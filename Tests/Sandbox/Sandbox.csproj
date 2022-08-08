@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.5" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\LOVE.NET.Common\LOVE.NET.Common.csproj" />
+    <ProjectReference Include="..\..\Data\LOVE.NET.Data.Common\LOVE.NET.Data.Common.csproj" />
+    <ProjectReference Include="..\..\Data\LOVE.NET.Data.Models\LOVE.NET.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\LOVE.NET.Data\LOVE.NET.Data.csproj" />
+    <ProjectReference Include="..\..\Services\LOVE.NET.Services.Data\LOVE.NET.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Services\LOVE.NET.Services.Mapping\LOVE.NET.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Services\LOVE.NET.Services.Messaging\LOVE.NET.Services.Messaging.csproj" />
+    <ProjectReference Include="..\..\Services\LOVE.NET.Services\LOVE.NET.Services.csproj" />
+  </ItemGroup>
+
+</Project>

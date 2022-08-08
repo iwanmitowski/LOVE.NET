@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <UserSecretsId>aspnet-LOVE.NET-BBB373B5-EF3F-4DBB-B8AA-7152CEC275BF</UserSecretsId>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+	<ItemGroup>
+		<AdditionalFiles Include="..\..\stylecop.json" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<InternalsVisibleTo Include="LOVE.NET.Web.Tests" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.5" />
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.161" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.5" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\LOVE.NET.Common\LOVE.NET.Common.csproj" />
+    <ProjectReference Include="..\..\Data\LOVE.NET.Data.Models\LOVE.NET.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\LOVE.NET.Data\LOVE.NET.Data.csproj" />
+    <ProjectReference Include="..\..\Services\LOVE.NET.Services.Data\LOVE.NET.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Services\LOVE.NET.Services.Mapping\LOVE.NET.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Services\LOVE.NET.Services.Messaging\LOVE.NET.Services.Messaging.csproj" />
+    <ProjectReference Include="..\..\Services\LOVE.NET.Services\LOVE.NET.Services.csproj" />
+    <ProjectReference Include="..\LOVE.NET.Web.Infrastructure\LOVE.NET.Web.Infrastructure.csproj" />
+    <ProjectReference Include="..\LOVE.NET.Web.ViewModels\LOVE.NET.Web.ViewModels.csproj" />
+  </ItemGroup>
+</Project>
