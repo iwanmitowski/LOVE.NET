@@ -1,9 +1,8 @@
 ﻿namespace LOVE.NET.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

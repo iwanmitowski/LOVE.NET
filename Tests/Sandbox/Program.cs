@@ -5,6 +5,7 @@
     using System.IO;
     using System.Threading.Tasks;
 
+    using CommandLine;
     using LOVE.NET.Data;
     using LOVE.NET.Data.Common;
     using LOVE.NET.Data.Common.Repositories;
@@ -13,9 +14,6 @@
     using LOVE.NET.Data.Seeding;
     using LOVE.NET.Services.Data;
     using LOVE.NET.Services.Messaging;
-
-    using CommandLine;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;

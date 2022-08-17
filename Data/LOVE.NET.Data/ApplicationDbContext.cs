@@ -28,6 +28,12 @@
 
         public DbSet<Country> Countries { get; set; }
 
+        public DbSet<Image> Images { get; set; }
+
+        public DbSet<Like> Likes { get; set; }
+
+        public DbSet<Match> Matches { get; set; }
+
         public DbSet<City> Cities { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
