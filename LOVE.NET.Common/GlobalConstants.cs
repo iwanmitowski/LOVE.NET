@@ -37,5 +37,26 @@
 
             public const string CountriesFileName = "Countries.csv";
         }
+
+        public class ControllerRoutesConstants
+        {
+            public const string Api = "api/";
+
+            public const string IdentityControllerName = Api + "identity";
+            public const string RegisterRoute = "register";
+        }
+
+        public class ControllerResponseMessages
+        {
+            public const string EmailAlreadyInUse = "Email already in use";
+            public const string PasswordsDontMatch = "Password and confirm password must match";
+            public const string LogoutSuccessfully = "Logout successfully";
+            public const string FillAllTheInformation = "Fill all the information";
+            public const string UserNotFound = "User not found";
+            public const string WrongPassword = "Wrong password";
+            public const string WrongOldPassword = "Old password is invalid";
+            public const string ChangePasswordsDontMatch = "New password and confirm password must match";
+            public const string PasswordChangedSuccessfully = "Password changed successfully";
+        }
     }
 }

@@ -56,8 +56,12 @@ namespace LOVE.NET.Data.Models
 
         public virtual ICollection<Image> Images { get; set; }
 
+        public int CountryId { get; set; }
+
         [Required]
         public virtual Country Country { get; set; }
+
+        public int CityId { get; set; }
 
         [Required]
         public virtual City City { get; set; }
