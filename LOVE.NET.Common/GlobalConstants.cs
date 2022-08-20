@@ -10,6 +10,21 @@
 
         public const string Data = "Data";
 
+        public const string JWT = "JWT";
+
+        public const string AuthSettingsKey = "AuthSettings:Key";
+
+        public const string AuthSettingsIssuer = "AuthSettings:Issuer";
+
+        public const string AuthSettingsAudience = "AuthSettings:Audience";
+
+        public class JWTSecurityScheme
+        {
+            public const string JWTScheme = "bearer";
+            public const string JWTName = "JWT Authentication";
+            public const string JWTDescription = "Put **_ONLY_** your JWT Bearer token on textbox below!";
+        }
+
         public class FilePaths
         {
             public const string OneDirectoryUp = "..";
