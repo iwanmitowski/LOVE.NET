@@ -11,6 +11,7 @@
     using LOVE.NET.Data.Repositories;
     using LOVE.NET.Data.Seeding;
     using LOVE.NET.Services.Data;
+    using LOVE.NET.Services.Identity;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Services.Messaging;
     using LOVE.NET.Web.ViewModels;
@@ -133,6 +134,7 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IIdentityService, IdentityService>();
         }
 
         private static void Configure(WebApplication app)
