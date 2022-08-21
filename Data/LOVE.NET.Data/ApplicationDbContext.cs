@@ -35,6 +35,8 @@
         public DbSet<Match> Matches { get; set; }
 
         public DbSet<City> Cities { get; set; }
+        
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

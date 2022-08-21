@@ -21,6 +21,7 @@ namespace LOVE.NET.Data.Models
             this.LikesSent = new HashSet<Like>();
             this.LikesReceived = new HashSet<Like>();
             this.Images = new HashSet<Image>();
+            this.RefreshTokens = new HashSet<RefreshToken>();
         }
 
         // Audit info
@@ -65,5 +66,7 @@ namespace LOVE.NET.Data.Models
 
         [Required]
         public virtual City City { get; set; }
+
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 }
