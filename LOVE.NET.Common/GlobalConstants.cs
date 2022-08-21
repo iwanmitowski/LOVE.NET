@@ -18,6 +18,8 @@
 
         public const string AuthSettingsAudience = "AuthSettings:Audience";
 
+        public const string RefreshTokenValue = "refreshToken";
+
         public class JWTSecurityScheme
         {
             public const string JWTScheme = "bearer";
@@ -44,6 +46,9 @@
 
             public const string IdentityControllerName = Api + "identity";
             public const string RegisterRoute = "register";
+            public const string LoginRoute = "login";
+            public const string LogoutRoute = "logout";
+            public const string RefreshTokenRoute = "refreshToken";
         }
 
         public class ControllerResponseMessages

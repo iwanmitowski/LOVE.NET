@@ -9,6 +9,7 @@
     using LOVE.NET.Data.Common.Repositories;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories;
+    using LOVE.NET.Data.Repositories.Users;
     using LOVE.NET.Data.Seeding;
     using LOVE.NET.Services.Data;
     using LOVE.NET.Services.Identity;
@@ -130,6 +131,7 @@
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
 
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();

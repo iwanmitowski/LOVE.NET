@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\LOVE.NET.Services.Mapping\LOVE.NET.Services.Mapping.csproj" />
     <ProjectReference Include="..\LOVE.NET.Data.Common\LOVE.NET.Data.Common.csproj" />
   </ItemGroup>
   
