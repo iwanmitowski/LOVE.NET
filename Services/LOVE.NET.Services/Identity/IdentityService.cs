@@ -82,7 +82,7 @@
                 Email = model.Email,
                 UserName = model.UserName,
                 Bio = model.Bio,
-                Age = model.Age,
+                Birthdate = model.Birthdate,
                 CityId = model.CityId,
                 CountryId = model.CountryId,
                 EmailConfirmed = false,

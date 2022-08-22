@@ -38,8 +38,7 @@ namespace LOVE.NET.Data.Models
         [MaxLength(255)]
         public string Bio { get; set; }
 
-        [MaxLength(150)]
-        public int Age { get; set; }
+        public DateTime Birthdate { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

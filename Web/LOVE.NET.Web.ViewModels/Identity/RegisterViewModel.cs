@@ -1,5 +1,6 @@
 ﻿namespace LOVE.NET.Web.ViewModels.Identity
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
 
     public class RegisterViewModel : BaseCredentialsModel
@@ -16,8 +17,7 @@
         [MaxLength(255)]
         public string Bio { get; set; }
 
-        [Range(18, 150)]
-        public int Age { get; set; }
+        public DateTime Birthdate { get; set; }
 
         public int CountryId { get; set; }
 

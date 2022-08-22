@@ -1,5 +1,6 @@
 ﻿namespace LOVE.NET.Web.ViewModels.Identity
 {
+    using System;
     using System.Text.Json.Serialization;
 
     using LOVE.NET.Data.Models;
@@ -20,7 +21,7 @@
 
         public string Bio { get; set; }
 
-        public int Age { get; set; }
+        public DateTime Birthdate { get; set; }
 
         public string CountryName { get; set; }
 
