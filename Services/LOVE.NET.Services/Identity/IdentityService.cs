@@ -77,17 +77,7 @@
         public async Task<Result> RegisterAsync(RegisterViewModel model)
         {
             // TODO: Map images
-            var user = new ApplicationUser()
-            {
-                Email = model.Email,
-                UserName = model.UserName,
-                Bio = model.Bio,
-                Birthdate = model.Birthdate,
-                CityId = model.CityId,
-                CountryId = model.CountryId,
-                EmailConfirmed = false,
-                LockoutEnabled = false,
-            };
+            var user = AutoMapperConfig.MapperInstance.Map<ApplicationUser>(model);
 
             var result = await this.userManager.CreateAsync(user, model.Password);
 
