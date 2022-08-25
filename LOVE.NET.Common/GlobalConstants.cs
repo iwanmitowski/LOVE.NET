@@ -20,6 +20,14 @@
 
         public const string RefreshTokenValue = "refreshToken";
 
+        public const string Error = "Error";
+
+        public const int CitiesMaxCountInDb = 239;
+
+        public const int CountriesMaxCountInDb = 42905;
+
+        public const int MinimalAge = 18;
+
         public class JWTSecurityScheme
         {
             public const string JWTScheme = "bearer";
@@ -55,6 +63,7 @@
         {
             public const string EmailAlreadyInUse = "Email already in use";
             public const string PasswordsDontMatch = "Password and confirm password must match";
+            public const string UnderagedUser = "You need to be 18 years old to register";
             public const string LogoutSuccessfully = "Logout successfully";
             public const string FillAllTheInformation = "Fill all the information";
             public const string UserNotFound = "User not found";
@@ -62,6 +71,8 @@
             public const string WrongOldPassword = "Old password is invalid";
             public const string ChangePasswordsDontMatch = "New password and confirm password must match";
             public const string PasswordChangedSuccessfully = "Password changed successfully";
+            public const string InvalidCity = "Invalid city";
+            public const string InvalidCountry = "Invalid country";
         }
     }
 }

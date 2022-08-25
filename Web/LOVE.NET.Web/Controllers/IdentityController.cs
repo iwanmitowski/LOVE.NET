@@ -17,7 +17,7 @@
     using static LOVE.NET.Common.GlobalConstants.ControllerResponseMessages;
     using static LOVE.NET.Common.GlobalConstants.ControllerRoutesConstants;
 
-    [Route("api/[controller]")]
+    [Route(IdentityControllerName)]
     [ApiController]
     public class IdentityController : ControllerBase
     {
@@ -125,12 +125,38 @@
         {
             if (await this.userManager.Users.AnyAsync(x => x.Email == model.Email))
             {
-                this.ModelState.AddModelError("Error", EmailAlreadyInUse);
+                this.ModelState.AddModelError(Error, EmailAlreadyInUse);
             }
 
             if (model.Password != model.ConfirmPassword)
             {
-                this.ModelState.AddModelError("Error", PasswordsDontMatch);
+                this.ModelState.AddModelError(Error, PasswordsDontMatch);
+            }
+
+            var today = DateTime.UtcNow;
+            var birthdate = model.Birthdate;
+
+            var age = today.Year - birthdate.Year;
+
+            // Leap years calculation
+            if (birthdate > today.AddYears(-age))
+            {
+                age--;
+            }
+
+            if (age < MinimalAge)
+            {
+                this.ModelState.AddModelError(Error, UnderagedUser);
+            }
+
+            if (model.CityId < 1 || model.CityId > CitiesMaxCountInDb)
+            {
+                this.ModelState.AddModelError(Error, InvalidCity);
+            }
+
+            if (model.CountryId < 1 || model.CountryId > CountriesMaxCountInDb)
+            {
+                this.ModelState.AddModelError(Error, InvalidCountry);
             }
 
             // TODO: Validate country and city
