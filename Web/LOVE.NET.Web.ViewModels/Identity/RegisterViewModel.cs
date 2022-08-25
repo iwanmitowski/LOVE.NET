@@ -3,7 +3,10 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class RegisterViewModel : BaseCredentialsModel
+    using LOVE.NET.Data.Models;
+    using LOVE.NET.Services.Mapping;
+
+    public class RegisterViewModel : BaseCredentialsModel, IMapTo<ApplicationUser>
     {
         [Required]
         [StringLength(50, MinimumLength = 5)]

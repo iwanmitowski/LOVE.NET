@@ -158,8 +158,6 @@
             {
                 this.ModelState.AddModelError(Error, InvalidCountry);
             }
-
-            // TODO: Validate country and city
         }
     }
 }
