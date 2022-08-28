@@ -21,6 +21,7 @@
 
     using static LOVE.NET.Common.GlobalConstants;
     using static LOVE.NET.Common.GlobalConstants.ControllerResponseMessages;
+    using static LOVE.NET.Common.GlobalConstants.EmailMessagesConstants;
 
     public class IdentityService : IIdentityService
     {
@@ -103,10 +104,10 @@
                 throw new ArgumentException(WrongPassword);
             }
 
-            // if (user.LockoutEnabled)
-            // {
-            //    Todo
-            // }
+            if (user.LockoutEnabled)
+            {
+                throw new ArgumentException(EmailNotConfirmed);
+            }
             //  Enable when done
             // if (!user.EmailConfirmed)
             // {

@@ -5,6 +5,7 @@
 
     using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
+    using LOVE.NET.Services.Email;
     using LOVE.NET.Services.Identity;
     using LOVE.NET.Web.ViewModels.Identity;
     using Microsoft.AspNetCore.Authorization;
@@ -21,15 +22,18 @@
     [ApiController]
     public class IdentityController : ControllerBase
     {
-        private readonly IIdentityService userService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IIdentityService userService;
+        private readonly IEmailService emailService;
 
         public IdentityController(
             IIdentityService userService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IEmailService emailService)
         {
-            this.userService = userService;
             this.userManager = userManager;
+            this.userService = userService;
+            this.emailService = emailService;
         }
 
         [HttpPost]
@@ -53,7 +57,8 @@
                 return this.BadRequest(result.Error);
             }
 
-            // Email Confirmation
+            await this.EmailConfirmation(model.Email);
+
             var user = await this.userManager.FindByEmailAsync(model.Email);
 
             await this.SetRefreshToken(user);
@@ -119,6 +124,15 @@
             };
 
             this.Response.Cookies.Append(RefreshTokenValue, refreshToken.Token, cookieOptions);
+        }
+
+        private async Task EmailConfirmation(string email)
+        {
+            var user = await this.userManager.FindByEmailAsync(email);
+
+            var origin = this.Request.Headers[HeaderOrigin];
+
+            await this.emailService.SendEmailConfirmationAsync(origin, user);
         }
 
         private async Task ValidateRegisterModel(RegisterViewModel model)
