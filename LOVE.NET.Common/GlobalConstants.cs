@@ -18,9 +18,13 @@
 
         public const string AuthSettingsAudience = "AuthSettings:Audience";
 
+        public const string SendGridApiKey = "SendGrid:ApiKey";
+
         public const string RefreshTokenValue = "refreshToken";
 
         public const string Error = "Error";
+
+        public const string Unauthorized = "Unauthorized";
 
         public const int CitiesMaxCountInDb = 239;
 
@@ -51,12 +55,17 @@
         public class ControllerRoutesConstants
         {
             public const string Api = "api/";
+            public const string HeaderOrigin = "origin";
 
             public const string IdentityControllerName = Api + "identity";
             public const string RegisterRoute = "register";
             public const string LoginRoute = "login";
             public const string LogoutRoute = "logout";
             public const string RefreshTokenRoute = "refreshToken";
+
+            public const string EmailControllerName = Api + "email";
+            public const string VerifyEmailRoute = "verify";
+            public const string ResendEmailConfirmationLinkRoute = "resendEmailConfirmationLink";
         }
 
         public class ControllerResponseMessages
@@ -73,6 +82,27 @@
             public const string PasswordChangedSuccessfully = "Password changed successfully";
             public const string InvalidCity = "Invalid city";
             public const string InvalidCountry = "Invalid country";
+        }
+
+        public class EmailMessagesConstants
+        {
+            public const string IncorrectEmail = "Your email is incorrect.";
+            public const string EmailConfirmed = "Email confirmed - you can now login.";
+            public const string EmailDoesntMatch = "This is not the email you registered with.";
+            public const string EmailNotConfirmed = "Please, check your email and verify your account.";
+            public const string EmailAlreadyVerified = "Your email is already verified.";
+        }
+
+        public class EmailSenderConstants
+        {
+            public const string FromEmail = "parentassistantapi@abv.bg";
+            public const string FromName = "ParentAssistantApi";
+            public const string EmailSubject = "Verify Email";
+            public const string VerifyUrl = "{0}/{1}/{2}?token={3}&email={4}";
+            public const string Templates = "templates";
+            public const string Email = "email";
+            public const string VerifyHtml = "verify.html";
+
         }
     }
 }

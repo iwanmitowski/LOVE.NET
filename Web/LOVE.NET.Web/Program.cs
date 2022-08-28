@@ -1,9 +1,5 @@
 ﻿namespace LOVE.NET.Web
 {
-    using System;
-    using System.Reflection;
-    using System.Text;
-
     using LOVE.NET.Data;
     using LOVE.NET.Data.Common;
     using LOVE.NET.Data.Common.Repositories;
@@ -12,11 +8,11 @@
     using LOVE.NET.Data.Repositories.Users;
     using LOVE.NET.Data.Seeding;
     using LOVE.NET.Services.Data;
+    using LOVE.NET.Services.Email;
     using LOVE.NET.Services.Identity;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Services.Messaging;
     using LOVE.NET.Web.ViewModels;
-
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
@@ -27,7 +23,9 @@
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
-
+    using System;
+    using System.Reflection;
+    using System.Text;
     using static LOVE.NET.Common.GlobalConstants;
     using static LOVE.NET.Common.GlobalConstants.JWTSecurityScheme;
 
@@ -134,9 +132,10 @@
             services.AddScoped<IUsersRepository, UsersRepository>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
-            services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IEmailSender>(x =>
+                new SendGridEmailSender(configuration[SendGridApiKey]));
             services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IEmailService, EmailService>();
         }
 
         private static void Configure(WebApplication app)
@@ -146,7 +145,7 @@
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                // dbContext.Database.EnsureDeleted();
+                dbContext.Database.EnsureDeleted();
                 dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
