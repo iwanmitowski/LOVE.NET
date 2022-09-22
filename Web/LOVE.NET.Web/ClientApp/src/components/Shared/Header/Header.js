@@ -6,8 +6,11 @@ import { Link } from "react-router-dom";
 import { Fragment } from "react";
 
 import styles from "./Header.module.css";
+import { useIdentityContext } from "../../../hooks/useIdentityContext";
 
 export default function Header() {
+  const { user, isLogged } = useIdentityContext();
+
   return (
     <header className={styles.header}>
       <Navbar collapseOnSelect expand="lg">
@@ -38,22 +41,28 @@ export default function Header() {
               </NavDropdown>
             </Nav>
             <Nav>
-              <Fragment>
-                <Link className="nav-link" to="/login">
-                  Login
-                </Link>
-                <Link className="nav-link" to="/register">
-                  Register
-                </Link>
-                <Link className="nav-link" to="/user">
-                  User name
-                </Link>
-                <Nav>
-                  <Link className="nav-link" to="/">
-                    Logout
+              {!isLogged && (
+                <Fragment>
+                  <Link className="nav-link" to="/login">
+                    Login
                   </Link>
-                </Nav>
-              </Fragment>
+                  <Link className="nav-link" to="/register">
+                    Register
+                  </Link>
+                </Fragment>
+              )}
+              {isLogged && (
+                <Fragment>
+                  <Link className="nav-link" to="/user">
+                    {user.userName}
+                  </Link>
+                  <Nav>
+                    <Link className="nav-link" to="/">
+                      Logout
+                    </Link>
+                  </Nav>
+                </Fragment>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
