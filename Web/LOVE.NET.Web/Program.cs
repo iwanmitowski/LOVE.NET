@@ -34,7 +34,6 @@
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddSwaggerGen();
             ConfigureServices(builder.Services, builder.Configuration);
             var app = builder.Build();
             Configure(app);
@@ -63,6 +62,7 @@
             //    {
             //        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             //    }).AddRazorRuntimeCompilation();
+            services.AddSwaggerGen();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
