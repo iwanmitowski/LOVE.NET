@@ -10,7 +10,7 @@ import styles from "./Header.module.css";
 export default function Header() {
   return (
     <header className={styles.header}>
-      <Navbar collapseOnSelect expand="lg" bg="red" variant="light">
+      <Navbar collapseOnSelect expand="lg">
         <Container>
           <Navbar.Brand>
             <Link className="nav-link" to="/">
