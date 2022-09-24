@@ -1,6 +1,8 @@
 ﻿namespace LOVE.NET.Web.Controllers
 {
     using System;
+    using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using LOVE.NET.Common;
@@ -103,6 +105,47 @@
         }
 
         [Authorize]
+        [HttpPost(RefreshTokenRoute)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseModel))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = this.Request.Cookies[RefreshTokenValue];
+
+            var test = this.User.FindFirstValue(ClaimTypes.Email);
+
+            var user = await this.userManager.Users
+                .Include(u => u.RefreshTokens)
+                .FirstOrDefaultAsync(x => x.Email == this.User.FindFirstValue(ClaimTypes.Email));
+
+            if (user == null)
+            {
+                return this.Unauthorized();
+            }
+
+            var oldToken = user.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
+
+            if (oldToken != null && !oldToken.IsActive)
+            {
+                return this.Unauthorized();
+            }
+
+            var userRoles = await this.userManager.GetRolesAsync(user);
+            var newToken = await this.userService.GenerateJwtToken(user);
+
+            var response = new LoginResponseModel()
+            {
+                Id = user.Id,
+                Token = newToken,
+                Email = user.Email,
+                UserName = user.UserName,
+                IsAdmin = userRoles.Any(r => r == AdministratorRoleName),
+            };
+
+            return this.Ok(response);
+        }
+
+        [Authorize]
         [HttpGet("test")]
         public IActionResult Test()
         {
@@ -121,6 +164,8 @@
             {
                 HttpOnly = true,
                 Expires = DateTime.UtcNow.AddHours(1.5),
+                SameSite = SameSiteMode.None,
+                Secure = true,
             };
 
             this.Response.Cookies.Append(RefreshTokenValue, refreshToken.Token, cookieOptions);

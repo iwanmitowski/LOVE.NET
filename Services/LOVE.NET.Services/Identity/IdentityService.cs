@@ -135,10 +135,13 @@
 
             rng.GetBytes(randomNumber);
 
+            var now = DateTime.UtcNow;
+
             return new RefreshToken
             {
                 Token = Convert.ToBase64String(randomNumber),
                 Expires = DateTime.UtcNow.AddHours(1.5),
+                CreatedOn = now,
             };
         }
     }

@@ -54,7 +54,8 @@
                 options =>
                 {
                     options.CheckConsentNeeded = context => true;
-                    options.MinimumSameSitePolicy = SameSiteMode.None;
+                    // Change to none if domain is diff
+                    options.MinimumSameSitePolicy = SameSiteMode.Lax;
                 });
 
             // services.AddControllersWithViews(
@@ -145,7 +146,7 @@
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                dbContext.Database.EnsureDeleted();
+                //dbContext.Database.EnsureDeleted();
                 dbContext.Database.Migrate();
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
@@ -170,13 +171,14 @@
             }
 
             app.UseCors(x => x
-               .AllowAnyOrigin()
+               .WithOrigins("http://localhost:3000")
                .AllowAnyMethod()
-               .AllowAnyHeader());
+               .AllowAnyHeader()
+               .AllowCredentials());
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            //app.UseCookiePolicy();
 
             app.UseRouting();
 

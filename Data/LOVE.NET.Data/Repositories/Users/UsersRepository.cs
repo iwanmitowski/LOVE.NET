@@ -20,7 +20,8 @@
                 .Include(u => u.Country)
                 .Include(u => u.LikesReceived)
                 .Include(u => u.LikesSent)
-                .Include(u => u.Matches);
+                .Include(u => u.Matches)
+                .Include(u => u.RefreshTokens);
         }
 
         public IQueryable<ApplicationUser> WithAllInformation(
@@ -32,6 +33,7 @@
                 .Include(u => u.LikesReceived)
                 .Include(u => u.LikesSent)
                 .Include(u => u.Matches)
+                .Include(u => u.RefreshTokens)
                 .Where(func);
         }
     }
