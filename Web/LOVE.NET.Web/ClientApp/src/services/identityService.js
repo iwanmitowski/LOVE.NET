@@ -1,4 +1,4 @@
-import axios from "axios";
+import { axiosInternal } from "../services/api";
 import { globalConstants, identityConstants } from "../utils/constants";
 
 const baseUrl = globalConstants.API_URL + "identity";
@@ -9,7 +9,8 @@ export async function login(user) {
   }
 
   try {
-    const response = await axios.post(`${baseUrl}/login`, user);
+    const response = await axiosInternal.post(`${baseUrl}/login`, user);
+    
     return response.data;
   } catch (error) {
     console.log(error.response.data.error);
