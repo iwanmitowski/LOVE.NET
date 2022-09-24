@@ -6,7 +6,7 @@ import { useIdentityContext } from "../../../hooks/useIdentityContext";
 import * as identityService from "../../../services/identityService";
 
 
-export function Login() {
+export default function Login() {
 	const { userLogin	} = useIdentityContext();
   const navigate = useNavigate();
 

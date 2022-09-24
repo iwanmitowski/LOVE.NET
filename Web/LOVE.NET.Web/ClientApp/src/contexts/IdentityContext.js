@@ -12,7 +12,7 @@ export const IdentityProvider = ({
         setUser(data);
     }
 
-    const userLogout = (data) => {
+    const userLogout = () => {
         setUser(null);
     }
 

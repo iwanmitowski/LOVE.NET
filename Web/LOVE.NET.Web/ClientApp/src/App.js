@@ -4,7 +4,7 @@ import Home from "./components/Home";
 import Main from "./components/Shared/Main/Main";
 import Footer from "./components/Shared/Footer/Footer";
 import Header from "./components/Shared/Header/Header";
-import { Login } from "./components/Auth/Login/Login";
+import Login from "./components/Auth/Login/Login";
 import { IdentityProvider } from "./contexts/IdentityContext";
 
 function App() {
