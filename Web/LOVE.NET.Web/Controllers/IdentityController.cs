@@ -91,12 +91,6 @@
                 return this.BadRequest((Result)e.Message);
             }
 
-            this.Response.Cookies.Append(JWT, token.Token, new CookieOptions()
-            {
-                HttpOnly = true,
-                Expires = DateTime.UtcNow.AddHours(1),
-            });
-
             var user = await this.userManager.FindByEmailAsync(model.Email);
 
             await this.SetRefreshToken(user);
@@ -111,8 +105,6 @@
         public async Task<IActionResult> RefreshToken()
         {
             var refreshToken = this.Request.Cookies[RefreshTokenValue];
-
-            var test = this.User.FindFirstValue(ClaimTypes.Email);
 
             var user = await this.userManager.Users
                 .Include(u => u.RefreshTokens)
@@ -133,6 +125,8 @@
             var userRoles = await this.userManager.GetRolesAsync(user);
             var newToken = await this.userService.GenerateJwtToken(user);
 
+            await this.SetRefreshToken(user, oldToken);
+
             var response = new LoginResponseModel()
             {
                 Id = user.Id,
@@ -152,9 +146,17 @@
             return this.Ok("test");
         }
 
-        private async Task SetRefreshToken(ApplicationUser user)
+        private async Task SetRefreshToken(
+            ApplicationUser user,
+            RefreshToken oldRefreshToken = null)
         {
             var refreshToken = this.userService.GenerateRefreshToken();
+
+            if (oldRefreshToken != null)
+            {
+                oldRefreshToken.Revoked = DateTime.UtcNow;
+                oldRefreshToken.ReplacedByToken = refreshToken.Token;
+            }
 
             user.RefreshTokens.Add(refreshToken);
 
