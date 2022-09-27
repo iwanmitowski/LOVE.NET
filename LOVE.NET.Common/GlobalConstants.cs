@@ -102,7 +102,6 @@
             public const string Templates = "templates";
             public const string Email = "email";
             public const string VerifyHtml = "verify.html";
-
         }
     }
 }

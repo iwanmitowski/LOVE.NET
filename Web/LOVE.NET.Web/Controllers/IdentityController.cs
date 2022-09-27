@@ -98,6 +98,40 @@
             return this.Ok(token);
         }
 
+        [HttpPost]
+        [Authorize]
+        [Route(LogoutRoute)]
+        public async Task<IActionResult> Logout()
+        {
+            var refreshToken = this.Request.Cookies[RefreshTokenValue];
+            this.Response.Cookies.Delete(RefreshTokenValue);
+
+            var user = await this.userManager.Users
+                .Include(u => u.RefreshTokens)
+                .FirstOrDefaultAsync(x => x.Email == this.User.FindFirstValue(ClaimTypes.Email));
+
+            if (user == null)
+            {
+                return this.Unauthorized();
+            }
+
+            var token = user.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
+
+            if (token != null)
+            {
+                if (!token.IsActive)
+                {
+                    return this.Unauthorized();
+                }
+
+                token.Revoked = DateTime.UtcNow;
+                await this.userManager.UpdateAsync(user);
+            }
+
+
+            return this.Ok();
+        }
+
         [Authorize]
         [HttpPost(RefreshTokenRoute)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseModel))]
