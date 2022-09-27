@@ -57,7 +57,7 @@ export default function Header() {
                     {user.userName}
                   </Link>
                   <Nav>
-                    <Link className="nav-link" to="/">
+                    <Link className="nav-link" to="/logout">
                       Logout
                     </Link>
                   </Nav>
