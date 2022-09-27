@@ -50,14 +50,6 @@
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.Configure<CookiePolicyOptions>(
-                options =>
-                {
-                    options.CheckConsentNeeded = context => true;
-                    // Change to none if domain is diff
-                    options.MinimumSameSitePolicy = SameSiteMode.Lax;
-                });
-
             // services.AddControllersWithViews(
             //    options =>
             //    {
@@ -178,7 +170,6 @@
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            //app.UseCookiePolicy();
 
             app.UseRouting();
 
