@@ -99,8 +99,8 @@
         }
 
         [HttpPost]
-        [Authorize]
         [Route(LogoutRoute)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Logout()
         {
             var refreshToken = this.Request.Cookies[RefreshTokenValue];
@@ -108,26 +108,15 @@
 
             var user = await this.userManager.Users
                 .Include(u => u.RefreshTokens)
-                .FirstOrDefaultAsync(x => x.Email == this.User.FindFirstValue(ClaimTypes.Email));
+                .FirstOrDefaultAsync(x => x.RefreshTokens.Any(t => t.Token == refreshToken));
 
-            if (user == null)
-            {
-                return this.Unauthorized();
-            }
-
-            var token = user.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
+            var token = user?.RefreshTokens.FirstOrDefault(t => t.Token == refreshToken);
 
             if (token != null)
             {
-                if (!token.IsActive)
-                {
-                    return this.Unauthorized();
-                }
-
                 token.Revoked = DateTime.UtcNow;
                 await this.userManager.UpdateAsync(user);
             }
-
 
             return this.Ok();
         }
