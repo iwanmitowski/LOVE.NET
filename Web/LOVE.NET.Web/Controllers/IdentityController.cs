@@ -121,7 +121,6 @@
             return this.Ok();
         }
 
-        [Authorize]
         [HttpPost(RefreshTokenRoute)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseModel))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -131,7 +130,7 @@
 
             var user = await this.userManager.Users
                 .Include(u => u.RefreshTokens)
-                .FirstOrDefaultAsync(x => x.Email == this.User.FindFirstValue(ClaimTypes.Email));
+                .FirstOrDefaultAsync(x => x.RefreshTokens.Any(t => t.Token == refreshToken));
 
             if (user == null)
             {
