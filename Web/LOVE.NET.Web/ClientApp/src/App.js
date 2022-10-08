@@ -1,12 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import "./App.css";
+import { IdentityProvider } from "./contexts/IdentityContext";
 import Home from "./components/Home";
 import Main from "./components/Shared/Main/Main";
 import Footer from "./components/Shared/Footer/Footer";
 import Header from "./components/Shared/Header/Header";
 import Login from "./components/Auth/Login/Login";
-import { IdentityProvider } from "./contexts/IdentityContext";
 import Logout from "./components/Auth/Logout/Logout";
+import Register from "./components/Auth/Register/Register";
+
+import "./App.css";
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </Main>
         <Footer />
