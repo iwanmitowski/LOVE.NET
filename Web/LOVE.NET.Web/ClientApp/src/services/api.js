@@ -21,10 +21,20 @@ instance.interceptors.request.use(
     const auth = localStorage.getItem("auth");
 
     if (auth) {
+      console.log(auth);
       const { token } = JSON.parse(auth);
       config.headers["Authorization"] = `Bearer ${token}`;
     }
 
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axiosInternal.interceptors.request.use(
+  (config) => {
     return config;
   },
   (error) => {
@@ -54,12 +64,14 @@ axiosInternal.interceptors.response.use(
           localStorage.setItem("auth", JSON.stringify(token));
 
           originalConfig.headers["Authorization"] = `Bearer ${token}`;
-
+          
           return axiosInternal(originalConfig);
         } catch (error) {
           return Promise.reject(error);
         }
       }
     }
+
+    return Promise.reject(err);
   }
 );
