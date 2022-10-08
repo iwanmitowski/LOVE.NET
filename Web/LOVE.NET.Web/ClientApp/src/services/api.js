@@ -39,7 +39,11 @@ axiosInternal.interceptors.response.use(
   async (err) => {
     const originalConfig = err.config;
 
-    if (!originalConfig.url.includes("/identity/login") && err.response) {
+    if (
+      !originalConfig.url.includes("/identity/login") &&
+      !originalConfig.url.includes("/identity/refreshToken") &&
+      err.response
+    ) {
       if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
 
