@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
+
 import * as identityService from "../../../services/identityService";
 
 
@@ -11,7 +12,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
-    name: "",
+    email: "",
     password: "",
   });
 
@@ -52,7 +53,7 @@ export default function Login() {
           <Form.Control
             type="email"
             name="email"
-            value={user.email}
+            defaultValue={user.email}
             placeholder="Enter address"
             onChange={onInputChange}
             required
@@ -63,7 +64,7 @@ export default function Login() {
           <Form.Control
             type="password"
             name="password"
-            value={user.password}
+            defaultValue={user.password}
             placeholder="Enter password"
             onChange={onInputChange}
             required
