@@ -67,6 +67,8 @@ export default function Register() {
             onChange={onInputChange}
             required
           />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="userName">
           <Form.Label>Username</Form.Label>
           <Form.Control
             type="text"
@@ -87,6 +89,8 @@ export default function Register() {
             onChange={onInputChange}
             required
           />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="confirmPassword">
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             type="password"
@@ -97,7 +101,7 @@ export default function Register() {
             required
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="information">
+        <Form.Group className="mb-3" controlId="countryId">
           <Form.Label>Choose country</Form.Label>
           <Form.Select
             className="mb-3"
@@ -109,22 +113,23 @@ export default function Register() {
             <option value="2">second</option>
             <option value="3">third</option>
           </Form.Select>
-          {!!parseInt(user.countryId) && (
-            <Fragment>
-              <Form.Label>Choose city</Form.Label>
-              <Form.Select
-                className="mb-3"
-                name="cityId"
-                onChange={onInputChange}
-              >
-                <option value="0">Choose city here</option>
-                <option value="1">first</option>
-                <option value="2">second</option>
-                <option value="3">third</option>
-              </Form.Select>
-            </Fragment>
-          )}
         </Form.Group>
+        {!!parseInt(user.countryId) && (
+          <Form.Group className="mb-3" controlId="cityId">
+            {" "}
+            <Form.Label>Choose city</Form.Label>
+            <Form.Select
+              className="mb-3"
+              name="cityId"
+              onChange={onInputChange}
+            >
+              <option value="0">Choose city here</option>
+              <option value="1">first</option>
+              <option value="2">second</option>
+              <option value="3">third</option>
+            </Form.Select>
+          </Form.Group>
+        )}
         <Form.Group className="mb-3" controlId="information">
           <Form.Label>Bio</Form.Label>
           <Form.Control
