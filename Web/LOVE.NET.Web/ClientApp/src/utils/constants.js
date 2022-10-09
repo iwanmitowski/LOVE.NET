@@ -1,7 +1,22 @@
 export const globalConstants = {
-    API_URL: 'https://localhost:44319/api/',
-}
+  API_URL: "https://localhost:44319/api/",
+};
 
 export const identityConstants = {
-    FILL_REQUIRED_FIELDS: "Please fill required fields",
-}
+  FILL_REQUIRED_FIELDS: "Please fill required fields",
+  EMAIL_REGEX:
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  INVALID_EMAIL: "Invalid email",
+  PASSWORDS_DONT_MATCH: "Password and confirm password must match",
+  PASSWORD_MIN_LENGTH: 5,
+  TOO_SHORT_PASSWORD: "Password is too short",
+  BIO_MAX_LENGTH: 255,
+  TOO_LONG_BIO: "Shorten your bio",
+  USERNAME_MAX_LENGTH: 255,
+  TOO_LONG_USERNAME: "Shorten your bio",
+  UNDERAGED_USER: "You must to be 18 years old to register",
+  CITIES_MAX_COUNT: 239,
+  INVALID_CITY: "Invalid city",
+  COUNTRIES_MAX_COUNT: 42905,
+  INVALID_COUNTRY: "Invalid country",
+};

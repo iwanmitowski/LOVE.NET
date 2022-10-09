@@ -2,7 +2,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useIdentityContext } from "../../../hooks/useIdentityContext";
 
 import * as identityService from "../../../services/identityService";
 import * as date from "../../../utils/date.js";
@@ -10,7 +9,6 @@ import * as date from "../../../utils/date.js";
 import styles from "../Auth.module.css";
 
 export default function Register() {
-  const { userLogin } = useIdentityContext();
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
@@ -19,7 +17,7 @@ export default function Register() {
     confirmPassword: "",
     userName: "",
     bio: "bio",
-    birthdate: date.getLatestLegal().toISOString().split('T')[0],
+    birthdate: date.getLatestLegal().toISOString().split("T")[0],
     countryId: 0,
     cityId: 0,
   });
