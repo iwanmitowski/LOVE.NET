@@ -5,14 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
 
 import * as identityService from "../../../services/identityService";
+import * as date from "../../../utils/date.js";
+
 import styles from "../Auth.module.css";
 
 export default function Register() {
   const { userLogin } = useIdentityContext();
   const navigate = useNavigate();
-
-  let newestLegalBirthdate = new Date();
-  newestLegalBirthdate.setFullYear(newestLegalBirthdate.getFullYear() - 18);
 
   const [user, setUser] = useState({
     email: "",
@@ -20,7 +19,7 @@ export default function Register() {
     confirmPassword: "",
     userName: "",
     bio: "bio",
-    birthdate: newestLegalBirthdate.toISOString().split('T')[0],
+    birthdate: date.getLatestLegal().toISOString().split('T')[0],
     countryId: 0,
     cityId: 0,
   });
@@ -91,7 +90,6 @@ export default function Register() {
             <Form.Control
               type="date"
               name="birthdate"
-              selected={newestLegalBirthdate}
               defaultValue={user.birthdate}
               onChange={onInputChange}
             />
