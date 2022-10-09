@@ -11,13 +11,16 @@ export default function Register() {
   const { userLogin } = useIdentityContext();
   const navigate = useNavigate();
 
+  let newestLegalBirthdate = new Date();
+  newestLegalBirthdate.setFullYear(newestLegalBirthdate.getFullYear() - 18);
+
   const [user, setUser] = useState({
     email: "",
     password: "",
     confirmPassword: "",
     userName: "",
     bio: "bio",
-    birthdate: "",
+    birthdate: newestLegalBirthdate.toISOString().split('T')[0],
     countryId: 0,
     cityId: 0,
   });
@@ -46,7 +49,7 @@ export default function Register() {
     e.preventDefault();
 
     identityService
-      .login(user)
+      .register(user)
       .then((res) => {
         navigate("/");
       })
@@ -59,7 +62,7 @@ export default function Register() {
 
   return (
     <div className={formWrapperStyles}>
-      <div className={styles['input-fields-length']}>
+      <div className={styles["input-fields-length"]}>
         <Form onSubmit={onFormSubmit}>
           <Form.Group className="form-group mb-3" controlId="email">
             <Form.Label>Email</Form.Label>
@@ -81,6 +84,16 @@ export default function Register() {
               placeholder="Enter username"
               onChange={onInputChange}
               required
+            />
+          </Form.Group>
+          <Form.Group className="form-group mb-3" controlId="birthdate">
+            <Form.Label>Enter your birthdate</Form.Label>
+            <Form.Control
+              type="date"
+              name="birthdate"
+              selected={newestLegalBirthdate}
+              defaultValue={user.birthdate}
+              onChange={onInputChange}
             />
           </Form.Group>
           <Form.Group className="form-group mb-3" controlId="password">
