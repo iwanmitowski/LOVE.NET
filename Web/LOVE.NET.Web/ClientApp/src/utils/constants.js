@@ -5,6 +5,7 @@ export const globalConstants = {
 export const identityConstants = {
   FILL_REQUIRED_FIELDS: "Please fill required fields",
   EMAIL_REGEX:
+    // eslint-disable-next-line no-useless-escape
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   INVALID_EMAIL: "Invalid email",
   PASSWORDS_DONT_MATCH: "Password and confirm password must match",
