@@ -74,7 +74,7 @@ export default function Login() {
               required
             />
           </Form.Group>
-          {error && <span className="text-danger">{error}</span>}
+          {error && <div className="text-danger mb-3"><span>{error}</span></div>}
           <Button variant="primary" type="submit">
             Login
           </Button>

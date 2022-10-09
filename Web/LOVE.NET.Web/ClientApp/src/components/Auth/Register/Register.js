@@ -161,7 +161,7 @@ export default function Register() {
             <Form.Label>Upload your photo</Form.Label>
             <Form.Control type="file" />
           </Form.Group>
-          {error && <span className="text-danger">{error}</span>}
+          {error && <div className="text-danger mb-3"><span>{error}</span></div>}
           <Button variant="primary" type="submit">
             Register
           </Button>
