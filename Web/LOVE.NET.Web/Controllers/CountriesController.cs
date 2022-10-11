@@ -28,10 +28,16 @@
 
         [HttpGet]
         [Route(ById)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CountryCitiesViewModel))]
         public IActionResult GetAllWithCities(int id)
         {
             var countryCities = this.countriesService.Get(id);
+
+            if (countryCities == null)
+            {
+                return this.NotFound();
+            }
 
             return this.Ok(countryCities);
         }

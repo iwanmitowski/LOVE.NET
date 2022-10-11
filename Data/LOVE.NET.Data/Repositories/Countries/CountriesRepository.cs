@@ -19,7 +19,8 @@
         {
             return this.Context.Countries
                 .AsNoTracking()
-                .Include(c => c.Cities);
+                .Include(c => c.Cities)
+                .Where(func);
         }
     }
 }
