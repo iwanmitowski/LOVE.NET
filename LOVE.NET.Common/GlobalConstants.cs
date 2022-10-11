@@ -66,6 +66,9 @@
             public const string EmailControllerName = Api + "email";
             public const string VerifyEmailRoute = "verify";
             public const string ResendEmailConfirmationLinkRoute = "resendEmailConfirmationLink";
+
+            public const string CountriesControllerName = Api + "countries";
+            public const string ById = "{id:int}";
         }
 
         public class ControllerResponseMessages

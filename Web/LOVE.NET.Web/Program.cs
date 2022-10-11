@@ -5,9 +5,10 @@
     using LOVE.NET.Data.Common.Repositories;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories;
+    using LOVE.NET.Data.Repositories.Countries;
     using LOVE.NET.Data.Repositories.Users;
     using LOVE.NET.Data.Seeding;
-    using LOVE.NET.Services.Data;
+    using LOVE.NET.Services.Countries;
     using LOVE.NET.Services.Email;
     using LOVE.NET.Services.Identity;
     using LOVE.NET.Services.Mapping;
@@ -15,7 +16,6 @@
     using LOVE.NET.Web.ViewModels;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -123,12 +123,14 @@
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<ICountriesRepository, CountriesRepository>();
 
             // Application services
             services.AddTransient<IEmailSender>(x =>
                 new SendGridEmailSender(configuration[SendGridApiKey]));
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<ICountriesService, CountriesService>();
         }
 
         private static void Configure(WebApplication app)
