@@ -32,6 +32,8 @@
 
             var result = AutoMapperConfig.MapperInstance.Map<CountryCitiesViewModel>(country);
 
+            result.Cities = result.Cities.OrderBy(c => c.CityName);
+
             return result;
         }
     }

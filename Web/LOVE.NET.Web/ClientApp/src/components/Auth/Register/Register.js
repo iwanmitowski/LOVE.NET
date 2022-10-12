@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import * as identityService from "../../../services/identityService";
+import * as countryService from "../../../services/countryService";
 import * as date from "../../../utils/date.js";
 
 import styles from "../Auth.module.css";
@@ -22,17 +23,60 @@ export default function Register() {
     cityId: 0,
   });
 
+  const [countries, setCountries] = useState([
+    {
+      countryId: 0,
+      countryName: "Chooce country here",
+    },
+  ]);
+
+  const [countriesCities, setCities] = useState([
+    {
+      countryId: 0,
+      cities: [
+        {
+          cityId: 0,
+          cityName: "Choose city here",
+        },
+      ],
+    },
+  ]);
+
   const [error, setError] = useState("");
 
   useEffect(() => {
-    console.log("Get countries and cities");
-  }, []);
+    if (countries.length === 1) {
+      countryService
+        .getAll()
+        .then((res) => {
+          setCountries((prevState) => {
+            return [...prevState, ...res];
+          });
+        })
+        .catch((error) => {
+          setError(error.message);
+        });
+    }
+  }, [countries]);
+
+  useEffect(() => {
+    const isCountryFetched = countriesCities.some(
+      (c) => c.countryId === parseInt(user.countryId)
+    );
+    if (user.countryId !== 0 && !isCountryFetched) {
+      countryService.getCitiesByCountryId(user.countryId).then((res) => {
+        setCities((prevState) => {
+          return [...prevState, res];
+        });
+      });
+    }
+  }, [user.countryId, countriesCities]);
 
   const onInputChange = (e) => {
     setUser((prevState) => {
       let currentName = e.target.name;
       let currentValue = e.target.value;
-      console.log(currentValue);
+
       return {
         ...prevState,
         [currentName]: currentValue,
@@ -47,7 +91,7 @@ export default function Register() {
 
     identityService
       .register(user)
-      .then((res) => {
+      .then(() => {
         navigate("/");
       })
       .catch((error) => {
@@ -56,6 +100,10 @@ export default function Register() {
   };
 
   const formWrapperStyles = `${styles["form-wrapper"]} d-flex justify-content-center align-items-center`;
+  const currentCities = countriesCities.find(
+    (cc) => cc.countryId === parseInt(user.countryId)
+  );
+  const areLoadedCities = !!currentCities;
 
   return (
     <div className={formWrapperStyles}>
@@ -121,25 +169,31 @@ export default function Register() {
               name="countryId"
               onChange={onInputChange}
             >
-              <option value="0">Chooce country here</option>
-              <option value="1">first</option>
-              <option value="2">second</option>
-              <option value="3">third</option>
+              {countries.map((c) => {
+                return (
+                  <option key={c.countryId} value={c.countryId}>
+                    {c.countryName}
+                  </option>
+                );
+              })}
             </Form.Select>
           </Form.Group>
           {!!parseInt(user.countryId) && (
             <Form.Group className="form-group mb-3" controlId="cityId">
-              {" "}
               <Form.Label>Choose city</Form.Label>
               <Form.Select
                 className="mb-3"
                 name="cityId"
                 onChange={onInputChange}
               >
-                <option value="0">Choose city here</option>
-                <option value="1">first</option>
-                <option value="2">second</option>
-                <option value="3">third</option>
+                {areLoadedCities &&
+                  currentCities.cities.map((c) => {
+                    return (
+                      <option key={c.cityId + c.cityName} value={c.cityId}>
+                        {c.cityName}
+                      </option>
+                    );
+                  })}
               </Form.Select>
             </Form.Group>
           )}
@@ -159,7 +213,11 @@ export default function Register() {
             <Form.Label>Upload your photo</Form.Label>
             <Form.Control type="file" />
           </Form.Group>
-          {error && <div className="text-danger mb-3"><span>{error}</span></div>}
+          {error && (
+            <div className="text-danger mb-3">
+              <span>{error}</span>
+            </div>
+          )}
           <Button variant="primary" type="submit">
             Register
           </Button>

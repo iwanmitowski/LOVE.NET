@@ -19,7 +19,7 @@ export const axiosInternal = axios.create({
 instance.interceptors.request.use(
   (config) => {
     const auth = localStorage.getItem("auth");
-
+    
     if (auth) {
       console.log(auth);
       const { token } = JSON.parse(auth);
