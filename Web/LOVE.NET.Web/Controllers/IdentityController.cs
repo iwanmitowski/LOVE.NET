@@ -7,6 +7,7 @@
 
     using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
+    using LOVE.NET.Services.Countries;
     using LOVE.NET.Services.Email;
     using LOVE.NET.Services.Identity;
     using LOVE.NET.Web.ViewModels.Identity;
@@ -27,15 +28,18 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IIdentityService userService;
         private readonly IEmailService emailService;
+        private readonly ICountriesService countriesService;
 
         public IdentityController(
             IIdentityService userService,
             UserManager<ApplicationUser> userManager,
-            IEmailService emailService)
+            IEmailService emailService,
+            ICountriesService countriesService)
         {
             this.userManager = userManager;
             this.userService = userService;
             this.emailService = emailService;
+            this.countriesService = countriesService;
         }
 
         [HttpPost]
@@ -240,6 +244,13 @@
             if (model.CountryId < 1 || model.CountryId > CountriesMaxCountInDb)
             {
                 this.ModelState.AddModelError(Error, InvalidCountry);
+            }
+
+            var countryCities = this.countriesService.Get(model.CountryId);
+
+            if (countryCities.Cities.Any(c => c.CityId == model.CityId) == false)
+            {
+                this.ModelState.AddModelError(Error, InvalidCity);
             }
         }
     }
