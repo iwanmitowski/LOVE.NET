@@ -17,8 +17,17 @@ export async function getAll() {
 export async function getCitiesByCountryId(id) {
   try {
     const response = await instance.get(`${baseUrl}/${id}`);
+    const data = await response.data;
 
-    return response.data;
+    const cities = {
+      countryId: data.countryId,
+      cities: [{
+        cityId: 0,
+        cityName: "Choose city here",
+      }, ...data.cities]
+    };
+
+    return cities;
   } catch (error) {
     console.log(error.response.data.error);
     throw new Error(error.response.data.error);
