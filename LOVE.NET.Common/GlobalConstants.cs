@@ -26,9 +26,9 @@
 
         public const string Unauthorized = "Unauthorized";
 
-        public const int CitiesMaxCountInDb = 239;
+        public const int CitiesMaxCountInDb = 42905;
 
-        public const int CountriesMaxCountInDb = 42905;
+        public const int CountriesMaxCountInDb = 239;
 
         public const int MinimalAge = 18;
 

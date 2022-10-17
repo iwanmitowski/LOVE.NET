@@ -16,8 +16,8 @@ export const identityConstants = {
   USERNAME_MAX_LENGTH: 255,
   TOO_LONG_USERNAME: "Shorten your bio",
   UNDERAGED_USER: "You must to be 18 years old to register",
-  CITIES_MAX_COUNT: 239,
+  CITIES_MAX_COUNT: 42905,
   INVALID_CITY: "Invalid city",
-  COUNTRIES_MAX_COUNT: 42905,
+  COUNTRIES_MAX_COUNT: 239,
   INVALID_COUNTRY: "Invalid country",
 };
