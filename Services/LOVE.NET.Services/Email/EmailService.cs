@@ -40,7 +40,6 @@
             var verifyUrl = string.Format(
                 VerifyUrl,
                 origin,
-                EmailControllerName,
                 VerifyEmailRoute,
                 token,
                 user.Email);

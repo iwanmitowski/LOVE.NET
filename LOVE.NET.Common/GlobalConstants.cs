@@ -101,7 +101,7 @@
             public const string FromEmail = "parentassistantapi@abv.bg";
             public const string FromName = "ParentAssistantApi";
             public const string EmailSubject = "Verify Email";
-            public const string VerifyUrl = "{0}/{1}/{2}?token={3}&email={4}";
+            public const string VerifyUrl = "{0}/{1}?token={2}&email={3}";
             public const string Templates = "templates";
             public const string Email = "email";
             public const string VerifyHtml = "verify.html";
