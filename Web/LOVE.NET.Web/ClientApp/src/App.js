@@ -7,6 +7,7 @@ import Header from "./components/Shared/Header/Header";
 import Login from "./components/Auth/Login/Login";
 import Logout from "./components/Auth/Logout/Logout";
 import Register from "./components/Auth/Register/Register";
+import Verify from "./components/Auth/Verify/Verify";
 
 import "./App.css";
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/verify" element={<Verify />} />
           </Routes>
         </Main>
         <Footer />
