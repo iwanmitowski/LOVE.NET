@@ -10,3 +10,11 @@ export async function verify(token, email) {
 
   return response.data;
 }
+
+export async function resend(email) {
+  const response = await instance.get(
+    `${baseUrl}/resendEmailConfirmationLink?email=${email}`
+  );
+
+  return response.data;
+}

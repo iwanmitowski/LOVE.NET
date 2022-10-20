@@ -92,7 +92,7 @@ export default function Register() {
     identityService
       .register(user)
       .then(() => {
-        navigate("/");
+        navigate(`/verify?email=${user.email}`);
       })
       .catch((error) => {
         setError(error.message);
