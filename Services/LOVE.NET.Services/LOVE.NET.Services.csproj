@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Data\LOVE.NET.Data.Models\LOVE.NET.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\LOVE.NET.Data\LOVE.NET.Data.csproj" />
     <ProjectReference Include="..\..\LOVE.NET.Common\LOVE.NET.Common.csproj" />
