@@ -4,6 +4,8 @@ import Home from "./components/Home";
 import Main from "./components/Shared/Main/Main";
 import Footer from "./components/Shared/Footer/Footer";
 import Header from "./components/Shared/Header/Header";
+import NoAuthGuard from "./components/Shared/guards/NoAuthGuard";
+import AuthGuard from "./components/Shared/guards/AuthGuard";
 import Login from "./components/Auth/Login/Login";
 import Logout from "./components/Auth/Logout/Logout";
 import Register from "./components/Auth/Register/Register";
@@ -19,10 +21,10 @@ function App() {
         <Main>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/verify" element={<Verify />} />
+            <Route path="/login" element={<NoAuthGuard><Login /></NoAuthGuard>} />
+            <Route path="/logout" element={<AuthGuard><Logout /></AuthGuard>} />
+            <Route path="/register" element={<NoAuthGuard><Register /></NoAuthGuard>} />
+            <Route path="/verify" element={<NoAuthGuard><Verify /></NoAuthGuard>} />
           </Routes>
         </Main>
         <Footer />
