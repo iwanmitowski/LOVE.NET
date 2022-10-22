@@ -61,14 +61,19 @@ export async function register(user, validCountries) {
     throw new Error(identityConstants.INVALID_CITY);
   }
 
-  if (user.countryId < 1 || user.countryId > identityConstants.COUNTRIES_MAX_COUNT) {
+  if (
+    user.countryId < 1 ||
+    user.countryId > identityConstants.COUNTRIES_MAX_COUNT
+  ) {
     throw new Error(identityConstants.INVALID_COUNTRY);
   }
 
   try {
-    await instance.post(`${baseUrl}/register`, user);
+    const response = await instance.post(`${baseUrl}/register`, user);
+
+    return response.data;
   } catch (error) {
-    throw new Error(error.response.data.error);
+    throw new Error(error.response.data.Error[0]);
   }
 }
 
