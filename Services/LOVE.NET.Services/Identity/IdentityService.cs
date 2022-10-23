@@ -13,6 +13,7 @@
     using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories.Users;
+    using LOVE.NET.Services.Images;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.ViewModels.Identity;
     using Microsoft.AspNetCore.Identity;
@@ -28,15 +29,18 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration configuration;
         private readonly IUsersRepository usersRepository;
+        private readonly IImagesService imagesService;
 
         public IdentityService(
             UserManager<ApplicationUser> userManager,
             IConfiguration configuration,
-            IUsersRepository usersRepository)
+            IUsersRepository usersRepository,
+            IImagesService imagesService)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.usersRepository = usersRepository;
+            this.imagesService = imagesService;
         }
 
         public async Task<string> GenerateJwtToken(ApplicationUser user)
@@ -77,8 +81,14 @@
 
         public async Task<Result> RegisterAsync(RegisterViewModel model)
         {
-            // TODO: Map images
+            var imageUrl = await this.imagesService.UploadImageAsync(model.Image);
             var user = AutoMapperConfig.MapperInstance.Map<ApplicationUser>(model);
+
+            user.Images.Add(new Image()
+            {
+                CreatedOn = DateTime.UtcNow,
+                Url = imageUrl,
+            });
 
             var result = await this.userManager.CreateAsync(user, model.Password);
 

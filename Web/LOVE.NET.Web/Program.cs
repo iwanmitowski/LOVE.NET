@@ -1,5 +1,6 @@
 ﻿namespace LOVE.NET.Web
 {
+    using CloudinaryDotNet;
     using LOVE.NET.Data;
     using LOVE.NET.Data.Common;
     using LOVE.NET.Data.Common.Repositories;
@@ -26,8 +27,11 @@
     using System;
     using System.Reflection;
     using System.Text;
+    using CloudinaryDotNet;
+    using CloudinaryDotNet.Actions;
     using static LOVE.NET.Common.GlobalConstants;
     using static LOVE.NET.Common.GlobalConstants.JWTSecurityScheme;
+    using LOVE.NET.Services.Images;
 
     public class Program
     {
@@ -50,16 +54,21 @@
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            // services.AddControllersWithViews(
-            //    options =>
-            //    {
-            //        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            //    }).AddRazorRuntimeCompilation();
             services.AddSwaggerGen();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddSingleton(configuration);
+
+            Account cloudinaryAccount = new Account(
+                configuration[CloudinaryCloudName],
+                configuration[CloudinaryKey],
+                configuration[CloudinarySecret]);
+
+            Cloudinary cloudinary = new Cloudinary(cloudinaryAccount);
+            cloudinary.Api.Secure = true;
+
+            services.AddSingleton(cloudinary);
 
             services.AddAuthentication(auth =>
             {
@@ -131,6 +140,7 @@
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<ICountriesService, CountriesService>();
+            services.AddSingleton<IImagesService, ImagesService>();
         }
 
         private static void Configure(WebApplication app)

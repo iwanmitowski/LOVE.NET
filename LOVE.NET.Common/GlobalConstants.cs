@@ -20,6 +20,12 @@
 
         public const string SendGridApiKey = "SendGrid:ApiKey";
 
+        public const string CloudinaryCloudName = "Cloudinary:CloudName";
+
+        public const string CloudinaryKey = "Cloudinary:Key";
+        
+        public const string CloudinarySecret = "Cloudinary:Secret";
+
         public const string RefreshTokenValue = "refreshToken";
 
         public const string Error = "Error";

@@ -47,7 +47,7 @@
         [Route(RegisterRoute)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string[]))]
-        public async Task<IActionResult> RegisterAsync([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> RegisterAsync([FromForm] RegisterViewModel model)
         {
             await this.ValidateRegisterModel(model);
 
