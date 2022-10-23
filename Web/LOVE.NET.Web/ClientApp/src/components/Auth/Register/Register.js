@@ -21,6 +21,7 @@ export default function Register() {
     birthdate: date.getLatestLegal().toISOString().split("T")[0],
     countryId: 0,
     cityId: 0,
+    image: null,
   });
 
   const [countries, setCountries] = useState([
@@ -76,6 +77,14 @@ export default function Register() {
     setUser((prevState) => {
       let currentName = e.target.name;
       let currentValue = e.target.value;
+
+      if (currentName === 'image') {
+        console.log(e.target);
+        return {
+          ...prevState,
+          [currentName]: e.target.files[0],
+        };
+      }
 
       return {
         ...prevState,
@@ -211,7 +220,7 @@ export default function Register() {
           </Form.Group>
           <Form.Group className="form-group mb-3" controlId="profilePicture">
             <Form.Label>Upload your photo</Form.Label>
-            <Form.Control type="file" />
+            <Form.Control type="file" name="image" onChange={onInputChange}/>
           </Form.Group>
           {error && (
             <div className="text-danger mb-3">

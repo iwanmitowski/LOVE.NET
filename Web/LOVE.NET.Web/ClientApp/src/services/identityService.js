@@ -68,10 +68,17 @@ export async function register(user, validCountries) {
     throw new Error(identityConstants.INVALID_COUNTRY);
   }
 
-  try {
-    const response = await instance.post(`${baseUrl}/register`, user);
+  var formData = new FormData();
+  for (var key in user) {
+    formData.append(key, user[key]);
+  }
 
-    return response.data;
+  try {
+    await instance.post(`${baseUrl}/register`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   } catch (error) {
     throw new Error(error.response.data.Error[0]);
   }
