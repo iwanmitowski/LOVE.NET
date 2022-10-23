@@ -39,7 +39,7 @@
 
                 var result = await this.cloudinary.UploadAsync(uploadParams);
 
-                imageUrl = result.Url.AbsoluteUri;
+                imageUrl = result.SecureUrl.AbsoluteUri;
             }
 
             return imageUrl;
