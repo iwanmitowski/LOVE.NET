@@ -229,7 +229,9 @@ export default function Register() {
           </Form.Group>
           {error && (
             <div className="text-danger mb-3">
-              <span>{error}</span>
+              {error.split("\n").map((message, key) => {
+                return <div key={key}>{message}</div>;
+              })}
             </div>
           )}
           <Button variant="primary" type="submit">

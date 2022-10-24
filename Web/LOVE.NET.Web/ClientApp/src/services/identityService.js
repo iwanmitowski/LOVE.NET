@@ -5,75 +5,46 @@ import * as date from "../utils/date";
 const baseUrl = globalConstants.API_URL + "identity";
 
 export async function login(user) {
-  if (!user.email || !user.password) {
-    throw new Error(identityConstants.FILL_REQUIRED_FIELDS);
-  }
-
   try {
+    if (!user.email || !user.password) {
+      throw new Error(identityConstants.FILL_REQUIRED_FIELDS);
+    }
     const response = await axiosInternal.post(`${baseUrl}/login`, user);
 
     return response.data;
   } catch (error) {
-    console.log(error.response.data.error);
-    throw new Error(error.response.data.error);
+    const errorMessage = getErrorMessage(error);
+    throw new Error(errorMessage);
   }
 }
 
-export async function register(user, validCountries) {
-  if (
-    !user.email ||
-    !user.userName ||
-    !user.password ||
-    !user.confirmPassword ||
-    !user.bio ||
-    !user.countryId ||
-    !user.cityId
-  ) {
-    throw new Error(identityConstants.FILL_REQUIRED_FIELDS);
-  }
-
-  if (user.password.length < identityConstants.PASSWORD_MIN_LENGTH) {
-    throw new Error(identityConstants.TOO_SHORT_PASSWORD);
-  }
-
-  if (user.confirmPassword !== user.password) {
-    throw new Error(identityConstants.PASSWORDS_DONT_MATCH);
-  }
-
-  const EMAIL_REGEX = identityConstants.EMAIL_REGEX;
-  if (!EMAIL_REGEX.test(user.email)) {
-    throw new Error(identityConstants.INVALID_EMAIL);
-  }
-
-  if (user.bio > identityConstants.BIO_MAX_LENGTH) {
-    throw new Error(identityConstants.TOO_LONG_BIO);
-  }
-
-  if (user.userName > identityConstants.USERNAME_MAX_LENGTH) {
-    throw new Error(identityConstants.TOO_LONG_USERNAME);
-  }
-
-  if (user.birthdate < date.getLatestLegal()) {
-    throw new Error(identityConstants.UNDERAGED_USER);
-  }
-
-  if (user.cityId < 1 || user.cityId > identityConstants.CITIES_MAX_COUNT) {
-    throw new Error(identityConstants.INVALID_CITY);
-  }
-
-  if (
-    user.countryId < 1 ||
-    user.countryId > identityConstants.COUNTRIES_MAX_COUNT
-  ) {
-    throw new Error(identityConstants.INVALID_COUNTRY);
-  }
-
+export async function register(user) {
   var formData = new FormData();
   for (var key in user) {
     formData.append(key, user[key]);
   }
 
   try {
+    if (
+      !user.email ||
+      !user.userName ||
+      !user.password ||
+      !user.confirmPassword ||
+      !user.bio ||
+      !user.countryId ||
+      !user.cityId
+    ) {
+      throw new Error(identityConstants.FILL_REQUIRED_FIELDS);
+    }
+  
+    if (user.password.length < identityConstants.PASSWORD_MIN_LENGTH) {
+      throw new Error(identityConstants.TOO_SHORT_PASSWORD);
+    }
+  
+    if (user.confirmPassword !== user.password) {
+      throw new Error(identityConstants.PASSWORDS_DONT_MATCH);
+    }
+  
     if (user.image) {
       const fileExtension = user.image.name.split(".").at(-1);
       const allowedFileTypes = ["jpg", "jpeg", "png"];
@@ -83,13 +54,42 @@ export async function register(user, validCountries) {
       }
     }
   
+    const EMAIL_REGEX = identityConstants.EMAIL_REGEX;
+    if (!EMAIL_REGEX.test(user.email)) {
+      throw new Error(identityConstants.INVALID_EMAIL);
+    }
+  
+    if (user.bio > identityConstants.BIO_MAX_LENGTH) {
+      throw new Error(identityConstants.TOO_LONG_BIO);
+    }
+  
+    if (user.userName > identityConstants.USERNAME_MAX_LENGTH) {
+      throw new Error(identityConstants.TOO_LONG_USERNAME);
+    }
+  
+    if (user.birthdate < date.getLatestLegal()) {
+      throw new Error(identityConstants.UNDERAGED_USER);
+    }
+  
+    if (user.cityId < 1 || user.cityId > identityConstants.CITIES_MAX_COUNT) {
+      throw new Error(identityConstants.INVALID_CITY);
+    }
+  
+    if (
+      user.countryId < 1 ||
+      user.countryId > identityConstants.COUNTRIES_MAX_COUNT
+    ) {
+      throw new Error(identityConstants.INVALID_COUNTRY);
+    }
+
     await instance.post(`${baseUrl}/register`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
   } catch (error) {
-    throw new Error(error.response.data.Error[0]);
+    const errorMessage = getErrorMessage(error);
+    throw new Error(errorMessage);
   }
 }
 
@@ -99,4 +99,18 @@ export async function logout() {
   } catch (error) {
     console.log(error);
   }
+}
+
+function getErrorMessage(error) {
+  const validationError = error?.response?.data?.Error;
+  const validationErrors = error?.response?.data?.errors && Object.values(error?.response?.data?.errors);
+
+  let errors = [...validationErrors, validationError].filter(e => !!e);
+  if (!errors.length){
+    errors = [...errors, error.message];
+  }
+    
+  const errorMessage = errors.join("\n");
+
+  return errorMessage;
 }
