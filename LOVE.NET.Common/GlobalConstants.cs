@@ -1,6 +1,7 @@
 ﻿namespace LOVE.NET.Common
 {
     using System.IO;
+    using static System.Net.WebRequestMethods;
 
     public static class GlobalConstants
     {
@@ -91,6 +92,7 @@
             public const string PasswordChangedSuccessfully = "Password changed successfully";
             public const string InvalidCity = "Invalid city";
             public const string InvalidCountry = "Invalid country";
+            public const string UnsupportedFileType = "Unsupported file type";
         }
 
         public class EmailMessagesConstants

@@ -20,4 +20,5 @@ export const identityConstants = {
   INVALID_CITY: "Invalid city",
   COUNTRIES_MAX_COUNT: 239,
   INVALID_COUNTRY: "Invalid country",
+  UNSUPPORTED_FILE_TYPE: "Unsupported file type",
 };

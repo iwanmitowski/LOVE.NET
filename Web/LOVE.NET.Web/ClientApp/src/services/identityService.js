@@ -74,6 +74,15 @@ export async function register(user, validCountries) {
   }
 
   try {
+    if (user.image) {
+      const fileExtension = user.image.name.split(".").at(-1);
+      const allowedFileTypes = ["jpg", "jpeg", "png"];
+  
+      if (!allowedFileTypes.includes(fileExtension)) {
+        throw new Error(identityConstants.UNSUPPORTED_FILE_TYPE);
+      }
+    }
+  
     await instance.post(`${baseUrl}/register`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",

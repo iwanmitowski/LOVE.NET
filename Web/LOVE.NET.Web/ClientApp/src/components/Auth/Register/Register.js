@@ -78,7 +78,7 @@ export default function Register() {
       let currentName = e.target.name;
       let currentValue = e.target.value;
 
-      if (currentName === 'image') {
+      if (currentName === "image") {
         console.log(e.target);
         return {
           ...prevState,
@@ -220,7 +220,12 @@ export default function Register() {
           </Form.Group>
           <Form.Group className="form-group mb-3" controlId="profilePicture">
             <Form.Label>Upload your photo</Form.Label>
-            <Form.Control type="file" name="image" onChange={onInputChange}/>
+            <Form.Control
+              type="file"
+              name="image"
+              onChange={onInputChange}
+              accept=".jpg,.jpeg,.png"
+            />
           </Form.Group>
           {error && (
             <div className="text-danger mb-3">
