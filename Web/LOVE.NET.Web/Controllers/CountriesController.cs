@@ -1,10 +1,12 @@
 ﻿namespace LOVE.NET.Web.Controllers
 {
+    using System.Collections.Generic;
+
     using LOVE.NET.Services.Countries;
     using LOVE.NET.Web.ViewModels.Countries;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
+
     using static LOVE.NET.Common.GlobalConstants.ControllerRoutesConstants;
 
     [Route(CountriesControllerName)]

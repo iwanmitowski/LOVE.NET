@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\LOVE.NET.Data.Models\LOVE.NET.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\LOVE.NET.Services.Mapping\LOVE.NET.Services.Mapping.csproj" />
+    <ProjectReference Include="..\LOVE.NET.Web.Infrastructure\LOVE.NET.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

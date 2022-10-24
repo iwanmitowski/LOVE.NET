@@ -5,6 +5,7 @@
 
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Mapping;
+    using LOVE.NET.Web.Infrastructure.Attributes;
     using Microsoft.AspNetCore.Http;
 
     public class RegisterViewModel : BaseCredentialsModel, IMapTo<ApplicationUser>
@@ -27,6 +28,7 @@
 
         public int CityId { get; set; }
 
+        [AllowedFileExtensions(new string[] { ".jpg", ".png" })]
         public IFormFile Image { get; set; }
     }
 }
