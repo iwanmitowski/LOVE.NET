@@ -24,7 +24,7 @@
         public const string CloudinaryCloudName = "Cloudinary:CloudName";
 
         public const string CloudinaryKey = "Cloudinary:Key";
-        
+
         public const string CloudinarySecret = "Cloudinary:Secret";
 
         public const string RefreshTokenValue = "refreshToken";
@@ -38,6 +38,8 @@
         public const int CountriesMaxCountInDb = 239;
 
         public const int MinimalAge = 18;
+
+        public const int MaxFileSizeInBytes = 20 * 1024 * 1024;
 
         public class JWTSecurityScheme
         {
@@ -93,6 +95,7 @@
             public const string InvalidCity = "Invalid city";
             public const string InvalidCountry = "Invalid country";
             public const string UnsupportedFileType = "Unsupported file type";
+            public const string MaxFileSizeReached = "Max file size reached";
         }
 
         public class EmailMessagesConstants

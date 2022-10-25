@@ -8,6 +8,8 @@
     using LOVE.NET.Web.Infrastructure.Attributes;
     using Microsoft.AspNetCore.Http;
 
+    using static LOVE.NET.Common.GlobalConstants;
+
     public class RegisterViewModel : BaseCredentialsModel, IMapTo<ApplicationUser>
     {
         [Required]
@@ -28,6 +30,7 @@
 
         public int CityId { get; set; }
 
+        [MaxFileSize(MaxFileSizeInBytes)]
         [AllowedFileExtensions(new string[] { ".jpg", ".png" })]
         public IFormFile Image { get; set; }
     }
