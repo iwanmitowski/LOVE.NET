@@ -1,7 +1,9 @@
 ﻿namespace LOVE.NET.Services.Images
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using CloudinaryDotNet;
@@ -43,6 +45,24 @@
             }
 
             return imageUrl;
+        }
+
+        public async Task<IEnumerable<string>> UploadImagesAsync(IEnumerable<IFormFile> images)
+        {
+            var imagesArray = images.ToArray();
+            var photosCount = imagesArray.Length;
+            var imageTasks = new Task<string>[photosCount];
+
+            for (int i = 0; i < photosCount; i++)
+            {
+                imageTasks[i] = this.UploadImageAsync(imagesArray[i]);
+            }
+
+            await Task.WhenAll(imageTasks);
+
+            var urls = imageTasks.Select(x => x.Result);
+
+            return urls;
         }
     }
 }

@@ -10,12 +10,14 @@
     using System.Threading.Tasks;
 
     using AutoMapper;
+    using CloudinaryDotNet;
     using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories.Users;
     using LOVE.NET.Services.Images;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.ViewModels.Identity;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
@@ -81,14 +83,20 @@
 
         public async Task<Result> RegisterAsync(RegisterViewModel model)
         {
-            var imageUrl = await this.imagesService.UploadImageAsync(model.Image);
+            var images = new List<IFormFile>(model.Photos);
+            images.Add(model.Image);
+            var imageUrls = await this.imagesService.UploadImagesAsync(images);
+
             var user = AutoMapperConfig.MapperInstance.Map<ApplicationUser>(model);
 
-            user.Images.Add(new Image()
+            foreach (var url in imageUrls)
             {
-                CreatedOn = DateTime.UtcNow,
-                Url = imageUrl,
-            });
+                user.Images.Add(new Image()
+                {
+                    CreatedOn = DateTime.UtcNow,
+                    Url = url,
+                });
+            }
 
             var result = await this.userManager.CreateAsync(user, model.Password);
 
