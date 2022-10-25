@@ -1,5 +1,6 @@
 ﻿namespace LOVE.NET.Web.Infrastructure.Attributes
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.IO;
     using System.Linq;
@@ -22,15 +23,39 @@
         protected override ValidationResult IsValid(
             object value, ValidationContext validationContext)
         {
-            var file = value as IFormFile;
-            if (file != null)
+            Type type = value.GetType();
+
+            if (type.IsArray)
             {
-                var extension = Path.GetExtension(file.FileName);
-                if (!this.extensions.Contains(extension.ToLower()))
+                var files = value as IFormFile[] ?? Enumerable.Empty<IFormFile>();
+
+                foreach (var file in files)
                 {
-                    return new ValidationResult(this.GetErrorMessage());
+                    if (file != null)
+                    {
+                        var extension = Path.GetExtension(file.FileName);
+                        if (!this.extensions.Contains(extension.ToLower()))
+                        {
+                            return new ValidationResult(this.GetErrorMessage());
+                        }
+                    }
                 }
             }
+            else
+            {
+                var file = value as IFormFile;
+
+                if (file != null)
+                {
+                    var extension = Path.GetExtension(file.FileName);
+                    if (!this.extensions.Contains(extension.ToLower()))
+                    {
+                        return new ValidationResult(this.GetErrorMessage());
+                    }
+                }
+            }
+
+
 
             return ValidationResult.Success;
         }
