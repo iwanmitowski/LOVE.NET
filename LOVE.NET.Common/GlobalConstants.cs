@@ -100,11 +100,11 @@
 
         public class EmailMessagesConstants
         {
-            public const string IncorrectEmail = "Your email is incorrect.";
-            public const string EmailConfirmed = "Email confirmed - you can now login.";
-            public const string EmailDoesntMatch = "This is not the email you registered with.";
-            public const string EmailNotConfirmed = "Please, check your email and verify your account.";
-            public const string EmailAlreadyVerified = "Your email is already verified.";
+            public const string IncorrectEmail = "Your email is incorrect";
+            public const string EmailConfirmed = "Email confirmed - you can now login";
+            public const string EmailDoesntMatch = "This is not the email you registered with";
+            public const string EmailNotConfirmed = "Please, check your email and verify your account";
+            public const string EmailAlreadyVerified = "Your email is already verified";
         }
 
         public class EmailSenderConstants
