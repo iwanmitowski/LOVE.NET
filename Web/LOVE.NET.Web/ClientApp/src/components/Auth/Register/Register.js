@@ -22,6 +22,7 @@ export default function Register() {
     countryId: 0,
     cityId: 0,
     image: null,
+    photos: [],
   });
 
   const [countries, setCountries] = useState([
@@ -219,10 +220,20 @@ export default function Register() {
             />
           </Form.Group>
           <Form.Group className="form-group mb-3" controlId="profilePicture">
-            <Form.Label>Upload your photo</Form.Label>
+            <Form.Label>Upload your profile picture</Form.Label>
             <Form.Control
               type="file"
               name="image"
+              onChange={onInputChange}
+              accept=".jpg,.jpeg,.png"
+            />
+          </Form.Group>
+          <Form.Group className="form-group mb-3" controlId="profilePicture">
+            <Form.Label>Upload your photos</Form.Label>
+            <Form.Control
+              type="file"
+              name="photos"
+              multiple
               onChange={onInputChange}
               accept=".jpg,.jpeg,.png"
             />
