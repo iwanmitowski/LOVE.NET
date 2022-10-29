@@ -9,6 +9,8 @@
         [Required]
         public string Url { get; set; }
 
+        public bool IsProfilePicture { get; set; }
+
         public virtual ApplicationUser User { get; set; }
     }
 }
