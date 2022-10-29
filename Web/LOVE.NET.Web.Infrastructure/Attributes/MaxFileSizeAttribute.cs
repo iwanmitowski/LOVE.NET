@@ -1,7 +1,8 @@
 ﻿namespace LOVE.NET.Web.Infrastructure.Attributes
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
-
+    using System.Linq;
     using Microsoft.AspNetCore.Http;
 
     using static LOVE.NET.Common.GlobalConstants.ControllerResponseMessages;
@@ -21,10 +22,25 @@
             object value,
             ValidationContext validationContext)
         {
-            var file = value as IFormFile;
-            if (file != null)
+            Type type = value.GetType();
+
+            if (type.IsArray)
             {
-                if (file.Length > this.maxFileSize)
+                var files = value as IFormFile[] ?? Enumerable.Empty<IFormFile>();
+
+                foreach (var file in files)
+                {
+                    if (file != null && file.Length > this.maxFileSize)
+                    {
+                        return new ValidationResult(this.GetErrorMessage());
+                    }
+                }
+            }
+            else
+            {
+                var file = value as IFormFile;
+
+                if (file != null && file.Length > this.maxFileSize)
                 {
                     return new ValidationResult(this.GetErrorMessage());
                 }
