@@ -119,5 +119,12 @@
             public const string Email = "email";
             public const string VerifyHtml = "verify.html";
         }
+
+        public class GenderConstants
+        {
+            public const string Male = "Male";
+            public const string Female = "Female";
+            public const string Trans = "Trans";
+        }
     }
 }

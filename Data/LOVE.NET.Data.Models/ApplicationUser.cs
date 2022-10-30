@@ -20,6 +20,7 @@ namespace LOVE.NET.Data.Models
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.LikesSent = new HashSet<Like>();
             this.LikesReceived = new HashSet<Like>();
+            this.Matches = new HashSet<Match>();
             this.Images = new HashSet<Image>();
             this.RefreshTokens = new HashSet<RefreshToken>();
         }
@@ -55,6 +56,11 @@ namespace LOVE.NET.Data.Models
         public virtual ICollection<Match> Matches { get; set; }
 
         public virtual ICollection<Image> Images { get; set; }
+
+        public int GenderId { get; set; }
+
+        [Required]
+        public virtual Gender Gender { get; set; }
 
         public int CountryId { get; set; }
 

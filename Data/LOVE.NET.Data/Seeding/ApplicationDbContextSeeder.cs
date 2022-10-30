@@ -28,6 +28,7 @@
                               new RolesSeeder(),
                               new SettingsSeeder(),
                               new CountriesSeeder(),
+                              new GendersSeeder(),
                           };
 
             foreach (var seeder in seeders)
