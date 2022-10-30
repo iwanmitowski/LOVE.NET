@@ -1,0 +1,140 @@
+[
+  {
+    "CreatedOn": "2022-10-17T18:03:39.3628562",
+    "ModifiedOn": "2022-10-17T18:03:40.127507",
+    "IsDeleted": false,
+    "GenderId": 1,
+    "Bio": "Admin",
+    "Birthdate": "2004-10-17T00:00:00",
+    "Images": [
+      {
+        "Url": "https://res.cloudinary.com/dojl8gfnd/image/upload/v1666714042/24-248253_user-profile-default-image-png-clipart-png-download_tuamuf.png",
+        "CreatedOn": "2022-10-17T18:03:39.3628562",
+        "ModifiedOn": "2022-10-17T18:03:40.127507",
+        "IsProfilePicture": true
+      }
+    ],
+    "CountryId": 30,
+    "CityId": 5808,
+    "UserName": "admin",
+    "Email": "admin@admin.admin",
+    "EmailConfirmed": true,
+    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "LockoutEnabled": false
+  },
+  {
+    "CreatedOn": "2022-10-17T18:03:39.3628562",
+    "ModifiedOn": "2022-10-17T18:03:40.127507",
+    "IsDeleted": false,
+    "GenderId": 1,
+    "Bio": "💪🎸",
+    "Birthdate": "2004-10-17T00:00:00",
+    "Images": [
+      {
+        "Url": "https://i.picsum.photos/id/334/2304/1536.jpg?hmac=ihrh84KbSSW-zvp-oRz8FGCVOWvPAD3SZvYPS0v3mv8",
+        "CreatedOn": "2022-10-17T18:03:39.3628562",
+        "ModifiedOn": "2022-10-17T18:03:40.127507",
+        "IsProfilePicture": true
+      }
+    ],
+    "CountryId": 30,
+    "CityId": 5885,
+    "UserName": "Pet3r",
+    "Email": "Pet3r@abv.bg",
+    "EmailConfirmed": true,
+    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "LockoutEnabled": false
+  },
+  {
+    "CreatedOn": "2022-10-17T18:03:39.3628562",
+    "ModifiedOn": "2022-10-17T18:03:40.127507",
+    "IsDeleted": false,
+    "GenderId": 2,
+    "Bio": "UwU, OwO 🌺",
+    "Birthdate": "2004-10-17T00:00:00",
+    "Images": [
+      {
+        "Url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWd_WC2oPRxMWdgLUqrJLonosMjvMLgOJNQg&usqp=CAU",
+        "CreatedOn": "2022-10-17T18:03:39.3628562",
+        "ModifiedOn": "2022-10-17T18:03:40.127507",
+        "IsProfilePicture": true
+      }
+    ],
+    "CountryId": 30,
+    "CityId": 5869,
+    "UserName": "Misa Misa",
+    "Email": "Misa4@abv.bg",
+    "EmailConfirmed": true,
+    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "LockoutEnabled": false
+  },
+  {
+    "CreatedOn": "2022-10-17T18:03:39.3628562",
+    "ModifiedOn": "2022-10-17T18:03:40.127507",
+    "IsDeleted": false,
+    "GenderId": 3,
+    "Bio": "Astrology ♑ and travelling 🏔 are my passion",
+    "Birthdate": "2004-10-17T00:00:00",
+    "Images": [
+      {
+        "Url": "https://i.picsum.photos/id/177/2515/1830.jpg?hmac=G8-2Q3-YPB2TreOK-4ofcmS-z5F6chIA0GHYAe5yzDY",
+        "CreatedOn": "2022-10-17T18:03:39.3628562",
+        "ModifiedOn": "2022-10-17T18:03:40.127507",
+        "IsProfilePicture": true
+      }
+    ],
+    "CountryId": 30,
+    "CityId": 5807,
+    "UserName": "Gosho ot po4ivka",
+    "Email": "Go6o@abv.bg",
+    "EmailConfirmed": true,
+    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "LockoutEnabled": false
+  },
+  {
+    "CreatedOn": "2022-10-17T18:03:39.3628562",
+    "ModifiedOn": "2022-10-17T18:03:40.127507",
+    "IsDeleted": false,
+    "GenderId": 1,
+    "Bio": "Are you todays date ?",
+    "Birthdate": "2004-10-17T00:00:00",
+    "Images": [
+      {
+        "Url": "https://i.picsum.photos/id/1083/5472/3648.jpg?hmac=CtOxgXc6Oe3TQvKBXtPsKVT9Z2Yg7SJKWVlgWPeMBUs",
+        "CreatedOn": "2022-10-17T18:03:39.3628562",
+        "ModifiedOn": "2022-10-17T18:03:40.127507",
+        "IsProfilePicture": true
+      }
+    ],
+    "CountryId": 30,
+    "CityId": 5878,
+    "UserName": "4ing Yao 4ong",
+    "Email": "4ing4ong@abv.bg",
+    "EmailConfirmed": true,
+    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "LockoutEnabled": false
+  },
+  {
+    "CreatedOn": "2022-10-17T18:03:39.3628562",
+    "ModifiedOn": "2022-10-17T18:03:40.127507",
+    "IsDeleted": false,
+    "GenderId": 2,
+    "Bio": "I promise, I am not a roBOAT 🛶",
+    "Birthdate": "2004-10-17T00:00:00",
+    "Images": [
+      {
+        "Url": "https://i.picsum.photos/id/1011/5472/3648.jpg?hmac=Koo9845x2akkVzVFX3xxAc9BCkeGYA9VRVfLE4f0Zzk",
+        "CreatedOn": "2022-10-17T18:03:39.3628562",
+        "ModifiedOn": "2022-10-17T18:03:40.127507",
+        "IsProfilePicture": true
+      }
+    ],
+    "CountryId": 30,
+    "CityId": 5834,
+    "UserName": "Mariika",
+    "Email": "MariikaBezIvan4o@abv.bg",
+    "EmailConfirmed": true,
+    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "LockoutEnabled": false
+  }
+]

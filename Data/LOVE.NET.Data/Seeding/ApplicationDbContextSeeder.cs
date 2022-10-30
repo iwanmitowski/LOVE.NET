@@ -29,6 +29,7 @@
                               new SettingsSeeder(),
                               new CountriesSeeder(),
                               new GendersSeeder(),
+                              new UsersSeeder(),
                           };
 
             foreach (var seeder in seeders)

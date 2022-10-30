@@ -61,6 +61,8 @@
             public const string CitiesWithCountriesFileName = "CitiesWithCountries.csv";
 
             public const string CountriesFileName = "Countries.csv";
+
+            public const string UsersFileName = "Users.json";
         }
 
         public class ControllerRoutesConstants
