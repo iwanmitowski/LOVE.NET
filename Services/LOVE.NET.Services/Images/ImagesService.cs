@@ -10,6 +10,8 @@
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
 
+    using static LOVE.NET.Common.GlobalConstants;
+
     public class ImagesService : IImagesService
     {
         private readonly Cloudinary cloudinary;
@@ -60,7 +62,12 @@
 
             await Task.WhenAll(imageTasks);
 
-            var urls = imageTasks.Select(x => x.Result);
+            var urls = imageTasks.Select(x => x.Result).ToList();
+
+            if (!urls.Any())
+            {
+                urls.Add(DefaultProfilePictureUrl);
+            }
 
             return urls;
         }

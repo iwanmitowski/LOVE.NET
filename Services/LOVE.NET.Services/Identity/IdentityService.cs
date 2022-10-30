@@ -83,18 +83,25 @@
 
         public async Task<Result> RegisterAsync(RegisterViewModel model)
         {
-            var images = new List<IFormFile>(model.Photos);
-            images.Add(model.Image);
-            var imageUrls = await this.imagesService.UploadImagesAsync(images);
+            var images = new List<IFormFile>();
+
+            if (model?.Photos?.Any() == true)
+            {
+                images.Add(model.Image);
+                images.AddRange(model.Photos);
+            }
+
+            var imageUrls = new List<string>(await this.imagesService.UploadImagesAsync(images));
 
             var user = AutoMapperConfig.MapperInstance.Map<ApplicationUser>(model);
 
-            foreach (var url in imageUrls)
+            for (int i = 0; i < imageUrls.Count; i++)
             {
                 user.Images.Add(new Image()
                 {
                     CreatedOn = DateTime.UtcNow,
-                    Url = url,
+                    Url = imageUrls[i],
+                    IsProfilePicture = i == 0,
                 });
             }
 
