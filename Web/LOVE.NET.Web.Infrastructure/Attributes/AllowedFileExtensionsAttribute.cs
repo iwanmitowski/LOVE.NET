@@ -23,9 +23,9 @@
         protected override ValidationResult IsValid(
             object value, ValidationContext validationContext)
         {
-            Type type = value.GetType();
+            Type type = value?.GetType();
 
-            if (type.IsArray)
+            if (type?.IsArray == true)
             {
                 var files = value as IFormFile[] ?? Enumerable.Empty<IFormFile>();
 
