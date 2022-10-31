@@ -70,7 +70,11 @@ export async function register(user) {
     if (user.birthdate < date.getLatestLegal()) {
       throw new Error(identityConstants.UNDERAGED_USER);
     }
-  
+
+    if (user.genderId < 1 || user.genderId > identityConstants.CITIES_MAX_COUNT) {
+      throw new Error(identityConstants.INVALID_GENDER);
+    }
+
     if (user.cityId < 1 || user.cityId > identityConstants.CITIES_MAX_COUNT) {
       throw new Error(identityConstants.INVALID_CITY);
     }
@@ -103,8 +107,8 @@ export async function logout() {
 
 function getErrorMessage(error) {
   const validationError = error?.response?.data?.Error;
-  const validationErrors = error?.response?.data?.errors && Object.values(error?.response?.data?.errors);
-
+  const validationErrors = (error?.response?.data?.errors && Object.values(error?.response?.data?.errors)) || [];
+  
   let errors = [...validationErrors, validationError].filter(e => !!e);
   if (!errors.length){
     errors = [...errors, error.message];

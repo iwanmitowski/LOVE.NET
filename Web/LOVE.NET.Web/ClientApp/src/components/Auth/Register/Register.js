@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import * as identityService from "../../../services/identityService";
 import * as countryService from "../../../services/countryService";
+import * as genderService from "../../../services/genderService";
 import * as date from "../../../utils/date.js";
 
 import styles from "../Auth.module.css";
@@ -21,6 +22,7 @@ export default function Register() {
     birthdate: date.getLatestLegal().toISOString().split("T")[0],
     countryId: 0,
     cityId: 0,
+    genderId: 1,
     image: null,
     photos: [],
   });
@@ -44,6 +46,8 @@ export default function Register() {
     },
   ]);
 
+  const [genders, setGenders] = useState([]);
+
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -58,6 +62,9 @@ export default function Register() {
         .catch((error) => {
           setError(error.message);
         });
+      genderService.getAll().then((res) => {
+        setGenders(res);
+      });
     }
   }, [countries]);
 
@@ -80,7 +87,6 @@ export default function Register() {
       let currentValue = e.target.value;
 
       if (currentName === "image") {
-        console.log(e.target);
         return {
           ...prevState,
           [currentName]: e.target.files[0],
@@ -172,6 +178,25 @@ export default function Register() {
               required
             />
           </Form.Group>
+          <Form.Group className="form-group mb-3">
+            <Form.Label>Choose gender</Form.Label>
+            <div>
+              {genders.map((g) => {
+                return (
+                  <Form.Check
+                    inline
+                    label={g.name}
+                    name="genderId"
+                    type="radio"
+                    key={`${g.id}-${g.name}`}
+                    defaultChecked={g.id === 1}
+                    value={g.id}
+                    onChange={onInputChange}
+                  />
+                );
+              })}
+            </div>
+          </Form.Group>
           <Form.Group className="form-group mb-3" controlId="countryId">
             <Form.Label>Choose country</Form.Label>
             <Form.Select
@@ -228,7 +253,7 @@ export default function Register() {
               accept=".jpg,.jpeg,.png"
             />
           </Form.Group>
-          <Form.Group className="form-group mb-3" controlId="profilePicture">
+          <Form.Group className="form-group mb-3" controlId="pictures">
             <Form.Label>Upload your photos</Form.Label>
             <Form.Control
               type="file"

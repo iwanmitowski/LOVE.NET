@@ -21,4 +21,6 @@ export const identityConstants = {
   COUNTRIES_MAX_COUNT: 239,
   INVALID_COUNTRY: "Invalid country",
   UNSUPPORTED_FILE_TYPE: "Unsupported file type",
+  GENDERS_MAX_COUNT: 3,
+  INVALID_GENDER: "Invalid gender",
 };

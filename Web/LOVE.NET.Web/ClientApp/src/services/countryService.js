@@ -9,7 +9,6 @@ export async function getAll() {
 
     return response.data;
   } catch (error) {
-    console.log(error.response.data.error);
     throw new Error(error.response.data.error);
   }
 }
@@ -29,7 +28,6 @@ export async function getCitiesByCountryId(id) {
 
     return cities;
   } catch (error) {
-    console.log(error.response.data.error);
     throw new Error(error.response.data.error);
   }
 }
