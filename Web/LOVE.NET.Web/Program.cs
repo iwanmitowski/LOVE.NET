@@ -1,5 +1,9 @@
 ﻿namespace LOVE.NET.Web
 {
+    using System;
+    using System.Reflection;
+    using System.Text;
+
     using CloudinaryDotNet;
     using LOVE.NET.Data;
     using LOVE.NET.Data.Common;
@@ -11,7 +15,9 @@
     using LOVE.NET.Data.Seeding;
     using LOVE.NET.Services.Countries;
     using LOVE.NET.Services.Email;
+    using LOVE.NET.Services.Genders;
     using LOVE.NET.Services.Identity;
+    using LOVE.NET.Services.Images;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Services.Messaging;
     using LOVE.NET.Web.ViewModels;
@@ -24,14 +30,9 @@
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
-    using System;
-    using System.Reflection;
-    using System.Text;
-    using CloudinaryDotNet;
-    using CloudinaryDotNet.Actions;
+
     using static LOVE.NET.Common.GlobalConstants;
     using static LOVE.NET.Common.GlobalConstants.JWTSecurityScheme;
-    using LOVE.NET.Services.Images;
 
     public class Program
     {
@@ -130,6 +131,7 @@
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+            services.AddScoped(typeof(IRepository<Gender>), typeof(EfRepository<Gender>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<ICountriesRepository, CountriesRepository>();
@@ -141,6 +143,7 @@
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddSingleton<IImagesService, ImagesService>();
+            services.AddTransient<IGendersService, GendersService>();
         }
 
         private static void Configure(WebApplication app)
