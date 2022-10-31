@@ -236,6 +236,11 @@
                 this.ModelState.AddModelError(Error, UnderagedUser);
             }
 
+            if (model.GenderId < 1 || model.GenderId > GendersMaxCountInDb)
+            {
+                this.ModelState.AddModelError(Error, InvalidGender);
+            }
+
             if (model.CityId < 1 || model.CityId > CitiesMaxCountInDb)
             {
                 this.ModelState.AddModelError(Error, InvalidCity);

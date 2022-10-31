@@ -28,6 +28,8 @@
 
         public int CountryId { get; set; }
 
+        public int GenderId { get; set; }
+
         public int CityId { get; set; }
 
         [MaxFileSize(MaxFileSizeInBytes)]
