@@ -37,6 +37,8 @@
 
         public const int CountriesMaxCountInDb = 239;
 
+        public const int GendersMaxCountInDb = 3;
+
         public const int MinimalAge = 18;
 
         public const int MaxFileSizeInBytes = 20 * 1024 * 1024;
@@ -82,6 +84,8 @@
 
             public const string CountriesControllerName = Api + "countries";
             public const string ById = "{id:int}";
+
+            public const string GendersControllerName = Api + "genders";
         }
 
         public class ControllerResponseMessages
@@ -100,6 +104,7 @@
             public const string InvalidCountry = "Invalid country";
             public const string UnsupportedFileType = "Unsupported file type";
             public const string MaxFileSizeReached = "Max file size reached";
+            public const string InvalidGender = "Invalid gender";
         }
 
         public class EmailMessagesConstants
