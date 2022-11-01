@@ -21,7 +21,7 @@
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<GendersViewModel>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<GenderViewModel>))]
         public IActionResult GetAll()
         {
             var genders = this.gendersService.GetAll();

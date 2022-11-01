@@ -17,11 +17,11 @@
             this.gendersRepository = gendersRepository;
         }
 
-        public IEnumerable<GendersViewModel> GetAll()
+        public IEnumerable<GenderViewModel> GetAll()
         {
             var genders = this.gendersRepository.AllAsNoTracking();
 
-            var result = AutoMapperConfig.MapperInstance.Map<IEnumerable<GendersViewModel>>(genders);
+            var result = AutoMapperConfig.MapperInstance.Map<IEnumerable<GenderViewModel>>(genders);
 
             return result;
         }
