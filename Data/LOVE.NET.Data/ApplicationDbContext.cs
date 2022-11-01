@@ -32,8 +32,6 @@
 
         public DbSet<Like> Likes { get; set; }
 
-        public DbSet<Match> Matches { get; set; }
-
         public DbSet<City> Cities { get; set; }
 
         public DbSet<Gender> Genders { get; set; }
