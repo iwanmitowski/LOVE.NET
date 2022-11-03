@@ -20,7 +20,6 @@
                 .Include(u => u.Country)
                 .Include(u => u.LikesReceived)
                 .Include(u => u.LikesSent)
-                .Include(u => u.Matches)
                 .Include(u => u.RefreshTokens);
         }
 
@@ -30,10 +29,20 @@
             return this.Context.Users
                 .Include(u => u.City)
                 .Include(u => u.Country)
-                .Include(u => u.LikesReceived)
+                .Include(u => u.Images)
                 .Include(u => u.LikesSent)
-                .Include(u => u.Matches)
+                    .ThenInclude(u => u.LikedUser)
+                        .ThenInclude(lu => lu.City)
+                        .ThenInclude(lu => lu.Country)
+                .Include(u => u.LikesSent)
+                    .ThenInclude(u => u.LikedUser)
+                    .ThenInclude(lu => lu.Gender)
+                .Include(u => u.LikesSent)
+                    .ThenInclude(u => u.LikedUser)
+                    .ThenInclude(lu => lu.Images)
                 .Include(u => u.RefreshTokens)
+                .Include(u => u.LikesReceived)
+                .Include(lu => lu.Gender)
                 .Where(func);
         }
     }
