@@ -71,9 +71,6 @@ namespace LOVE.NET.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Bio")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -148,8 +145,6 @@ namespace LOVE.NET.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("CityId");
 
@@ -503,10 +498,6 @@ namespace LOVE.NET.Data.Migrations
 
             modelBuilder.Entity("LOVE.NET.Data.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("LOVE.NET.Data.Models.ApplicationUser", null)
-                        .WithMany("Matches")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("LOVE.NET.Data.Models.City", "City")
                         .WithMany("Users")
                         .HasForeignKey("CityId")
@@ -636,8 +627,6 @@ namespace LOVE.NET.Data.Migrations
                     b.Navigation("LikesSent");
 
                     b.Navigation("Logins");
-
-                    b.Navigation("Matches");
 
                     b.Navigation("RefreshTokens");
 
