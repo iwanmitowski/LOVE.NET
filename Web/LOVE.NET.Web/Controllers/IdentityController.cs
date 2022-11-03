@@ -165,6 +165,25 @@
             return this.Ok(response);
         }
 
+        [HttpGet(GetAccountRoute)]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseModel))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult GetAccount(string id)
+        {
+            var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (loggedUserId != id)
+            {
+                return this.Forbid();
+            }
+
+            var user = this.userService.GetUserDetails(id);
+
+            return this.Ok(user);
+        }
+
         [Authorize]
         [HttpGet("test")]
         public IActionResult Test()

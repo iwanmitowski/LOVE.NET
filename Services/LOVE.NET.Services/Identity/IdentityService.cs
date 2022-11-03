@@ -9,8 +9,6 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    using AutoMapper;
-    using CloudinaryDotNet;
     using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories.Users;
@@ -168,6 +166,19 @@
                 Expires = DateTime.UtcNow.AddHours(1.5),
                 CreatedOn = now,
             };
+        }
+
+        public UserDetailsViewModel GetUserDetails(string id)
+        {
+            var user = this.usersRepository.WithAllInformation(u => u.Id == id).FirstOrDefault();
+
+            var matches = user.LikesSent
+                .Where(l =>
+                    user.LikesReceived.Select(lr => lr.UserId).Intersect(user.LikesSent.Select(ls => ls.LikedUserId)).Contains(l.LikedUserId));
+
+            var result = AutoMapperConfig.MapperInstance.Map<UserDetailsViewModel>(user);
+
+            return result;
         }
     }
 }

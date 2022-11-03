@@ -15,5 +15,7 @@
         Task<Result> RegisterAsync(RegisterViewModel model);
 
         RefreshToken GenerateRefreshToken();
+
+        UserDetailsViewModel GetUserDetails(string id);
     }
 }

@@ -77,6 +77,7 @@
             public const string LoginRoute = "login";
             public const string LogoutRoute = "logout";
             public const string RefreshTokenRoute = "refreshToken";
+            public const string GetAccountRoute = "account/{id:guid}";
 
             public const string EmailControllerName = Api + "email";
             public const string VerifyEmailRoute = "verify";
