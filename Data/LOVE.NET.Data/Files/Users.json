@@ -18,6 +18,7 @@
     "CityId": 5808,
     "UserName": "admin",
     "Email": "admin@admin.admin",
+    "NormalizedEmail": "ADMIN@ADMIN.ADMIN",
     "EmailConfirmed": true,
     "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
     "LockoutEnabled": false
@@ -41,6 +42,7 @@
     "CityId": 5885,
     "UserName": "Pet3r",
     "Email": "Pet3r@abv.bg",
+    "NormalizedEmail": "PET3R@ABV.BG",
     "EmailConfirmed": true,
     "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
     "LockoutEnabled": false
@@ -64,6 +66,7 @@
     "CityId": 5869,
     "UserName": "Misa Misa",
     "Email": "Misa4@abv.bg",
+    "NormalizedEmail": "MISA4@ABV.BG",
     "EmailConfirmed": true,
     "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
     "LockoutEnabled": false
@@ -87,6 +90,7 @@
     "CityId": 5807,
     "UserName": "Gosho ot po4ivka",
     "Email": "Go6o@abv.bg",
+    "NormalizedEmail": "GO6O@ABV.BG",
     "EmailConfirmed": true,
     "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
     "LockoutEnabled": false
@@ -110,6 +114,7 @@
     "CityId": 5878,
     "UserName": "4ing Yao 4ong",
     "Email": "4ing4ong@abv.bg",
+    "NormalizedEmail": "4ING4ONG@ABV.BG",
     "EmailConfirmed": true,
     "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
     "LockoutEnabled": false
@@ -133,6 +138,7 @@
     "CityId": 5834,
     "UserName": "Mariika",
     "Email": "MariikaBezIvan4o@abv.bg",
+    "Email": "MARIIKABEZIVAN4O@ABV.BG",
     "EmailConfirmed": true,
     "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
     "LockoutEnabled": false
