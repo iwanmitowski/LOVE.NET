@@ -3,27 +3,27 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export const IdentityContext = createContext();
 
-export const IdentityProvider = ({
-    children,
-}) => {
-    const [user, setUser] =  useLocalStorage('auth', null);
+export const IdentityProvider = ({ children }) => {
+  const [user, setUser] = useLocalStorage("auth", null);
 
-    const userLogin = (data) => {
-        setUser(data);
-    }
+  const userLogin = (data) => {
+    setUser(data);
+  };
 
-    const userLogout = () => {
-        setUser(null);
-    }
+  const userLogout = () => {
+    setUser(null);
+  };
 
-    return (
-        <IdentityContext.Provider value={{
-            user,
-            userLogin,
-            userLogout,
-            isLogged: user && !!user.token
-        }}>
-            {children}
-        </IdentityContext.Provider>
-    )
-}
+  return (
+    <IdentityContext.Provider
+      value={{
+        user,
+        userLogin,
+        userLogout,
+        isLogged: user && !!user.token,
+      }}
+    >
+      {children}
+    </IdentityContext.Provider>
+  );
+};
