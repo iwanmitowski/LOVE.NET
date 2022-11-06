@@ -60,7 +60,7 @@
 
             if (result.Failure)
             {
-                return this.BadRequest(result.Error);
+                return this.BadRequest(result.Errors);
             }
 
             await this.EmailConfirmation(model.Email);
@@ -167,7 +167,7 @@
 
         [HttpGet(GetAccountRoute)]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseModel))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDetailsViewModel))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult GetAccount(string id)

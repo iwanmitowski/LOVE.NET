@@ -31,7 +31,7 @@
 
             if (result.Failure)
             {
-                return this.BadRequest(result.Error);
+                return this.BadRequest(result.Errors);
             }
 
             return this.Ok(EmailConfirmed);
@@ -48,7 +48,7 @@
 
             if (result.Failure)
             {
-                return this.BadRequest(result.Error);
+                return this.BadRequest(result.Errors);
             }
 
             return this.Ok();

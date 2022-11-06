@@ -6,7 +6,7 @@
 
         public bool Failure => !this.Succeeded;
 
-        public string[] Error { get; private set; }
+        public string[] Errors { get; private set; }
 
         public static implicit operator Result(bool succeeded)
             => new Result { Succeeded = succeeded };
@@ -15,7 +15,7 @@
             => new Result
             {
                 Succeeded = false,
-                Error = new[] { error },
+                Errors = new[] { error },
             };
     }
 }
