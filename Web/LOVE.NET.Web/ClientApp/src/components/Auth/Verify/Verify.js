@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
 
 import * as emailService from "../../../services/emailService";
-import styles from "../Auth.module.css";
+import styles from "../../Shared/Forms.module.css";
 
 export default function Verify() {
   const [searchParams] = useSearchParams();

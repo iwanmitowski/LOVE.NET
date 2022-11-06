@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
 
 import * as identityService from "../../../services/identityService";
-import styles from "../Auth.module.css";
+import styles from "../../Shared/Forms.module.css";
 
 export default function Login() {
   const { userLogin } = useIdentityContext();
