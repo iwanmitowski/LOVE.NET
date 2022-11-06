@@ -138,7 +138,7 @@
     "CityId": 5834,
     "UserName": "Mariika",
     "Email": "MariikaBezIvan4o@abv.bg",
-    "Email": "MARIIKABEZIVAN4O@ABV.BG",
+    "NormalizedEmail": "MARIIKABEZIVAN4O@ABV.BG",
     "EmailConfirmed": true,
     "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
     "LockoutEnabled": false
