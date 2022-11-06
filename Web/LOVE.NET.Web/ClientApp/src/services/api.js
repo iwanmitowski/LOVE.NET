@@ -6,22 +6,14 @@ export const instance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-});
-
-export const axiosInternal = axios.create({
-  baseURL: globalConstants.API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
   withCredentials: true,
 });
 
 instance.interceptors.request.use(
   (config) => {
     const auth = localStorage.getItem("auth");
-    
-    if (auth) {
-      console.log(auth);
+
+    if (!!auth) {
       const { token } = JSON.parse(auth);
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -33,16 +25,7 @@ instance.interceptors.request.use(
   }
 );
 
-axiosInternal.interceptors.request.use(
-  (config) => {
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-axiosInternal.interceptors.response.use(
+instance.interceptors.response.use(
   (res) => {
     return res;
   },
@@ -58,14 +41,14 @@ axiosInternal.interceptors.response.use(
         originalConfig._retry = true;
 
         try {
-          const response = await axiosInternal.post("/identity/refreshToken");
+          const response = await instance.post("/identity/refreshToken");
 
           const { token } = response.data;
           localStorage.setItem("auth", JSON.stringify(token));
 
           originalConfig.headers["Authorization"] = `Bearer ${token}`;
-          
-          return axiosInternal(originalConfig);
+
+          return instance(originalConfig);
         } catch (error) {
           return Promise.reject(error);
         }

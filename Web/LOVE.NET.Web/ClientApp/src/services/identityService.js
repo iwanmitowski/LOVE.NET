@@ -1,4 +1,4 @@
-import { axiosInternal, instance } from "../services/api";
+import { instance } from "../services/api";
 import { globalConstants, identityConstants } from "../utils/constants";
 import * as date from "../utils/date";
 
@@ -9,7 +9,7 @@ export async function login(user) {
     if (!user.email || !user.password) {
       throw new Error(identityConstants.FILL_REQUIRED_FIELDS);
     }
-    const response = await axiosInternal.post(`${baseUrl}/login`, user);
+    const response = await instance.post(`${baseUrl}/login`, user);
 
     return response.data;
   } catch (error) {
@@ -99,7 +99,7 @@ export async function register(user) {
 
 export async function logout() {
   try {
-    await axiosInternal.post(`${baseUrl}/logout`);
+    await instance.post(`${baseUrl}/logout`);
   } catch (error) {
     console.log(error);
   }
