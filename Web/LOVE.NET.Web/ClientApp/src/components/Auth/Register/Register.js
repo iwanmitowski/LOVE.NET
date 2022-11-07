@@ -3,6 +3,7 @@ import { useState, Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserForm from "../../User/UserForm";
 
+import * as genderService from "../../../services/genderService";
 import * as identityService from "../../../services/identityService";
 import * as date from "../../../utils/date.js";
 
@@ -23,8 +24,12 @@ export default function Register() {
     photos: [],
   });
 
+  const [genders, setGenders] = useState([]);
   const errorState = useState("");
   const [, setError] = errorState;
+
+  genderService.getAll()
+    .then((res) => setGenders(res));
 
   const onInputChange = (e) => {
     setUser((prevState) => {
@@ -64,6 +69,7 @@ export default function Register() {
     <Fragment>
       <UserForm
         user={user}
+        genders={genders}
         onFormSubmit={onFormSubmit}
         onInputChange={onInputChange}
         errorState={errorState}

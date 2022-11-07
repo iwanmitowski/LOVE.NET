@@ -12,6 +12,7 @@ import Register from "./components/Auth/Register/Register";
 import Verify from "./components/Auth/Verify/Verify";
 
 import "./App.css";
+import UserDetails from "./components/User/UserDetails";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/logout" element={<AuthGuard><Logout /></AuthGuard>} />
             <Route path="/register" element={<NoAuthGuard><Register /></NoAuthGuard>} />
             <Route path="/verify" element={<NoAuthGuard><Verify /></NoAuthGuard>} />
+            <Route path="/user/:id" element={<AuthGuard><UserDetails /></AuthGuard>} />
           </Routes>
         </Main>
         <Footer />
