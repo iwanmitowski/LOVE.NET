@@ -29,6 +29,8 @@
 
         public CityViewModel City { get; set; }
 
+        public CountryViewModel Country { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             // Getting intersection of both users likes, and select the liked user
