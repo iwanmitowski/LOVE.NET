@@ -1,38 +1,54 @@
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useIdentityContext } from "../../hooks/useIdentityContext";
 
 import * as countryService from "../../services/countryService";
-import * as genderService from "../../services/genderService";
 
 import styles from "../Shared/Forms.module.css";
 
 export default function UserForm(props) {
-	const user = props.user;
-	const onFormSubmit = props.onFormSubmit;
-	const onInputChange = props.onInputChange;
-	const [error, setError] = props.errorState;
+  const user = props.user;
+  const genders = props.genders;
+  const townState = props.townState;
+  const onFormSubmit = props.onFormSubmit;
+  const onInputChange = props.onInputChange;
+  const [error, setError] = props.errorState;
 
-  const [countries, setCountries] = useState([
-    {
-      countryId: 0,
-      countryName: "Chooce country here",
-    },
-  ]);
-
+  const { isLogged } = useIdentityContext();
+  const [countries, setCountries] = useState(townState.country);
   const [countriesCities, setCities] = useState([
     {
-      countryId: 0,
-      cities: [
-        {
-          cityId: 0,
-          cityName: "Choose city here",
-        },
-      ],
+      cityId: 0,
+      cityName: "Choose city here",
     },
   ]);
 
+  const loadCities = useCallback(() => {
+    const countryId = user?.country.countryId || user.countryId;
+
+    const isCountryFetched = countriesCities.some(
+      (c) => c.countryId === parseInt(countryId)
+    );
+    
+    if (countryId !== 0 && !isCountryFetched) {
+      countryService.getCitiesByCountryId(countryId).then((res) => {
+        setCities((prevState) => {
+          return [...prevState, res];
+        });
+      });
+    }
+  });
+
   useEffect(() => {
+    if (!countries.length) {
+      setCountries(townState.country);
+    }
+
+    if (!countriesCities.length) {
+      setCities(townState.city);
+    }
+
     if (countries.length === 1) {
       countryService
         .getAll()
@@ -43,49 +59,57 @@ export default function UserForm(props) {
         })
         .catch((error) => {
           setError(error.message);
+        })
+        .finally(() => {
+          if (isLogged) {
+            loadCities();
+          }
         });
-      genderService.getAll().then((res) => {
-        setGenders(res);
-      });
     }
-  }, [countries]);
-
-  useEffect(() => {
-    const isCountryFetched = countriesCities.some(
-      (c) => c.countryId === parseInt(user.countryId)
-    );
-    if (user.countryId !== 0 && !isCountryFetched) {
-      countryService.getCitiesByCountryId(user.countryId).then((res) => {
-        setCities((prevState) => {
-          return [...prevState, res];
-        });
-      });
-    }
-  }, [user.countryId, countriesCities]);
-
-  const [genders, setGenders] = useState([]);
+  }, [
+    countries,
+    countriesCities,
+    countriesCities.length,
+    isLogged,
+    loadCities,
+    setError,
+    townState.city,
+    townState.country,
+    user.countryId,
+  ]);
 
   const formWrapperStyles = `${styles["form-wrapper"]} d-flex justify-content-center align-items-center`;
   const currentCities = countriesCities.find(
-    (cc) => cc.countryId === parseInt(user.countryId)
+    (cc) =>
+      cc.countryId === parseInt(user?.country?.countryId || user.countryId)
   );
-  const areLoadedCities = !!currentCities;
 
+  const areLoadedCities = !!currentCities;
+  if (areLoadedCities && isLogged) {
+    // fix deleting values
+    currentCities.cities = currentCities.cities.filter(
+      (c) => c.cityId !== townState.city[0].cities[0].cityId
+    );
+    currentCities.cities[0] = townState.city[0].cities[0];
+  }
   return (
     <div className={formWrapperStyles}>
       <div className={styles["input-fields-length"]}>
         <Form onSubmit={onFormSubmit}>
-          <Form.Group className="form-group mb-3" controlId="email">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              defaultValue={user.email}
-              placeholder="Enter address"
-              onChange={onInputChange}
-              required
-            />
-          </Form.Group>
+          {!isLogged && (
+            <Form.Group className="form-group mb-3" controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                defaultValue={user.email}
+                placeholder="Enter address"
+                onChange={onInputChange}
+                required
+              />
+            </Form.Group>
+          )}
+
           <Form.Group className="form-group mb-3" controlId="userName">
             <Form.Label>Username</Form.Label>
             <Form.Control
@@ -139,7 +163,9 @@ export default function UserForm(props) {
                     name="genderId"
                     type="radio"
                     key={`${g.id}-${g.name}`}
-                    defaultChecked={g.id === 1}
+                    defaultChecked={
+                      isLogged ? g.id === user.gender.id : g.id === 1
+                    }
                     value={g.id}
                     onChange={onInputChange}
                   />
@@ -154,27 +180,28 @@ export default function UserForm(props) {
               name="countryId"
               onChange={onInputChange}
             >
-              {countries.map((c) => {
+              {countries.map((c, i) => {
                 return (
-                  <option key={c.countryId} value={c.countryId}>
+                  <option key={i} value={c.countryId}>
                     {c.countryName}
                   </option>
                 );
               })}
             </Form.Select>
           </Form.Group>
-          {!!parseInt(user.countryId) && (
+          {!!parseInt(user?.country?.countryId || user.countryId) && (
             <Form.Group className="form-group mb-3" controlId="cityId">
               <Form.Label>Choose city</Form.Label>
               <Form.Select
                 className="mb-3"
                 name="cityId"
                 onChange={onInputChange}
+                onClick={loadCities}
               >
                 {areLoadedCities &&
-                  currentCities.cities.map((c) => {
+                  currentCities.cities.map((c, i) => {
                     return (
-                      <option key={c.cityId + c.cityName} value={c.cityId}>
+                      <option key={i} value={c.cityId}>
                         {c.cityName}
                       </option>
                     );
@@ -221,7 +248,7 @@ export default function UserForm(props) {
             </div>
           )}
           <Button variant="primary" type="submit">
-            Register
+            {isLogged ? "Edit" : "Register"}
           </Button>
         </Form>
       </div>

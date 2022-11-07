@@ -105,6 +105,17 @@ export async function logout() {
   }
 }
 
+export async function getAccount(id) {
+  try {
+    const response = await instance.get(`${baseUrl}/account/${id}`);
+    
+    return response.data;
+  } catch (error) {
+    const errorMessage = getErrorMessage(error);
+    throw new Error(errorMessage);
+  }
+}
+
 function getErrorMessage(error) {
   // Client side validation error
   const validationError = error?.response?.data?.Error;
