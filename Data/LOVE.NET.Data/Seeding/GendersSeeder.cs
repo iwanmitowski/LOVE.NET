@@ -1,6 +1,7 @@
 ﻿namespace LOVE.NET.Data.Seeding
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using LOVE.NET.Data.Models;
@@ -11,23 +12,28 @@
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            Gender[] genders =
-            {
-               new Gender()
-               {
-                   Name = Male,
-               },
-               new Gender()
-               {
-                   Name = Female,
-               },
-               new Gender()
-               {
-                   Name = Trans,
-               },
-            };
+            var isPopulated = dbContext.Genders.Any();
 
-            await dbContext.Genders.AddRangeAsync(genders);
+            if (!isPopulated)
+            {
+                Gender[] genders =
+                {
+                   new Gender()
+                   {
+                       Name = Male,
+                   },
+                   new Gender()
+                   {
+                       Name = Female,
+                   },
+                   new Gender()
+                   {
+                       Name = Trans,
+                   },
+                };
+
+                await dbContext.Genders.AddRangeAsync(genders);
+            }
         }
     }
 }
