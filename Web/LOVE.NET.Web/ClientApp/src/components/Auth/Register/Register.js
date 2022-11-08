@@ -1,11 +1,12 @@
-
 import { useState, Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserForm from "../../User/UserForm";
 
 import * as genderService from "../../../services/genderService";
+import * as countryService from "../../../services/countryService";
 import * as identityService from "../../../services/identityService";
 import * as date from "../../../utils/date.js";
+import { useEffect } from "react";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -25,11 +26,22 @@ export default function Register() {
   });
 
   const [genders, setGenders] = useState([]);
+  const [countries, setCountries] = useState([]);
   const errorState = useState("");
   const [, setError] = errorState;
 
-  genderService.getAll()
-    .then((res) => setGenders(res));
+  useEffect(() => {
+    countryService
+      .getAll()
+      .then((res) => {
+        setCountries(res);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  }, []);
+
+  genderService.getAll().then((res) => setGenders(res));
 
   const onInputChange = (e) => {
     setUser((prevState) => {
@@ -70,6 +82,7 @@ export default function Register() {
       <UserForm
         user={user}
         genders={genders}
+        countries={countries}
         onFormSubmit={onFormSubmit}
         onInputChange={onInputChange}
         errorState={errorState}
