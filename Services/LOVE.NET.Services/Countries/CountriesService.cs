@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+
+    using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories.Countries;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.ViewModels.Countries;
@@ -19,7 +21,13 @@
         {
             var countriesWithCities = this.countriesRepository.AllAsNoTracking();
 
-            var result = AutoMapperConfig.MapperInstance.Map<IEnumerable<CountryViewModel>>(countriesWithCities);
+            var result = AutoMapperConfig.MapperInstance.Map<IEnumerable<CountryViewModel>>(countriesWithCities).ToList();
+
+            result.Insert(0, new CountryViewModel()
+            {
+                CountryId = 0,
+                CountryName = "Chooce country here",
+            });
 
             return result;
         }
@@ -32,7 +40,14 @@
 
             var result = AutoMapperConfig.MapperInstance.Map<CountryCitiesViewModel>(country);
 
-            result.Cities = result.Cities.OrderBy(c => c.CityName);
+            var orderedCities = result.Cities.OrderBy(c => c.CityName).ToList();
+            orderedCities.Insert(0, new CityViewModel()
+            {
+                CityId = 0,
+                CityName = "Choose city here",
+            });
+
+            result.Cities = orderedCities;
 
             return result;
         }
