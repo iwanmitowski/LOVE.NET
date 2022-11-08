@@ -21,8 +21,16 @@
 
         public ICollection<ImageViewModel> Images { get; set; }
 
-        public GenderViewModel Gender { get; set; }
+        public int GenderId { get; set; }
 
-        public CityViewModel City { get; set; }
+        public string GenderName { get; set; }
+
+        public int CityId { get; set; }
+
+        public string CityName { get; set; }
+
+        public int CountryId { get; set; }
+
+        public string CountryName { get; set; }
     }
 }
