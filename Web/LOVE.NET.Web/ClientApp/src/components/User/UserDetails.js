@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import UserForm from "../User/UserForm";
 
 import * as identityService from "../../services/identityService";
+import * as countryService from "../../services/countryService";
 import * as genderService from "../../services/genderService";
 import * as date from "../../utils/date";
 
@@ -27,60 +28,30 @@ export default function UserDetails() {
   const errorState = useState("");
   const [, setError] = errorState;
   const [genders, setGenders] = useState([]);
-  const [townState, setTownState] = useState({
-    country: [],
-    city: [],
-  });
+  const [countries, setCountries] = useState([]);
 
   const userId = params.id;
   useEffect(() => {
     const promises = [
       identityService.getAccount(userId),
       genderService.getAll(),
+      countryService.getAll(),
     ];
 
     Promise.all(promises)
       .then((results) => {
         const accountPromiseResult = results[0];
         const genderPromiseResult = results[1];
+        const countryPromiseResult = results[2];
+
         setUser(accountPromiseResult);
         setGenders(genderPromiseResult);
-        
-        setTownState({
-          city: [
-            {
-              countryId: !!accountPromiseResult.id
-                ? accountPromiseResult.country.countryId
-                : 0,
-              cities: [
-                {
-                  cityId: !!accountPromiseResult.id
-                    ? accountPromiseResult.city.cityId
-                    : 0,
-                  cityName: !!accountPromiseResult.id
-                    ? accountPromiseResult.city.cityName
-                    : "Choose city here",
-                },
-              ],
-            },
-          ],
-          country: [
-            {
-              countryId: !!accountPromiseResult.id
-                ? accountPromiseResult.country.countryId
-                : 0,
-              countryName: !!accountPromiseResult.id
-                ? accountPromiseResult.country.countryName
-                : "Chooce country here",
-            },
-          ],
-        });
-
+        setCountries(countryPromiseResult);
       })
       .catch((error) => {
         setError(error.message);
       });
-  }, [userId, genders.length, setError]);
+  }, [userId]);
 
   const onInputChange = (e) => {
     setUser((prevState) => {
@@ -121,7 +92,7 @@ export default function UserDetails() {
       <UserForm
         user={user}
         genders={genders}
-        townState={townState}
+        countries={countries}
         onFormSubmit={onFormSubmit}
         onInputChange={onInputChange}
         errorState={errorState}

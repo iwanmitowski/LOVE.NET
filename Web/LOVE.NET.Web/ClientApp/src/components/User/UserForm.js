@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useIdentityContext } from "../../hooks/useIdentityContext";
 
 import * as countryService from "../../services/countryService";
@@ -10,88 +10,36 @@ import styles from "../Shared/Forms.module.css";
 export default function UserForm(props) {
   const user = props.user;
   const genders = props.genders;
-  const townState = props.townState;
+  const countriesProp = props.countries;
   const onFormSubmit = props.onFormSubmit;
   const onInputChange = props.onInputChange;
-  const [error, setError] = props.errorState;
+  const [error] = props.errorState;
 
   const { isLogged } = useIdentityContext();
-  const [countries, setCountries] = useState(townState.country);
-  const [countriesCities, setCities] = useState([
-    {
-      cityId: 0,
-      cityName: "Choose city here",
-    },
-  ]);
+  const [countries, setCountries] = useState([]);
+  const [countriesCities, setCities] = useState([]);
 
-  const loadCities = useCallback(() => {
-    const countryId = user?.country.countryId || user.countryId;
+  useEffect(() => {
+    setCountries(countriesProp);
+  }, [countriesProp]);
 
-    const isCountryFetched = countriesCities.some(
-      (c) => c.countryId === parseInt(countryId)
-    );
-    
-    if (countryId !== 0 && !isCountryFetched) {
-      countryService.getCitiesByCountryId(countryId).then((res) => {
+  useEffect(() => {
+    if (!!user.countryId) {
+      countryService.getCitiesByCountryId(user.countryId).then((res) => {
         setCities((prevState) => {
           return [...prevState, res];
         });
       });
     }
-  });
-
-  useEffect(() => {
-    if (!countries.length) {
-      setCountries(townState.country);
-    }
-
-    if (!countriesCities.length) {
-      setCities(townState.city);
-    }
-
-    if (countries.length === 1) {
-      countryService
-        .getAll()
-        .then((res) => {
-          setCountries((prevState) => {
-            return [...prevState, ...res];
-          });
-        })
-        .catch((error) => {
-          setError(error.message);
-        })
-        .finally(() => {
-          if (isLogged) {
-            loadCities();
-          }
-        });
-    }
-  }, [
-    countries,
-    countriesCities,
-    countriesCities.length,
-    isLogged,
-    loadCities,
-    setError,
-    townState.city,
-    townState.country,
-    user.countryId,
-  ]);
+  }, [user.countryId]);
 
   const formWrapperStyles = `${styles["form-wrapper"]} d-flex justify-content-center align-items-center`;
   const currentCities = countriesCities.find(
-    (cc) =>
-      cc.countryId === parseInt(user?.country?.countryId || user.countryId)
+    (cc) => cc.countryId === parseInt(user.countryId)
   );
 
   const areLoadedCities = !!currentCities;
-  if (areLoadedCities && isLogged) {
-    // fix deleting values
-    currentCities.cities = currentCities.cities.filter(
-      (c) => c.cityId !== townState.city[0].cities[0].cityId
-    );
-    currentCities.cities[0] = townState.city[0].cities[0];
-  }
+
   return (
     <div className={formWrapperStyles}>
       <div className={styles["input-fields-length"]}>
@@ -126,30 +74,8 @@ export default function UserForm(props) {
             <Form.Control
               type="date"
               name="birthdate"
-              defaultValue={user.birthdate}
+              value={new Date(user.birthdate).toLocaleDateString('en-CA', {year: 'numeric', month: '2-digit', day: '2-digit'})}
               onChange={onInputChange}
-            />
-          </Form.Group>
-          <Form.Group className="form-group mb-3" controlId="password">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              name="password"
-              defaultValue={user.password}
-              placeholder="Enter password"
-              onChange={onInputChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group className="form-group mb-3" controlId="confirmPassword">
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              type="password"
-              name="confirmPassword"
-              defaultValue={user.confirmPassword}
-              placeholder="Confirm password"
-              onChange={onInputChange}
-              required
             />
           </Form.Group>
           <Form.Group className="form-group mb-3">
@@ -164,7 +90,7 @@ export default function UserForm(props) {
                     type="radio"
                     key={`${g.id}-${g.name}`}
                     defaultChecked={
-                      isLogged ? g.id === user.gender.id : g.id === 1
+                      isLogged ? g.id === user.genderId : g.id === 1
                     }
                     value={g.id}
                     onChange={onInputChange}
@@ -178,6 +104,7 @@ export default function UserForm(props) {
             <Form.Select
               className="mb-3"
               name="countryId"
+              value={user.countryId}
               onChange={onInputChange}
             >
               {countries.map((c, i) => {
@@ -189,14 +116,14 @@ export default function UserForm(props) {
               })}
             </Form.Select>
           </Form.Group>
-          {!!parseInt(user?.country?.countryId || user.countryId) && (
+          {!!parseInt(user.countryId) && (
             <Form.Group className="form-group mb-3" controlId="cityId">
               <Form.Label>Choose city</Form.Label>
               <Form.Select
                 className="mb-3"
                 name="cityId"
                 onChange={onInputChange}
-                onClick={loadCities}
+                value={user.cityId}
               >
                 {areLoadedCities &&
                   currentCities.cities.map((c, i) => {
@@ -209,13 +136,14 @@ export default function UserForm(props) {
               </Form.Select>
             </Form.Group>
           )}
+          {/* If multiselect defaultValue for Reactbootstrap textarea should be [] https://stackoverflow.com/questions/41174974/specify-default-value-to-formcontrol-of-react-bootstrap */}
           <Form.Group className="form-group mb-3" controlId="information">
             <Form.Label>Bio</Form.Label>
             <Form.Control
               as="textarea"
               name="bio"
               rows={5}
-              defaultValue={user.bio}
+              defaultValue={[user.bio]}
               placeholder="Enter your bio"
               onChange={onInputChange}
               required
@@ -238,6 +166,28 @@ export default function UserForm(props) {
               multiple
               onChange={onInputChange}
               accept=".jpg,.jpeg,.png"
+            />
+          </Form.Group>
+          <Form.Group className="form-group mb-3" controlId="password">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              name="password"
+              defaultValue={user.password}
+              placeholder="Enter password"
+              onChange={onInputChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="form-group mb-3" controlId="confirmPassword">
+            <Form.Label>Confirm Password</Form.Label>
+            <Form.Control
+              type="password"
+              name="confirmPassword"
+              defaultValue={user.confirmPassword}
+              placeholder="Confirm password"
+              onChange={onInputChange}
+              required
             />
           </Form.Group>
           {error && (
