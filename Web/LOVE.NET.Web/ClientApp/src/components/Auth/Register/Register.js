@@ -39,9 +39,9 @@ export default function Register() {
       .catch((error) => {
         setError(error.message);
       });
-  }, []);
 
-  genderService.getAll().then((res) => setGenders(res));
+    genderService.getAll().then((res) => setGenders(res));
+  }, []);
 
   const onInputChange = (e) => {
     setUser((prevState) => {
