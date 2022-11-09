@@ -50,7 +50,7 @@ export default function UserForm(props) {
               <Form.Control
                 type="email"
                 name="email"
-                defaultValue={user.email}
+                value={user.email}
                 placeholder="Enter address"
                 onChange={onInputChange}
                 required
@@ -63,7 +63,7 @@ export default function UserForm(props) {
             <Form.Control
               type="text"
               name="userName"
-              defaultValue={user.userName}
+              value={user.userName}
               placeholder="Enter username"
               onChange={onInputChange}
               required
@@ -74,7 +74,11 @@ export default function UserForm(props) {
             <Form.Control
               type="date"
               name="birthdate"
-              value={new Date(user.birthdate).toLocaleDateString('en-CA', {year: 'numeric', month: '2-digit', day: '2-digit'})}
+              value={new Date(user.birthdate).toLocaleDateString("en-CA", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })}
               onChange={onInputChange}
             />
           </Form.Group>
@@ -143,7 +147,7 @@ export default function UserForm(props) {
               as="textarea"
               name="bio"
               rows={5}
-              defaultValue={[user.bio]}
+              value={user.bio}
               placeholder="Enter your bio"
               onChange={onInputChange}
               required
@@ -173,7 +177,7 @@ export default function UserForm(props) {
             <Form.Control
               type="password"
               name="password"
-              defaultValue={user.password}
+              value={user.password || ""}
               placeholder="Enter password"
               onChange={onInputChange}
               required
@@ -184,7 +188,7 @@ export default function UserForm(props) {
             <Form.Control
               type="password"
               name="confirmPassword"
-              defaultValue={user.confirmPassword}
+              value={user.confirmPassword || ""}
               placeholder="Confirm password"
               onChange={onInputChange}
               required

@@ -116,6 +116,17 @@ export async function getAccount(id) {
   }
 }
 
+export async function editAccount(user) {
+  try {
+    const response = await instance.put(`${baseUrl}/account/${user.id}`, user);
+    
+    return response.data;
+  } catch (error) {
+    const errorMessage = getErrorMessage(error);
+    throw new Error(errorMessage);
+  }
+}
+
 function getErrorMessage(error) {
   // Client side validation error
   const validationError = error?.response?.data?.Error;

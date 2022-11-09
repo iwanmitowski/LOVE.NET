@@ -8,10 +8,9 @@ import * as genderService from "../../services/genderService";
 import * as date from "../../utils/date";
 
 export default function UserDetails() {
-  const navigate = useNavigate();
   const params = useParams();
 
-  const [user, setUser] = useState({
+  const userInitialState = {
     email: "",
     password: "",
     confirmPassword: "",
@@ -23,8 +22,9 @@ export default function UserDetails() {
     genderId: 1,
     image: null,
     photos: [],
-  });
+  };
 
+  const [user, setUser] = useState(userInitialState);
   const errorState = useState("");
   const [, setError] = errorState;
   const [genders, setGenders] = useState([]);
@@ -78,9 +78,11 @@ export default function UserDetails() {
     e.preventDefault();
 
     identityService
-      .register(user) // change ?
-      .then(() => {
-        navigate(`/verify?email=${user.email}`);
+      .editAccount(user)
+      .then((res) => {
+        setUser({
+          ...res,
+        });
       })
       .catch((error) => {
         setError(error.message);

@@ -53,7 +53,7 @@ export default function Header() {
               )}
               {isLogged && (
                 <Fragment>
-                  <Link className="nav-link" to="/user">
+                  <Link className="nav-link" to={`/user/${user.id}`}>
                     {user.userName}
                   </Link>
                   <Nav>
