@@ -49,7 +49,7 @@
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string[]))]
         public async Task<IActionResult> RegisterAsync([FromForm] RegisterViewModel model)
         {
-            await this.ValidateRegisterModel(model);
+            await this.ValidateRegisterModelAsync(model);
 
             if (!this.ModelState.IsValid)
             {
@@ -165,7 +165,7 @@
             return this.Ok(response);
         }
 
-        [HttpGet(GetAccountRoute)]
+        [HttpGet(AccountRoute)]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDetailsViewModel))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -181,6 +181,25 @@
 
             var user = this.userService.GetUserDetails(id);
 
+            return this.Ok(user);
+        }
+
+        [HttpPut(AccountRoute)]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDetailsViewModel))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult EditAccount(EditUserViewModel model)
+        {
+            var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (loggedUserId != model.Id)
+            {
+                return this.Forbid();
+            }
+
+            var user = this.userService.GetUserDetails(model.Id);
+            user.Bio = "changed";
             return this.Ok(user);
         }
 
@@ -227,39 +246,45 @@
             await this.emailService.SendEmailConfirmationAsync(origin, user);
         }
 
-        private async Task ValidateRegisterModel(RegisterViewModel model)
+        private async Task ValidateRegisterModelAsync(RegisterViewModel model)
         {
             if (await this.userManager.Users.AnyAsync(x => x.Email == model.Email))
             {
                 this.ModelState.AddModelError(Error, EmailAlreadyInUse);
             }
 
+            this.BaseModelValidation(model);
+        }
+
+        private async Task ValidateEditModelAsync(EditUserViewModel model)
+        {
+            if (!await this.userManager.Users.AnyAsync(x => x.Email == model.Email))
+            {
+                this.ModelState.AddModelError(Error, InvalidEmail);
+            }
+
+            this.BaseModelValidation(model);
+        }
+
+        private void BaseModelValidation(RegisterViewModel model)
+        {
             if (model.Password != model.ConfirmPassword)
             {
                 this.ModelState.AddModelError(Error, PasswordsDontMatch);
             }
 
-            var today = DateTime.UtcNow;
-            var birthdate = model.Birthdate;
-
-            var age = today.Year - birthdate.Year;
-
-            // Leap years calculation
-            if (birthdate > today.AddYears(-age))
-            {
-                age--;
-            }
-
-            if (age < MinimalAge)
-            {
-                this.ModelState.AddModelError(Error, UnderagedUser);
-            }
+            this.ValidateBirthday(model);
 
             if (model.GenderId < 1 || model.GenderId > GendersMaxCountInDb)
             {
                 this.ModelState.AddModelError(Error, InvalidGender);
             }
 
+            this.ValidateCountryAndCity(model);
+        }
+
+        private void ValidateCountryAndCity(RegisterViewModel model)
+        {
             if (model.CityId < 1 || model.CityId > CitiesMaxCountInDb)
             {
                 this.ModelState.AddModelError(Error, InvalidCity);
@@ -275,6 +300,25 @@
             if (countryCities.Cities.Any(c => c.CityId == model.CityId) == false)
             {
                 this.ModelState.AddModelError(Error, InvalidCity);
+            }
+        }
+
+        private void ValidateBirthday(RegisterViewModel model)
+        {
+            var today = DateTime.UtcNow;
+            var birthdate = model.Birthdate;
+
+            var age = today.Year - birthdate.Year;
+
+            // Leap years calculation
+            if (birthdate > today.AddYears(-age))
+            {
+                age--;
+            }
+
+            if (age < MinimalAge)
+            {
+                this.ModelState.AddModelError(Error, UnderagedUser);
             }
         }
     }

@@ -77,7 +77,7 @@
             public const string LoginRoute = "login";
             public const string LogoutRoute = "logout";
             public const string RefreshTokenRoute = "refreshToken";
-            public const string GetAccountRoute = "account/{id:guid}";
+            public const string AccountRoute = "account/{id:guid}";
 
             public const string EmailControllerName = Api + "email";
             public const string VerifyEmailRoute = "verify";
@@ -92,6 +92,7 @@
         public class ControllerResponseMessages
         {
             public const string EmailAlreadyInUse = "Email already in use";
+            public const string InvalidEmail = "Invalid email";
             public const string PasswordsDontMatch = "Password and confirm password must match";
             public const string UnderagedUser = "You need to be 18 years old to register";
             public const string LogoutSuccessfully = "Logout successfully";
