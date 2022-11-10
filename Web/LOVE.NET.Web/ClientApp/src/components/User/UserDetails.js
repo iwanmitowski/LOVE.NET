@@ -1,6 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import UserForm from "../User/UserForm";
+import ImagesContainer from "../Image/ImagesContainer";
 
 import * as identityService from "../../services/identityService";
 import * as countryService from "../../services/countryService";
@@ -99,7 +100,8 @@ export default function UserDetails() {
         onInputChange={onInputChange}
         errorState={errorState}
       />
-      <h1>Visualized images</h1>
+      <h1>Your images</h1>
+      {!!user?.images && <ImagesContainer images={user.images} />}
     </Fragment>
   );
 }

@@ -153,15 +153,17 @@ export default function UserForm(props) {
               required
             />
           </Form.Group>
-          <Form.Group className="form-group mb-3" controlId="profilePicture">
-            <Form.Label>Upload your profile picture</Form.Label>
-            <Form.Control
-              type="file"
-              name="image"
-              onChange={onInputChange}
-              accept=".jpg,.jpeg,.png"
-            />
-          </Form.Group>
+          {!isLogged && (
+            <Form.Group className="form-group mb-3" controlId="profilePicture">
+              <Form.Label>Upload your profile picture</Form.Label>
+              <Form.Control
+                type="file"
+                name="image"
+                onChange={onInputChange}
+                accept=".jpg,.jpeg,.png"
+              />
+            </Form.Group>
+          )}
           <Form.Group className="form-group mb-3" controlId="pictures">
             <Form.Label>Upload your photos</Form.Label>
             <Form.Control

@@ -1,0 +1,8 @@
+.card {
+    flex: 0 1 auto !important; 
+    margin: 30px;
+}
+
+.button {
+    margin: 0 15px;
+}
