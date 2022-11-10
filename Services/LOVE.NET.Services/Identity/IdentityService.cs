@@ -180,5 +180,21 @@
 
             return result;
         }
+
+        public async Task EditUserAsync(EditUserViewModel model)
+        {
+            var user = this.usersRepository.WithAllInformation(u => u.Id == model.Id).FirstOrDefault();
+
+            // Removing images should not exist in the model when sent, so remove them
+            // Save the new images in Cloudinary
+            user.UserName = model.UserName;
+            user.Bio = model.Bio;
+            user.Birthdate = model.Birthdate;
+            user.CountryId = model.CountryId;
+            user.CityId = model.CityId;
+            user.GenderId = model.GenderId;
+
+            await this.usersRepository.SaveChangesAsync();
+        }
     }
 }

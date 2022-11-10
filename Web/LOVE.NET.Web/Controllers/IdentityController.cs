@@ -187,9 +187,10 @@
         [HttpPut(AccountRoute)]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDetailsViewModel))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public IActionResult EditAccount(EditUserViewModel model)
+        public async Task<IActionResult> EditAccount(EditUserViewModel model)
         {
             var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -198,8 +199,16 @@
                 return this.Forbid();
             }
 
+            await this.ValidateEditModelAsync(model);
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            await this.userService.EditUserAsync(model);
             var user = this.userService.GetUserDetails(model.Id);
-            user.Bio = "changed";
+
             return this.Ok(user);
         }
 

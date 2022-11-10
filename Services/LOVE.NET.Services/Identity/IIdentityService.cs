@@ -17,5 +17,7 @@
         RefreshToken GenerateRefreshToken();
 
         UserDetailsViewModel GetUserDetails(string id);
+
+        Task EditUserAsync(EditUserViewModel model);
     }
 }
