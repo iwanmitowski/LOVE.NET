@@ -22,7 +22,7 @@ export default function Register() {
     cityId: 0,
     genderId: 1,
     image: null,
-    photos: [],
+    newPhotos: [],
   });
 
   const [genders, setGenders] = useState([]);
@@ -52,6 +52,13 @@ export default function Register() {
         return {
           ...prevState,
           [currentName]: e.target.files[0],
+        };
+      }
+
+      if (currentName === 'newPhotos') {
+        return {
+          ...prevState,
+          [currentName]: e.target.files,
         };
       }
 

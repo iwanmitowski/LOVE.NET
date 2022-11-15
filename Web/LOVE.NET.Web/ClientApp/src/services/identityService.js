@@ -24,6 +24,10 @@ export async function register(user) {
     formData.append(key, user[key]);
   }
 
+  for (var i = 0; i < user.newPhotos.length; i++) {
+    formData.append("NewPhotos", user.newPhotos[i]);
+  }
+
   try {
     if (
       !user.email ||
@@ -36,49 +40,52 @@ export async function register(user) {
     ) {
       throw new Error(identityConstants.FILL_REQUIRED_FIELDS);
     }
-  
+
     if (user.password.length < identityConstants.PASSWORD_MIN_LENGTH) {
       throw new Error(identityConstants.TOO_SHORT_PASSWORD);
     }
-  
+
     if (user.confirmPassword !== user.password) {
       throw new Error(identityConstants.PASSWORDS_DONT_MATCH);
     }
-  
+
     if (user.image) {
       const fileExtension = user.image.name.split(".").at(-1);
       const allowedFileTypes = ["jpg", "jpeg", "png"];
-  
+
       if (!allowedFileTypes.includes(fileExtension)) {
         throw new Error(identityConstants.UNSUPPORTED_FILE_TYPE);
       }
     }
-  
+
     const EMAIL_REGEX = identityConstants.EMAIL_REGEX;
     if (!EMAIL_REGEX.test(user.email)) {
       throw new Error(identityConstants.INVALID_EMAIL);
     }
-  
+
     if (user.bio > identityConstants.BIO_MAX_LENGTH) {
       throw new Error(identityConstants.TOO_LONG_BIO);
     }
-  
+
     if (user.userName > identityConstants.USERNAME_MAX_LENGTH) {
       throw new Error(identityConstants.TOO_LONG_USERNAME);
     }
-  
+
     if (user.birthdate < date.getLatestLegal()) {
       throw new Error(identityConstants.UNDERAGED_USER);
     }
 
-    if (user.genderId < 1 || user.genderId > identityConstants.CITIES_MAX_COUNT) {
+    if (
+      user.genderId < 1 ||
+      user.genderId > identityConstants.CITIES_MAX_COUNT
+    ) {
       throw new Error(identityConstants.INVALID_GENDER);
     }
 
     if (user.cityId < 1 || user.cityId > identityConstants.CITIES_MAX_COUNT) {
       throw new Error(identityConstants.INVALID_CITY);
     }
-  
+
     if (
       user.countryId < 1 ||
       user.countryId > identityConstants.COUNTRIES_MAX_COUNT
@@ -108,7 +115,7 @@ export async function logout() {
 export async function getAccount(id) {
   try {
     const response = await instance.get(`${baseUrl}/account/${id}`);
-    
+
     return response.data;
   } catch (error) {
     const errorMessage = getErrorMessage(error);
@@ -117,9 +124,27 @@ export async function getAccount(id) {
 }
 
 export async function editAccount(user) {
+  var formData = new FormData();
+  console.log(user);
+  for (var key in user) {
+    formData.append(key, user[key]);
+  }
+
+  for (var i = 0; i < user.newPhotos.length; i++) {
+    formData.append("NewPhotos", user.newPhotos[i]);
+  }
+
   try {
-    const response = await instance.put(`${baseUrl}/account/${user.id}`, user);
-    
+    const response = await instance.put(
+      `${baseUrl}/account/${user.id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
     return response.data;
   } catch (error) {
     const errorMessage = getErrorMessage(error);
@@ -131,13 +156,16 @@ function getErrorMessage(error) {
   // Client side validation error
   const validationError = error?.response?.data?.Error;
   // Serverside validation error
-  const validationErrors = (error?.response?.data?.errors && Object.values(error?.response?.data?.errors)) || [];
-  
-  let errors = [...validationErrors, validationError].filter(e => !!e);
-  if (!errors.length){
+  const validationErrors =
+    (error?.response?.data?.errors &&
+      Object.values(error?.response?.data?.errors)) ||
+    [];
+
+  let errors = [...validationErrors, validationError].filter((e) => !!e);
+  if (!errors.length) {
     errors = [...errors, error.message];
   }
-    
+
   const errorMessage = errors.join("\n");
 
   return errorMessage;

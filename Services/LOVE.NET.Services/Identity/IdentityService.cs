@@ -83,10 +83,10 @@
         {
             var images = new List<IFormFile>();
 
-            if (model?.Photos?.Any() == true)
+            if (model?.NewPhotos?.Any() == true)
             {
                 images.Add(model.Image);
-                images.AddRange(model.Photos);
+                images.AddRange(model.NewPhotos);
             }
 
             var imageUrls = new List<string>(await this.imagesService.UploadImagesAsync(images));
@@ -185,8 +185,25 @@
         {
             var user = this.usersRepository.WithAllInformation(u => u.Id == model.Id).FirstOrDefault();
 
-            // Removing images should not exist in the model when sent, so remove them
-            // Save the new images in Cloudinary
+            var images = new List<IFormFile>();
+
+            if (model?.NewPhotos?.Any() == true)
+            {
+                images.AddRange(model.NewPhotos);
+            }
+
+            var imageUrls = new List<string>(await this.imagesService.UploadImagesAsync(images));
+
+            for (int i = 0; i < imageUrls.Count; i++)
+            {
+                user.Images.Add(new Image()
+                {
+                    CreatedOn = DateTime.UtcNow,
+                    Url = imageUrls[i],
+                    IsProfilePicture = i == 0,
+                });
+            }
+
             user.UserName = model.UserName;
             user.Bio = model.Bio;
             user.Birthdate = model.Birthdate;

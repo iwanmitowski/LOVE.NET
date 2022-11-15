@@ -3,7 +3,7 @@
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Mapping;
 
-    public class ImageViewModel : IMapFrom<Image>
+    public class ImageViewModel : IMapFrom<Image>, IMapTo<Image>
     {
         public int Id { get; set; }
 

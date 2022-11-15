@@ -140,7 +140,6 @@ export default function UserForm(props) {
               </Form.Select>
             </Form.Group>
           )}
-          {/* If multiselect defaultValue for Reactbootstrap textarea should be [] https://stackoverflow.com/questions/41174974/specify-default-value-to-formcontrol-of-react-bootstrap */}
           <Form.Group className="form-group mb-3" controlId="information">
             <Form.Label>Bio</Form.Label>
             <Form.Control
@@ -165,10 +164,10 @@ export default function UserForm(props) {
             </Form.Group>
           )}
           <Form.Group className="form-group mb-3" controlId="pictures">
-            <Form.Label>Upload your photos</Form.Label>
+            <Form.Label>Upload your new photos</Form.Label>
             <Form.Control
               type="file"
-              name="photos"
+              name="newPhotos"
               multiple
               onChange={onInputChange}
               accept=".jpg,.jpeg,.png"

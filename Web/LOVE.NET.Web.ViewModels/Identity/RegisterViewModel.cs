@@ -38,6 +38,6 @@
 
         [MaxFileSize(MaxFileSizeInBytes)]
         [AllowedFileExtensions(new string[] { ".jpg", ".png" })]
-        public IFormFile[] Photos { get; set; }
+        public IFormFile[] NewPhotos { get; set; }
     }
 }

@@ -190,7 +190,7 @@
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> EditAccount(EditUserViewModel model)
+        public async Task<IActionResult> EditAccount([FromForm] EditUserViewModel model)
         {
             var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 

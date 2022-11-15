@@ -23,6 +23,7 @@ export default function UserDetails() {
     genderId: 1,
     image: null,
     photos: [],
+    newPhotos: [],
   };
 
   const [user, setUser] = useState(userInitialState);
@@ -63,6 +64,13 @@ export default function UserDetails() {
         return {
           ...prevState,
           [currentName]: e.target.files[0],
+        };
+      }
+
+      if (currentName === 'newPhotos') {
+        return {
+          ...prevState,
+          [currentName]: e.target.files,
         };
       }
 
