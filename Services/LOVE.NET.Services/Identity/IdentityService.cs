@@ -83,10 +83,10 @@
         {
             var images = new List<IFormFile>();
 
-            if (model?.NewPhotos?.Any() == true)
+            if (model?.NewImages?.Any() == true)
             {
                 images.Add(model.Image);
-                images.AddRange(model.NewPhotos);
+                images.AddRange(model.NewImages);
             }
 
             var imageUrls = new List<string>(await this.imagesService.UploadImagesAsync(images));
@@ -187,9 +187,9 @@
 
             var images = new List<IFormFile>();
 
-            if (model?.NewPhotos?.Any() == true)
+            if (model?.NewImages?.Any() == true)
             {
-                images.AddRange(model.NewPhotos);
+                images.AddRange(model.NewImages);
             }
 
             var imageUrls = new List<string>(await this.imagesService.UploadImagesAsync(images));

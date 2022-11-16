@@ -22,8 +22,8 @@ export default function UserDetails() {
     cityId: 0,
     genderId: 1,
     image: null,
-    photos: [],
-    newPhotos: [],
+    images: [],
+    newImages: [],
   };
 
   const [user, setUser] = useState(userInitialState);
@@ -67,7 +67,7 @@ export default function UserDetails() {
         };
       }
 
-      if (currentName === 'newPhotos') {
+      if (currentName === "newImages") {
         return {
           ...prevState,
           [currentName]: e.target.files,

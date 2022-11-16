@@ -164,10 +164,10 @@ export default function UserForm(props) {
             </Form.Group>
           )}
           <Form.Group className="form-group mb-3" controlId="pictures">
-            <Form.Label>Upload your new photos</Form.Label>
+            <Form.Label>Upload your new images</Form.Label>
             <Form.Control
               type="file"
-              name="newPhotos"
+              name="newImages"
               multiple
               onChange={onInputChange}
               accept=".jpg,.jpeg,.png"

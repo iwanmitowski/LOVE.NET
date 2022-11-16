@@ -24,8 +24,8 @@ export async function register(user) {
     formData.append(key, user[key]);
   }
 
-  for (var i = 0; i < user.newPhotos.length; i++) {
-    formData.append("NewPhotos", user.newPhotos[i]);
+  for (var i = 0; i < user.newImages.length; i++) {
+    formData.append("NewImages", user.newImages[i]);
   }
 
   try {
@@ -130,8 +130,8 @@ export async function editAccount(user) {
     formData.append(key, user[key]);
   }
 
-  for (var i = 0; i < user.newPhotos.length; i++) {
-    formData.append("NewPhotos", user.newPhotos[i]);
+  for (var i = 0; i < user.newImages.length; i++) {
+    formData.append("NewImages", user.newImages[i]);
   }
 
   try {

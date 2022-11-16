@@ -52,10 +52,10 @@
         public async Task<IEnumerable<string>> UploadImagesAsync(IEnumerable<IFormFile> images)
         {
             var imagesArray = images.ToArray();
-            var photosCount = imagesArray.Length;
-            var imageTasks = new Task<string>[photosCount];
+            var imagesCount = imagesArray.Length;
+            var imageTasks = new Task<string>[imagesCount];
 
-            for (int i = 0; i < photosCount; i++)
+            for (int i = 0; i < imagesCount; i++)
             {
                 imageTasks[i] = this.UploadImageAsync(imagesArray[i]);
             }
