@@ -11,6 +11,7 @@
     using LOVE.NET.Services.Email;
     using LOVE.NET.Services.Identity;
     using LOVE.NET.Web.ViewModels.Identity;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
@@ -58,9 +59,10 @@
 
             var result = await this.userService.RegisterAsync(model);
 
-            if (result.Failure)
+            if (!result.Succeeded)
             {
-                return this.BadRequest(result.Errors);
+                var errorMessages = string.Join("\n", result.Errors.Select(x => x.Description));
+                return this.BadRequest((Result)errorMessages);
             }
 
             await this.EmailConfirmation(model.Email);

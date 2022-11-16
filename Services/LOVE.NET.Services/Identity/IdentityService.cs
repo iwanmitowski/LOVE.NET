@@ -15,6 +15,7 @@
     using LOVE.NET.Services.Images;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.ViewModels.Identity;
+
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Configuration;
@@ -79,7 +80,7 @@
             return token;
         }
 
-        public async Task<Result> RegisterAsync(RegisterViewModel model)
+        public async Task<IdentityResult> RegisterAsync(RegisterViewModel model)
         {
             var images = new List<IFormFile>();
 
@@ -105,7 +106,7 @@
 
             var result = await this.userManager.CreateAsync(user, model.Password);
 
-            return result.Succeeded;
+            return result;
         }
 
         public async Task<LoginResponseModel> LoginAsync(LoginViewModel model)

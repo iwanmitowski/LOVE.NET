@@ -2,9 +2,10 @@
 {
     using System.Threading.Tasks;
 
-    using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Web.ViewModels.Identity;
+
+    using Microsoft.AspNetCore.Identity;
 
     public interface IIdentityService
     {
@@ -12,7 +13,7 @@
 
         Task<LoginResponseModel> LoginAsync(LoginViewModel model);
 
-        Task<Result> RegisterAsync(RegisterViewModel model);
+        Task<IdentityResult> RegisterAsync(RegisterViewModel model);
 
         RefreshToken GenerateRefreshToken();
 
