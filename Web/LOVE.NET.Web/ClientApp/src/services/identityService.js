@@ -152,6 +152,10 @@ export async function editAccount(user) {
   }
 }
 
+export async function refreshToken() {
+  await instance.post(`${baseUrl}/refreshToken`);
+}
+
 function getErrorMessage(error) {
   // Client side validation error
   const validationError = error?.response?.data?.Error;

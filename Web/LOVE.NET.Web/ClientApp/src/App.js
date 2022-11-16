@@ -13,25 +13,71 @@ import Verify from "./components/Auth/Verify/Verify";
 
 import "./App.css";
 import UserDetails from "./components/User/UserDetails";
+import { useIdentityContext } from "./hooks/useIdentityContext";
+import { useEffect } from "react";
+
+import * as identityService from "./services/identityService";
 
 function App() {
+  const { isLogged, userLogout } = useIdentityContext();
+
+  // Logout if session is expired
+  useEffect(() => {
+    if (isLogged) {
+      identityService.refreshToken().catch(() => userLogout());
+    }
+  }, []);
+
   return (
-    <IdentityProvider>
-      <div className="App">
-        <Header />
-        <Main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<NoAuthGuard><Login /></NoAuthGuard>} />
-            <Route path="/logout" element={<AuthGuard><Logout /></AuthGuard>} />
-            <Route path="/register" element={<NoAuthGuard><Register /></NoAuthGuard>} />
-            <Route path="/verify" element={<NoAuthGuard><Verify /></NoAuthGuard>} />
-            <Route path="/user/:id" element={<AuthGuard><UserDetails /></AuthGuard>} />
-          </Routes>
-        </Main>
-        <Footer />
-      </div>
-    </IdentityProvider>
+    <div className="App">
+      <Header />
+      <Main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/login"
+            element={
+              <NoAuthGuard>
+                <Login />
+              </NoAuthGuard>
+            }
+          />
+          <Route
+            path="/logout"
+            element={
+              <AuthGuard>
+                <Logout />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <NoAuthGuard>
+                <Register />
+              </NoAuthGuard>
+            }
+          />
+          <Route
+            path="/verify"
+            element={
+              <NoAuthGuard>
+                <Verify />
+              </NoAuthGuard>
+            }
+          />
+          <Route
+            path="/user/:id"
+            element={
+              <AuthGuard>
+                <UserDetails />
+              </AuthGuard>
+            }
+          />
+        </Routes>
+      </Main>
+      <Footer />
+    </div>
   );
 }
 
