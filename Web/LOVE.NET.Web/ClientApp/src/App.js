@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Routes, Route } from "react-router-dom";
-import { IdentityProvider } from "./contexts/IdentityContext";
 import Home from "./components/Home";
 import Main from "./components/Shared/Main/Main";
 import Footer from "./components/Shared/Footer/Footer";
