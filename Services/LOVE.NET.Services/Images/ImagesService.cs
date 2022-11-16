@@ -8,6 +8,7 @@
 
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
+
     using Microsoft.AspNetCore.Http;
 
     using static LOVE.NET.Common.GlobalConstants;
@@ -52,22 +53,20 @@
         public async Task<IEnumerable<string>> UploadImagesAsync(IEnumerable<IFormFile> images)
         {
             var imagesArray = images.ToArray();
-            var imagesCount = imagesArray.Length;
+            var imagesCount = imagesArray.Length; 
             var imageTasks = new Task<string>[imagesCount];
 
             for (int i = 0; i < imagesCount; i++)
             {
-                imageTasks[i] = this.UploadImageAsync(imagesArray[i]);
+                if (imagesArray[i] != null)
+                {
+                    imageTasks[i] = this.UploadImageAsync(imagesArray[i]);
+                }
             }
 
             await Task.WhenAll(imageTasks);
 
-            var urls = imageTasks.Select(x => x.Result).ToList();
-
-            if (!urls.Any())
-            {
-                urls.Add(DefaultProfilePictureUrl);
-            }
+            var urls = imageTasks.Select(x => x.Result)?.ToList() ?? Enumerable.Empty<string>();
 
             return urls;
         }

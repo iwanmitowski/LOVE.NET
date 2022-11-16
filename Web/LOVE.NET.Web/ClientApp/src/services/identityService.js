@@ -24,7 +24,7 @@ export async function register(user) {
     formData.append(key, user[key]);
   }
 
-  for (var i = 0; i < user.newImages.length; i++) {
+  for (var i = 0; i < user?.newImages?.length; i++) {
     formData.append("NewImages", user.newImages[i]);
   }
 
@@ -130,7 +130,7 @@ export async function editAccount(user) {
     formData.append(key, user[key]);
   }
 
-  for (var i = 0; i < user.newImages.length; i++) {
+  for (var i = 0; i < user?.newImages?.length; i++) {
     formData.append("NewImages", user.newImages[i]);
   }
 

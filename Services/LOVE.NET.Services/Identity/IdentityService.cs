@@ -86,22 +86,37 @@
 
             if (model?.NewImages?.Any() == true)
             {
-                images.Add(model.Image);
+                if (model.Image != null)
+                {
+                    images.Add(model.Image);
+                }
+
                 images.AddRange(model.NewImages);
             }
 
             var imageUrls = new List<string>(await this.imagesService.UploadImagesAsync(images));
 
+            if (model.Image == null)
+            {
+                imageUrls.Insert(0, DefaultProfilePictureUrl);
+            }
+
             var user = AutoMapperConfig.MapperInstance.Map<ApplicationUser>(model);
 
             for (int i = 0; i < imageUrls.Count; i++)
             {
-                user.Images.Add(new Image()
+                var image = new Image()
                 {
                     CreatedOn = DateTime.UtcNow,
                     Url = imageUrls[i],
-                    IsProfilePicture = i == 0,
-                });
+                };
+
+                if ((imageUrls.Contains(DefaultProfilePictureUrl) || model.Image != null) && i == 0)
+                {
+                    image.IsProfilePicture = true;
+                }
+
+                user.Images.Add(image);
             }
 
             var result = await this.userManager.CreateAsync(user, model.Password);
@@ -201,7 +216,7 @@
                 {
                     CreatedOn = DateTime.UtcNow,
                     Url = imageUrls[i],
-                    IsProfilePicture = i == 0,
+                    IsProfilePicture = false,
                 });
             }
 
