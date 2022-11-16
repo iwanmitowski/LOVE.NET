@@ -31,6 +31,7 @@ export default function UserDetails() {
   const [, setError] = errorState;
   const [genders, setGenders] = useState([]);
   const [countries, setCountries] = useState([]);
+  const [userImages, setUserImages] = useState([]);
 
   const userId = params.id;
   useEffect(() => {
@@ -49,6 +50,7 @@ export default function UserDetails() {
         setUser(accountPromiseResult);
         setGenders(genderPromiseResult);
         setCountries(countryPromiseResult);
+        setUserImages(accountPromiseResult.images);
       })
       .catch((error) => {
         setError(error.message);
@@ -85,13 +87,14 @@ export default function UserDetails() {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-
+    
     identityService
       .editAccount(user)
       .then((res) => {
         setUser({
           ...res,
         });
+        setUserImages(res.images);
       })
       .catch((error) => {
         setError(error.message);
@@ -109,7 +112,7 @@ export default function UserDetails() {
         errorState={errorState}
       />
       <h1>Your images</h1>
-      {!!user?.images && <ImagesContainer images={user.images} />}
+      {!!user?.images && <ImagesContainer images={userImages} />}
     </Fragment>
   );
 }

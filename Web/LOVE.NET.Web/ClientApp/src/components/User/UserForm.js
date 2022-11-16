@@ -163,12 +163,13 @@ export default function UserForm(props) {
               />
             </Form.Group>
           )}
-          <Form.Group className="form-group mb-3" controlId="pictures">
+          <Form.Group className="form-group mb-3" controlId="images">
             <Form.Label>Upload your new images</Form.Label>
             <Form.Control
               type="file"
               name="newImages"
               multiple
+              value={user?.newImages?.length ? null : '' }
               onChange={onInputChange}
               accept=".jpg,.jpeg,.png"
             />
