@@ -86,9 +86,47 @@ export default function UserDetails() {
     setError("");
   };
 
+  const removeImageFromList = (id) => {
+    setUserImages((prevState) => {
+      const filteredImages = prevState.filter((i) => i.id !== id);
+
+      setUser((prevUserState) => {
+        return {
+          ...prevUserState,
+          images: filteredImages,
+        };
+      });
+
+      return filteredImages;
+    });
+  };
+
+  const setNewProfilePicture = (id) => {
+    setUserImages((prevState) => {
+      const oldPfpIndex = prevState.findIndex((i) => i.isProfilePicture);
+      const newPfpIndex = prevState.findIndex((i) => i.id === id);
+
+      const oldPfp = { ...prevState[oldPfpIndex], isProfilePicture: false };
+      const newPfp = { ...prevState[newPfpIndex], isProfilePicture: true };
+
+      const filteredImages = [...prevState];
+      filteredImages[oldPfpIndex] = newPfp;
+      filteredImages[newPfpIndex] = oldPfp;
+
+      setUser((prevUserState) => {
+        return {
+          ...prevUserState,
+          images: filteredImages,
+        };
+      });
+
+      return filteredImages;
+    });
+  };
+
   const onFormSubmit = (e) => {
     e.preventDefault();
-    
+
     identityService
       .editAccount(user)
       .then((res) => {
@@ -113,7 +151,13 @@ export default function UserDetails() {
         errorState={errorState}
       />
       <h1>Your images</h1>
-      {!!user?.images && <ImagesContainer images={userImages} />}
+      {!!user?.images && (
+        <ImagesContainer
+          images={userImages}
+          removeImageFromList={removeImageFromList}
+          setNewProfilePicture={setNewProfilePicture}
+        />
+      )}
     </Fragment>
   );
 }
