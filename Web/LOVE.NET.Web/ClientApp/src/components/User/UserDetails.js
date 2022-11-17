@@ -32,7 +32,6 @@ export default function UserDetails() {
   const [, setError] = errorState;
   const [genders, setGenders] = useState([]);
   const [countries, setCountries] = useState([]);
-  const [userImages, setUserImages] = useState([]);
 
   const userId = params.id;
   useEffect(() => {
@@ -51,7 +50,6 @@ export default function UserDetails() {
         setUser(accountPromiseResult);
         setGenders(genderPromiseResult);
         setCountries(countryPromiseResult);
-        setUserImages(accountPromiseResult.images);
       })
       .catch((error) => {
         setError(error.message);
@@ -87,40 +85,32 @@ export default function UserDetails() {
   };
 
   const removeImageFromList = (id) => {
-    setUserImages((prevState) => {
-      const filteredImages = prevState.filter((i) => i.id !== id);
+    setUser((prevState) => {
+      const filteredImages = prevState.images.filter((i) => i.id !== id);
 
-      setUser((prevUserState) => {
-        return {
-          ...prevUserState,
-          images: filteredImages,
-        };
-      });
-
-      return filteredImages;
+      return {
+        ...prevState,
+        images: filteredImages,
+      };
     });
   };
 
   const setNewProfilePicture = (id) => {
-    setUserImages((prevState) => {
-      const oldPfpIndex = prevState.findIndex((i) => i.isProfilePicture);
-      const newPfpIndex = prevState.findIndex((i) => i.id === id);
+    setUser((prevState) => {
+      const oldPfpIndex = prevState.images.findIndex((i) => i.isProfilePicture);
+      const newPfpIndex = prevState.images.findIndex((i) => i.id === id);
 
-      const oldPfp = { ...prevState[oldPfpIndex], isProfilePicture: false };
-      const newPfp = { ...prevState[newPfpIndex], isProfilePicture: true };
+      const oldPfp = { ...prevState.images[oldPfpIndex], isProfilePicture: false };
+      const newPfp = { ...prevState.images[newPfpIndex], isProfilePicture: true };
 
-      const filteredImages = [...prevState];
+      const filteredImages = [...prevState.images];
       filteredImages[oldPfpIndex] = newPfp;
       filteredImages[newPfpIndex] = oldPfp;
 
-      setUser((prevUserState) => {
-        return {
-          ...prevUserState,
-          images: filteredImages,
-        };
-      });
-
-      return filteredImages;
+      return {
+        ...prevState,
+        images: filteredImages,
+      };
     });
   };
 
@@ -133,7 +123,6 @@ export default function UserDetails() {
         setUser({
           ...res,
         });
-        setUserImages(res.images);
       })
       .catch((error) => {
         setError(error.message);
@@ -153,7 +142,7 @@ export default function UserDetails() {
       <h1>Your images</h1>
       {!!user?.images && (
         <ImagesContainer
-          images={userImages}
+          images={user.images}
           removeImageFromList={removeImageFromList}
           setNewProfilePicture={setNewProfilePicture}
         />
