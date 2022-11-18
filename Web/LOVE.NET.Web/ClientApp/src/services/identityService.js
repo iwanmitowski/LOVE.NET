@@ -126,16 +126,23 @@ export async function getAccount(id) {
 export async function editAccount(user) {
   var formData = new FormData();
   console.log(user);
-  for (var key in user) {
-    formData.append(key, user[key]);
+  for (let key in user) {
+    if (key === 'images') {
+      for (let i = 0; i < user?.images?.length; i++) {
+        formData.append(`Images`, JSON.stringify(user.images[i]));
+      }
+    }
+    else {
+      formData.append(key, user[key]);
+    }
   }
 
-  for (var i = 0; i < user?.newImages?.length; i++) {
+  for (let i = 0; i < user?.newImages?.length; i++) {
     formData.append("NewImages", user.newImages[i]);
   }
-
+  
   try {
-    const response = await instance.put(
+    const response = await instance.post(
       `${baseUrl}/account/${user.id}`,
       formData,
       {
