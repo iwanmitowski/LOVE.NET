@@ -140,9 +140,9 @@ export async function editAccount(user) {
   for (let i = 0; i < user?.newImages?.length; i++) {
     formData.append("NewImages", user.newImages[i]);
   }
-  
+
   try {
-    const response = await instance.post(
+    const response = await instance.put(
       `${baseUrl}/account/${user.id}`,
       formData,
       {

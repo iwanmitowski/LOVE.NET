@@ -10,6 +10,6 @@
     {
         public string Id { get; set; }
 
-        public IEnumerable<ImageViewModel> Images { get; set; } = new HashSet<ImageViewModel>();
+        public IEnumerable<string> Images { get; set; }
     }
 }

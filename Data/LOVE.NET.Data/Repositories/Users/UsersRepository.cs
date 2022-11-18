@@ -29,7 +29,9 @@
             return this.Context.Users
                 .Include(u => u.City)
                 .Include(u => u.Country)
-                .Include(u => u.Images)
+                .Include(u => u.Images
+                    .Where(i => !i.IsDeleted)
+                    .OrderByDescending(i => i.IsProfilePicture))
                 .Include(u => u.LikesSent)
                     .ThenInclude(u => u.LikedUser)
                         .ThenInclude(lu => lu.City)

@@ -21,6 +21,8 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
 
+    using Newtonsoft.Json;
+
     using static LOVE.NET.Common.GlobalConstants;
     using static LOVE.NET.Common.GlobalConstants.ControllerResponseMessages;
     using static LOVE.NET.Common.GlobalConstants.EmailMessagesConstants;
@@ -193,6 +195,7 @@
                     user.LikesReceived.Select(lr => lr.UserId).Intersect(user.LikesSent.Select(ls => ls.LikedUserId)).Contains(l.LikedUserId));
 
             var result = AutoMapperConfig.MapperInstance.Map<UserDetailsViewModel>(user);
+            result.Images = result.Images.OrderByDescending(i => i.IsProfilePicture).ToList();
 
             return result;
         }
@@ -218,6 +221,27 @@
                     Url = imageUrls[i],
                     IsProfilePicture = false,
                 });
+            }
+
+            var updatedImages = new List<Image>();
+
+            foreach (var item in model.Images)
+            {
+                updatedImages.Add(JsonConvert.DeserializeObject<Image>(item));
+            }
+
+            foreach (var image in user.Images)
+            {
+                var updatedImage = updatedImages.FirstOrDefault(i => i.Id == image.Id);
+
+                if (updatedImage == null)
+                {
+                    image.IsDeleted = true;
+                }
+                else
+                {
+                    image.IsProfilePicture = updatedImage.IsProfilePicture;
+                }
             }
 
             user.UserName = model.UserName;
