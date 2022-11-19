@@ -166,6 +166,7 @@ export default function UserDetails() {
         errorState={errorState}
       />
       <h1>Your images</h1>
+      <h5>Your changes wont be applied if you don't press Edit</h5>
       {!!user?.images && (
         <ImagesContainer
           images={user.images}

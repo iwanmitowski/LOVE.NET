@@ -142,6 +142,51 @@ export async function editAccount(user) {
   }
 
   try {
+    if (
+      !user.userName ||
+      !user.password ||
+      !user.confirmPassword ||
+      !user.bio ||
+      !user.countryId ||
+      !user.cityId
+    ) {
+      throw new Error(identityConstants.FILL_REQUIRED_FIELDS);
+    }
+
+    if (user.confirmPassword !== user.password) {
+      throw new Error(identityConstants.PASSWORDS_DONT_MATCH);
+    }
+
+    if (user.bio > identityConstants.BIO_MAX_LENGTH) {
+      throw new Error(identityConstants.TOO_LONG_BIO);
+    }
+
+    if (user.userName > identityConstants.USERNAME_MAX_LENGTH) {
+      throw new Error(identityConstants.TOO_LONG_USERNAME);
+    }
+
+    if (user.birthdate < date.getLatestLegal()) {
+      throw new Error(identityConstants.UNDERAGED_USER);
+    }
+
+    if (
+      user.genderId < 1 ||
+      user.genderId > identityConstants.CITIES_MAX_COUNT
+    ) {
+      throw new Error(identityConstants.INVALID_GENDER);
+    }
+
+    if (user.cityId < 1 || user.cityId > identityConstants.CITIES_MAX_COUNT) {
+      throw new Error(identityConstants.INVALID_CITY);
+    }
+
+    if (
+      user.countryId < 1 ||
+      user.countryId > identityConstants.COUNTRIES_MAX_COUNT
+    ) {
+      throw new Error(identityConstants.INVALID_COUNTRY);
+    }
+
     const response = await instance.put(
       `${baseUrl}/account/${user.id}`,
       formData,
