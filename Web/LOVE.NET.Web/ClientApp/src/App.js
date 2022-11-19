@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/Home";
 import Main from "./components/Shared/Main/Main";
 import Footer from "./components/Shared/Footer/Footer";
@@ -10,13 +11,13 @@ import Login from "./components/Auth/Login/Login";
 import Logout from "./components/Auth/Logout/Logout";
 import Register from "./components/Auth/Register/Register";
 import Verify from "./components/Auth/Verify/Verify";
-
-import "./App.css";
+import Forbidden from "./components/Shared/Error/Forbidden/Forbidden";
+import NotFound from "./components/Shared/Error/NotFound/NotFound";
 import UserDetails from "./components/User/UserDetails";
-import { useIdentityContext } from "./hooks/useIdentityContext";
-import { useEffect } from "react";
 
+import { useIdentityContext } from "./hooks/useIdentityContext";
 import * as identityService from "./services/identityService";
+import "./App.css";
 
 function App() {
   const { isLogged, userLogout } = useIdentityContext();
@@ -74,6 +75,9 @@ function App() {
               </AuthGuard>
             }
           />
+          <Route path="/forbidden" element={<Forbidden />} />
+          <Route path="/notfound" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/notfound" replace />} />
         </Routes>
       </Main>
       <Footer />

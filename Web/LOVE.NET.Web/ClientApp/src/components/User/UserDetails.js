@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, Fragment } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UserForm from "../User/UserForm";
 import ImagesContainer from "../Image/ImagesContainer";
 
@@ -8,9 +8,12 @@ import * as identityService from "../../services/identityService";
 import * as countryService from "../../services/countryService";
 import * as genderService from "../../services/genderService";
 import * as date from "../../utils/date";
+import { useIdentityContext } from "../../hooks/useIdentityContext";
 
 export default function UserDetails() {
   const params = useParams();
+  const navigate = useNavigate();
+  const { userLogout } = useIdentityContext();
 
   const userInitialState = {
     email: "",
@@ -52,7 +55,16 @@ export default function UserDetails() {
         setCountries(countryPromiseResult);
       })
       .catch((error) => {
-        setError(error.message);
+        debugger;
+        if (error?.response?.status === 401 || error?.message?.includes("status code 401")) {
+          userLogout();
+        } else if (error?.response?.status === 403 || error?.message?.includes("status code 403")) {
+          navigate('/forbidden');
+        } else if (error?.response?.status === 404 || error?.message?.includes("status code 404")) {
+          navigate('/notfound');
+        } else {
+          setError(error.message);
+        }
       });
   }, [userId]);
 
@@ -100,8 +112,14 @@ export default function UserDetails() {
       const oldPfpIndex = prevState.images.findIndex((i) => i.isProfilePicture);
       const newPfpIndex = prevState.images.findIndex((i) => i.id === id);
 
-      const oldPfp = { ...prevState.images[oldPfpIndex], isProfilePicture: false };
-      const newPfp = { ...prevState.images[newPfpIndex], isProfilePicture: true };
+      const oldPfp = {
+        ...prevState.images[oldPfpIndex],
+        isProfilePicture: false,
+      };
+      const newPfp = {
+        ...prevState.images[newPfpIndex],
+        isProfilePicture: true,
+      };
 
       const filteredImages = [...prevState.images];
       filteredImages[oldPfpIndex] = newPfp;
@@ -125,7 +143,15 @@ export default function UserDetails() {
         });
       })
       .catch((error) => {
-        setError(error.message);
+        if (error?.response?.status === 401 || error?.message?.includes("status code 401")) {
+          userLogout();
+        } else if (error?.response?.status === 403 || error?.message?.includes("status code 403")) {
+          navigate('/forbidden');
+        } else if (error?.response?.status === 404 || error?.message?.includes("status code 404")) {
+          navigate('/notfound');
+        } else {
+          setError(error.message);
+        }
       });
   };
 
