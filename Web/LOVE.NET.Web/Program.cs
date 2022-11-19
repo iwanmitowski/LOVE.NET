@@ -14,6 +14,7 @@
     using LOVE.NET.Data.Repositories.Users;
     using LOVE.NET.Data.Seeding;
     using LOVE.NET.Services.Countries;
+    using LOVE.NET.Services.Dating;
     using LOVE.NET.Services.Email;
     using LOVE.NET.Services.Genders;
     using LOVE.NET.Services.Identity;
@@ -144,6 +145,7 @@
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddSingleton<IImagesService, ImagesService>();
             services.AddTransient<IGendersService, GendersService>();
+            services.AddTransient<IDatingService, DatingService>();
         }
 
         private static void Configure(WebApplication app)

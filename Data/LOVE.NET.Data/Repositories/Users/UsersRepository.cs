@@ -45,6 +45,7 @@
                 .Include(u => u.RefreshTokens)
                 .Include(u => u.LikesReceived)
                 .Include(lu => lu.Gender)
+                .Include(u => u.Roles)
                 .Where(func);
         }
     }

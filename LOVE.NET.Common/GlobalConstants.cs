@@ -87,6 +87,8 @@
             public const string ById = "{id:int}";
 
             public const string GendersControllerName = Api + "genders";
+
+            public const string DatingControllerName = Api + "dating";
         }
 
         public class ControllerResponseMessages
