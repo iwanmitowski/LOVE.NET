@@ -62,12 +62,11 @@ export async function register(user) {
     if (!EMAIL_REGEX.test(user.email)) {
       throw new Error(identityConstants.INVALID_EMAIL);
     }
-
-    if (user.bio > identityConstants.BIO_MAX_LENGTH) {
+    if (user.bio.length > identityConstants.BIO_MAX_LENGTH) {
       throw new Error(identityConstants.TOO_LONG_BIO);
     }
 
-    if (user.userName > identityConstants.USERNAME_MAX_LENGTH) {
+    if (user.userName.length > identityConstants.USERNAME_MAX_LENGTH) {
       throw new Error(identityConstants.TOO_LONG_USERNAME);
     }
 
@@ -157,11 +156,11 @@ export async function editAccount(user) {
       throw new Error(identityConstants.PASSWORDS_DONT_MATCH);
     }
 
-    if (user.bio > identityConstants.BIO_MAX_LENGTH) {
+    if (user.bio.length > identityConstants.BIO_MAX_LENGTH) {
       throw new Error(identityConstants.TOO_LONG_BIO);
     }
 
-    if (user.userName > identityConstants.USERNAME_MAX_LENGTH) {
+    if (user.userName.length > identityConstants.USERNAME_MAX_LENGTH) {
       throw new Error(identityConstants.TOO_LONG_USERNAME);
     }
 
