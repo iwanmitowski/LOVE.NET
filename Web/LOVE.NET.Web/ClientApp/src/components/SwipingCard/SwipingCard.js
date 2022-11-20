@@ -20,29 +20,16 @@ export default function SwipingCard(props) {
         className={`${styles["card"]} ${styles["no-selecting"]}`}
         style={{ width: "30rem", margin: "0px auto" }}
       >
-        <SwipingCardCarousel
-          images={[
-            "https://i.picsum.photos/id/1011/5472/3648.jpg?hmac=Koo9845x2akkVzVFX3xxAc9BCkeGYA9VRVfLE4f0Zzk",
-            "https://res.cloudinary.com/dojl8gfnd/image/upload/v1668613576/zhvlfmiporzpr1zq3bjg.png",
-          ]}
-        />
-        <div className="card-body">
-          <div className="d-inline-block">
-            <h4 className="card-title">
-              <strong>user.userName</strong> user.age
-            </h4>
-          </div>
-          <p className="card-text">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-            commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-            Donec quam felis, ultricies nec, pellentesque eu, pretium.12345
-          </p>
+        <SwipingCardCarousel images={user.images} />
+        <div className={styles["card-body"]}>
+            <p className="card-text">
+              <strong>{user.userName}</strong> {user.age}
+            </p>
+          <p className="card-text">{user.bio}</p>
         </div>
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">user.gender</li>
-          <li className="list-group-item">user.cityName</li>
-          <li className="list-group-item">Vestibulum at eros</li>
+          <li className="list-group-item">{user.gender}</li>
+          <li className="list-group-item">{user.cityName}</li>
         </ul>
         <div className="card-body">
           <Button variant="light" type="submit">

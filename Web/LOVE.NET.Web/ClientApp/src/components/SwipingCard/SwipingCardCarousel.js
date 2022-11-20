@@ -12,12 +12,12 @@ export default function SwipingCardCarousel(props) {
   };
 
   return (
-    <Carousel activeIndex={index} onSelect={handleSelect}>
+    <Carousel interval={null} activeIndex={index} onSelect={handleSelect}>
       {images.map((image, i) => (
         <Carousel.Item key={i + 1} className={styles["disable-indicators"]}>
           <img
             className={`d-block w-100 ${styles["image-size"]}`}
-            src={image}
+            src={image.url}
             alt={image}
           />
         </Carousel.Item>

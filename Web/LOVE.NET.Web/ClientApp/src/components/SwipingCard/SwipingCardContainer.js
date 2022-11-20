@@ -1,4 +1,4 @@
-import TinderCard from "react-tinder-card";
+import SwipingCard from "./SwipingCard";
 
 import styles from "./SwipingCard.module.css";
 
@@ -8,7 +8,7 @@ export default function SwipingCardContainer(props) {
   return (
     <div className={styles["cards-container"]}>
       {users.map((u) => (
-        <TinderCard key={u.id} user={u} />
+        <SwipingCard key={u.id} user={u} />
       ))}
     </div>
   );
