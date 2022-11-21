@@ -89,6 +89,7 @@
             public const string GendersControllerName = Api + "genders";
 
             public const string DatingControllerName = Api + "dating";
+            public const string LikeRoute = "like";
         }
 
         public class ControllerResponseMessages
@@ -100,6 +101,8 @@
             public const string LogoutSuccessfully = "Logout successfully";
             public const string FillAllTheInformation = "Fill all the information";
             public const string UserNotFound = "User not found";
+            public const string YouCantLikeYourself = "You can't like yourself";
+            public const string UserAlreadyLiked = "User is already liked";
             public const string WrongPassword = "Wrong password";
             public const string WrongOldPassword = "Old password is invalid";
             public const string ChangePasswordsDontMatch = "New password and confirm password must match";

@@ -55,7 +55,6 @@ export default function UserDetails() {
         setCountries(countryPromiseResult);
       })
       .catch((error) => {
-        debugger;
         if (error?.response?.status === 401 || error?.message?.includes("status code 401")) {
           userLogout();
         } else if (error?.response?.status === 403 || error?.message?.includes("status code 403")) {

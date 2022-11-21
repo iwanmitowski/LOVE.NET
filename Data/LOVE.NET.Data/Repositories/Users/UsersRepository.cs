@@ -42,6 +42,8 @@
                 .Include(u => u.LikesSent)
                     .ThenInclude(u => u.LikedUser)
                     .ThenInclude(lu => lu.Images)
+                .Include(u => u.LikesSent)
+                    .Where(u => !u.IsDeleted)
                 .Include(u => u.RefreshTokens)
                 .Include(u => u.LikesReceived)
                 .Include(lu => lu.Gender)
