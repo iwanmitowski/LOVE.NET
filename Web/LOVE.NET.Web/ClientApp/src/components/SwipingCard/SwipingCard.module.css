@@ -38,3 +38,11 @@
   -ms-user-select: none;      
   user-select: none;
 }
+
+.userName {
+  min-height: 69px;
+}
+
+.bio {
+  min-height: 120px;
+}

@@ -21,14 +21,14 @@ export default function SwipingCard(props) {
         style={{ width: "30rem", margin: "0px auto" }}
       >
         <SwipingCardCarousel images={user.images} />
-        <div className={styles["card-body"]}>
-            <p className="card-text">
+        <div className={`m-3 ${styles["card-body"]}`}>
+            <p className={`card-text ${styles.userName}`}>
               <strong>{user.userName}</strong> {user.age}
             </p>
-          <p className="card-text">{user.bio}</p>
+          <p className={`card-text ${styles.bio}`}>{user.bio}</p>
         </div>
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">{user.gender}</li>
+          <li className="list-group-item">{user.genderName}</li>
           <li className="list-group-item">{user.cityName}</li>
         </ul>
         <div className="card-body">
