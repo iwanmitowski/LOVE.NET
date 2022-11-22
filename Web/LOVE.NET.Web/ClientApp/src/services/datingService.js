@@ -16,6 +16,7 @@ export async function getUsersToSwipe() {
 
 export async function likeUser(userId) {
   try {
+      // Throttle reduces the backend calls due to bug in react-tinder-card
       const response = await axiosThrottle.use(instance.post(`${baseUrl}/like/${userId}`), { requestsPerSecond: 5 });
   
       return response.data;

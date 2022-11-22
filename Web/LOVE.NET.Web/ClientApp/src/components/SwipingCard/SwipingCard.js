@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
+import { useCallback } from "react";
 import { Button } from "react-bootstrap";
 import TinderCard from "react-tinder-card";
 import SwipingCardCarousel from "./SwipingCardCarousel";
 
 import styles from "./SwipingCard.module.css";
 
+// Debouncer for safety for delaying requests to the server
 function debounce(func, timeout = 3000) {
   let timer;
   return (...args) => {
@@ -19,8 +21,13 @@ export default function SwipingCard(props) {
   const user = props.user;
   const swipe = props.swipe;
 
-  const leftMemoizedCallback = debounce(() => swipe("left", user.id));
-  const rightMemoizedCallback = debounce(() => swipe("right", user.id));
+  const leftSwipe = useCallback(() => {
+    debounce(() => swipe("left", user.id));
+  }, [swipe, user.id]);
+
+  const rightSwipe = useCallback(() => {
+    debounce(() => swipe("right", user.id));
+  }, [swipe, user.id]);
 
   return (
     <TinderCard
@@ -32,7 +39,6 @@ export default function SwipingCard(props) {
           debounce(() => swipe(dir, user.id))();
         }, 1000);
       }}
-      onCardLeftScreen={()=> console.log(123654987)}
     >
       <div
         className={`${styles["card"]} ${styles["no-selecting"]}`}
@@ -53,7 +59,7 @@ export default function SwipingCard(props) {
           <Button
             variant="light"
             type="submit"
-            onClick={() => leftMemoizedCallback()}
+            onClick={() => leftSwipe()}
           >
             ❌
           </Button>
@@ -61,7 +67,7 @@ export default function SwipingCard(props) {
             variant="light"
             type="submit"
             onClick={() => {
-              rightMemoizedCallback();
+              rightSwipe();
             }}
           >
             💚
