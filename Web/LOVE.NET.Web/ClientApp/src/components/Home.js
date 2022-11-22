@@ -10,6 +10,32 @@ export default function Home() {
   const { isLogged, userLogout } = useIdentityContext();
   const [usersToSwipe, setUsersToSwipe] = useState([]);
 
+  const swipe = (dir, swipedUserId) => {
+    if (dir === "left") {
+      setUsersToSwipe((prevState) => {
+        return [...prevState.filter((u) => u.id !== swipedUserId)];
+      });
+    } else if (dir === "right") {
+      datingService
+        .likeUser(swipedUserId)
+        .then(() => {
+          setUsersToSwipe((prevState) => {
+            return [...prevState.filter((u) => u.id !== swipedUserId)];
+          });
+        })
+        .catch((error) => {
+          if (
+            error?.response?.status === 401 ||
+            error?.message?.includes("status code 401")
+          ) {
+            userLogout();
+          } else {
+            console.log(error);
+          }
+        });
+    }
+  };
+
   useEffect(() => {
     if (isLogged) {
       datingService
@@ -32,16 +58,16 @@ export default function Home() {
         });
     }
   }, [isLogged]);
-  console.log(usersToSwipe)
+
   if (!isLogged) {
-    return <h1>Don't you want to find your beloved one ?</h1>
+    return <h1>Don't you want to find your beloved one ?</h1>;
   }
 
   return (
     <Fragment>
       <h1>Home</h1>
-      {!!usersToSwipe.length ? (
-        <SwipingCardContainer users={usersToSwipe} />
+      {!!usersToSwipe?.length ? (
+        <SwipingCardContainer users={usersToSwipe} swipe={swipe} />
       ) : (
         <h1>Come back later</h1>
       )}
