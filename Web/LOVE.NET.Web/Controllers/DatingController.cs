@@ -53,11 +53,11 @@
         [Route(LikeRoute)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> LikeAsync(string likedUserId)
+        public async Task<IActionResult> LikeAsync(string id)
         {
             var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var result = await this.datingService.LikeAsync(loggedUserId, likedUserId);
+            var result = await this.datingService.LikeAsync(loggedUserId, id);
 
             if (result.Failure)
             {
