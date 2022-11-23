@@ -24,7 +24,7 @@
             this.usersRepository = usersRepository;
         }
 
-        public IEnumerable<UserMatchViewModel> GetUserMatchModels(string userId)
+        public IEnumerable<UserMatchViewModel> GetNotSwipedUsers(string userId)
         {
             var notSwipedUsers = this.usersRepository
                 .WithAllInformation(u =>
@@ -34,6 +34,19 @@
                 .To<UserMatchViewModel>();
 
             return notSwipedUsers;
+        }
+
+        public UserMatchViewModel GetCurrentMatch(string userId)
+        {
+            var match = this.usersRepository
+                .WithAllInformation(u =>
+                    u.Id == userId)
+                .FirstOrDefault();
+
+            var result = AutoMapperConfig.MapperInstance.Map<UserMatchViewModel>(match);
+            result.Images = result.Images.OrderByDescending(i => i.IsProfilePicture).ToList();
+
+            return result;
         }
 
         public async Task<Result> LikeAsync(string userId, string likedUserId)

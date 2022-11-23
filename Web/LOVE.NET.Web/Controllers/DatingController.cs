@@ -46,7 +46,7 @@ namespace LOVE.NET.Web.Controllers
                 return this.Unauthorized();
             }
 
-            var notSwipedUsers = this.datingService.GetUserMatchModels(loggedUserId);
+            var notSwipedUsers = this.datingService.GetNotSwipedUsers(loggedUserId);
 
             return this.Ok(notSwipedUsers);
         }
@@ -75,7 +75,7 @@ namespace LOVE.NET.Web.Controllers
 
             if (result.IsMatch)
             {
-                var match = this.datingService.GetUserMatchModels(id).FirstOrDefault();
+                var match = this.datingService.GetCurrentMatch(id);
                 result.User = match;
             }
 
