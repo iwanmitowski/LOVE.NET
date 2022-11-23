@@ -4,11 +4,16 @@ import SwipingCardContainer from "./SwipingCard/SwipingCardContainer";
 
 import * as datingService from "../services/datingService";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "react-bootstrap";
+import MatchModal from "./Modal/MatchModal";
 
 export default function Home() {
   const navigate = useNavigate();
   const { isLogged, userLogout } = useIdentityContext();
   const [usersToSwipe, setUsersToSwipe] = useState([]);
+  const [matchModel, setMatchModel] = useState({
+    isMatch: false,
+  });
 
   const swipe = (dir, swipedUserId) => {
     setUsersToSwipe((prevState) => {
@@ -17,8 +22,8 @@ export default function Home() {
     if (dir === "right") {
       datingService
         .likeUser(swipedUserId)
-        .then(() => {
-          console.log("MATCH");
+        .then((res) => {
+          setMatchModel(res);
         })
         .catch((error) => {
           if (
@@ -68,6 +73,11 @@ export default function Home() {
       ) : (
         <h1>Come back later</h1>
       )}
+      <MatchModal
+        show={matchModel.isMatch}
+        user={matchModel.user}
+        onHide={() => setMatchModel({ isMatch: false })}
+      />
     </Fragment>
   );
 }
