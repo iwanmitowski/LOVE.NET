@@ -1,4 +1,6 @@
-﻿namespace LOVE.NET.Web.Controllers
+﻿using System.Linq;
+
+namespace LOVE.NET.Web.Controllers
 {
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -6,6 +8,7 @@
     using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Dating;
+    using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -43,7 +46,7 @@
                 return this.Unauthorized();
             }
 
-            var notSwipedUsers = this.datingService.GetNotSwipedUsers(loggedUserId);
+            var notSwipedUsers = this.datingService.GetUserMatchModels(loggedUserId);
 
             return this.Ok(notSwipedUsers);
         }
@@ -51,20 +54,32 @@
         [HttpPost]
         [Authorize]
         [Route(LikeRoute)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MatchViewModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> LikeAsync(string id)
         {
             var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var result = await this.datingService.LikeAsync(loggedUserId, id);
+            var serviceResult = await this.datingService.LikeAsync(loggedUserId, id);
 
-            if (result.Failure)
+            if (serviceResult.Errors != null)
             {
-                return this.BadRequest((Result)string.Join('\n', result.Errors));
+                return this.BadRequest((Result)string.Join('\n', serviceResult.Errors));
             }
 
-            return this.Ok();
+            var result = new MatchViewModel()
+            {
+                IsMatch = serviceResult.Succeeded,
+            };
+
+            if (result.IsMatch)
+            {
+                var match = this.datingService.GetUserMatchModels(id).FirstOrDefault();
+                result.User = match;
+            }
+
+            return this.Ok(result);
         }
     }
 }
