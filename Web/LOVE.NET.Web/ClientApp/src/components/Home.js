@@ -11,17 +11,14 @@ export default function Home() {
   const [usersToSwipe, setUsersToSwipe] = useState([]);
 
   const swipe = (dir, swipedUserId) => {
-    if (dir === "left") {
-      setUsersToSwipe((prevState) => {
-        return [...prevState.filter((u) => u.id !== swipedUserId)];
-      });
-    } else if (dir === "right") {
+    setUsersToSwipe((prevState) => {
+      return [...prevState.filter((u) => u.id !== swipedUserId)];
+    });
+    if (dir === "right") {
       datingService
         .likeUser(swipedUserId)
         .then(() => {
-          setUsersToSwipe((prevState) => {
-            return [...prevState.filter((u) => u.id !== swipedUserId)];
-          });
+          console.log("MATCH");
         })
         .catch((error) => {
           if (
@@ -62,7 +59,7 @@ export default function Home() {
   if (!isLogged) {
     return <h1>Don't you want to find your beloved one ?</h1>;
   }
-
+  console.log(usersToSwipe?.length);
   return (
     <Fragment>
       <h1>Home</h1>
