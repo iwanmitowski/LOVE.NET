@@ -8,7 +8,7 @@
 
     public interface IDatingService
     {
-        public IEnumerable<UserMatchViewModel> GetNotSwipedUsers(string userId);
+        public IEnumerable<UserMatchViewModel> GetUserMatchModels(string userId);
 
         public Task<Result> LikeAsync(string userId, string likedUserId);
     }

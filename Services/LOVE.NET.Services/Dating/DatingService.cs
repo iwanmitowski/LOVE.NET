@@ -24,7 +24,7 @@
             this.usersRepository = usersRepository;
         }
 
-        public IEnumerable<UserMatchViewModel> GetNotSwipedUsers(string userId)
+        public IEnumerable<UserMatchViewModel> GetUserMatchModels(string userId)
         {
             var notSwipedUsers = this.usersRepository
                 .WithAllInformation(u =>
@@ -67,7 +67,9 @@
 
             await this.usersRepository.SaveChangesAsync();
 
-            return true;
+            var isMatch = likedUser.LikesSent.Any(ls => ls.LikedUserId == userId);
+
+            return isMatch;
         }
     }
 }
