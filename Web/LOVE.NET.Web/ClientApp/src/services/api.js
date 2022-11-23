@@ -1,6 +1,8 @@
 import axios from "axios";
 import { globalConstants } from "../utils/constants";
 
+import PromiseThrottle from "promise-throttle";
+
 export const instance = axios.create({
   baseURL: globalConstants.API_URL,
   headers: {
@@ -58,3 +60,7 @@ instance.interceptors.response.use(
     return Promise.reject(err);
   }
 );
+
+export const throttledAxios = new PromiseThrottle({
+  requestsPerSecond: 1, // up to 1 request per second
+});

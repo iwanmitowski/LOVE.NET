@@ -1,6 +1,5 @@
 import { globalConstants } from "../utils/constants";
-import { instance } from "./api";
-import axiosThrottle from 'axios-request-throttle';
+import { instance, throttledAxios } from "./api";
 
 const baseUrl = globalConstants.API_URL + "dating";
 
@@ -17,10 +16,10 @@ export async function getUsersToSwipe() {
 export async function likeUser(userId) {
   try {
       // Throttle reduces the backend calls due to bug in react-tinder-card
-      const response = await axiosThrottle.use(instance.post(`${baseUrl}/like/${userId}`), { requestsPerSecond: 5 });
+      const response = await throttledAxios.add(() => instance.post(`${baseUrl}/like/${userId}`));
   
       return response.data;
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.message);
     }
 }
