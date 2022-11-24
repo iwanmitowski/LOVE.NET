@@ -5,6 +5,7 @@
 
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Mapping;
+    using LOVE.NET.Web.Common.Helpers;
     using LOVE.NET.Web.ViewModels.Countries;
     using LOVE.NET.Web.ViewModels.Genders;
     using LOVE.NET.Web.ViewModels.Images;
@@ -18,6 +19,8 @@
         public string Bio { get; set; }
 
         public DateTime Birthdate { get; set; }
+
+        public int Age => DateHelper.AgeCalculator(this.Birthdate);
 
         public ICollection<ImageViewModel> Images { get; set; }
 

@@ -10,6 +10,7 @@
     using LOVE.NET.Services.Countries;
     using LOVE.NET.Services.Email;
     using LOVE.NET.Services.Identity;
+    using LOVE.NET.Web.Common.Helpers;
     using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.AspNetCore.Authorization;
@@ -316,16 +317,7 @@
 
         private void ValidateBirthday(RegisterViewModel model)
         {
-            var today = DateTime.UtcNow;
-            var birthdate = model.Birthdate;
-
-            var age = today.Year - birthdate.Year;
-
-            // Leap years calculation
-            if (birthdate > today.AddYears(-age))
-            {
-                age--;
-            }
+            var age = DateHelper.AgeCalculator(model.Birthdate);
 
             if (age < MinimalAge)
             {
