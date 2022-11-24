@@ -4,17 +4,18 @@ import SwipingCardContainer from "./SwipingCard/SwipingCardContainer";
 
 import * as datingService from "../services/datingService";
 import { useNavigate } from "react-router-dom";
-import { Modal } from "react-bootstrap";
 import MatchModal from "./Modal/MatchModal";
+import UserPreferences from "./UserPreferences/UserPreferences";
 
 export default function Home() {
   const navigate = useNavigate();
   const { isLogged, userLogout } = useIdentityContext();
   const [usersToSwipe, setUsersToSwipe] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [matchModel, setMatchModel] = useState({
     isMatch: false,
   });
-
+  console.log(666666);
   const swipe = (dir, swipedUserId) => {
     setUsersToSwipe((prevState) => {
       return [...prevState.filter((u) => u.id !== swipedUserId)];
@@ -64,12 +65,20 @@ export default function Home() {
   if (!isLogged) {
     return <h1>Don't you want to find your beloved one ?</h1>;
   }
-  console.log(usersToSwipe?.length);
+  const users = filteredUsers.length > 0 ? filteredUsers : usersToSwipe;
+  console.log(filteredUsers.length);
   return (
     <Fragment>
       <h1>Home</h1>
+      <UserPreferences
+        filterUsers={setFilteredUsers}
+        users={usersToSwipe}
+      />
       {!!usersToSwipe?.length ? (
-        <SwipingCardContainer users={usersToSwipe} swipe={swipe} />
+        <SwipingCardContainer
+          users={users}
+          swipe={swipe}
+        />
       ) : (
         <h1>Come back later</h1>
       )}
