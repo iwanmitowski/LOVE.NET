@@ -5,13 +5,19 @@ export const IdentityContext = createContext();
 
 export const IdentityProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("auth", null);
+  const [location, setLocation] = useLocalStorage("location", null);
 
   const userLogin = (data) => {
     setUser(data);
+    setLocation({
+      latitude: data.latitude,
+      longitude: data.longitude,
+    });
   };
 
   const userLogout = () => {
     setUser(null);
+    setLocation(null);
   };
 
   return (

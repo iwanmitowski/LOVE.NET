@@ -40,10 +40,16 @@
 
         public string CountryName { get; set; }
 
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             // Getting intersection of both users likes, and select the liked user
             configuration.CreateMap<ApplicationUser, UserDetailsViewModel>()
+                .ForMember(m => m.Latitude, opt => opt.MapFrom(x => x.City.Latitude))
+                .ForMember(m => m.Longitude, opt => opt.MapFrom(x => x.City.Longitude))
                 .ForMember(m => m.Matches, opt => opt.MapFrom(x =>
                     x.LikesSent
                         .Where(l =>

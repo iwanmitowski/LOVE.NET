@@ -3,17 +3,19 @@ import { useState, useEffect, Fragment } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import UserForm from "../User/UserForm";
 import ImagesContainer from "../Image/ImagesContainer";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useIdentityContext } from "../../hooks/useIdentityContext";
 
 import * as identityService from "../../services/identityService";
 import * as countryService from "../../services/countryService";
 import * as genderService from "../../services/genderService";
 import * as date from "../../utils/date";
-import { useIdentityContext } from "../../hooks/useIdentityContext";
 
 export default function UserDetails() {
   const params = useParams();
   const navigate = useNavigate();
   const { userLogout } = useIdentityContext();
+  const [, setLocation] = useLocalStorage("location", null);
 
   const userInitialState = {
     email: "",
@@ -53,14 +55,27 @@ export default function UserDetails() {
         setUser(accountPromiseResult);
         setGenders(genderPromiseResult);
         setCountries(countryPromiseResult);
+        setLocation({
+          latitude: accountPromiseResult.latitude,
+          longitude: accountPromiseResult.longitude,
+        });
       })
       .catch((error) => {
-        if (error?.response?.status === 401 || error?.message?.includes("status code 401")) {
+        if (
+          error?.response?.status === 401 ||
+          error?.message?.includes("status code 401")
+        ) {
           userLogout();
-        } else if (error?.response?.status === 403 || error?.message?.includes("status code 403")) {
-          navigate('/forbidden');
-        } else if (error?.response?.status === 404 || error?.message?.includes("status code 404")) {
-          navigate('/notfound');
+        } else if (
+          error?.response?.status === 403 ||
+          error?.message?.includes("status code 403")
+        ) {
+          navigate("/forbidden");
+        } else if (
+          error?.response?.status === 404 ||
+          error?.message?.includes("status code 404")
+        ) {
+          navigate("/notfound");
         } else {
           setError(error.message);
         }
@@ -140,14 +155,28 @@ export default function UserDetails() {
         setUser({
           ...res,
         });
+        console.log(res);
+        setLocation({
+          latitude: res.latitude,
+          longitude: res.longitude,
+        });
       })
       .catch((error) => {
-        if (error?.response?.status === 401 || error?.message?.includes("status code 401")) {
+        if (
+          error?.response?.status === 401 ||
+          error?.message?.includes("status code 401")
+        ) {
           userLogout();
-        } else if (error?.response?.status === 403 || error?.message?.includes("status code 403")) {
-          navigate('/forbidden');
-        } else if (error?.response?.status === 404 || error?.message?.includes("status code 404")) {
-          navigate('/notfound');
+        } else if (
+          error?.response?.status === 403 ||
+          error?.message?.includes("status code 403")
+        ) {
+          navigate("/forbidden");
+        } else if (
+          error?.response?.status === 404 ||
+          error?.message?.includes("status code 404")
+        ) {
+          navigate("/notfound");
         } else {
           setError(error.message);
         }
