@@ -124,14 +124,12 @@ export async function getAccount(id) {
 
 export async function editAccount(user) {
   var formData = new FormData();
-  console.log(user);
   for (let key in user) {
-    if (key === 'images') {
+    if (key === "images") {
       for (let i = 0; i < user?.images?.length; i++) {
         formData.append(`Images`, JSON.stringify(user.images[i]));
       }
-    }
-    else {
+    } else {
       formData.append(key, user[key]);
     }
   }

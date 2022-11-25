@@ -15,7 +15,7 @@ export default function Home() {
   const [matchModel, setMatchModel] = useState({
     isMatch: false,
   });
-  console.log(666666);
+
   const swipe = (dir, swipedUserId) => {
     setUsersToSwipe((prevState) => {
       return [...prevState.filter((u) => u.id !== swipedUserId)];
@@ -65,8 +65,7 @@ export default function Home() {
   if (!isLogged) {
     return <h1>Don't you want to find your beloved one ?</h1>;
   }
-  const users = filteredUsers.length > 0 ? filteredUsers : usersToSwipe;
-  console.log(filteredUsers.length);
+
   return (
     <Fragment>
       <h1>Home</h1>
@@ -76,7 +75,7 @@ export default function Home() {
       />
       {!!usersToSwipe?.length ? (
         <SwipingCardContainer
-          users={users}
+          users={filteredUsers}
           swipe={swipe}
         />
       ) : (

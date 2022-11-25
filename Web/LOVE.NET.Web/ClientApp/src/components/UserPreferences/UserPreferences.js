@@ -25,7 +25,22 @@ export default function UserPreferences(props) {
   const filterUsers = props.filterUsers;
   const users = props.users;
 
-  // useEffect(() => {}, [preferences, users]);
+  useEffect(() => {
+    let currentFilteredUsers = users.filter((u) => u.age <= preferences.maxAge);
+
+    if (preferences.gender !== -1) {
+      currentFilteredUsers = users.filter(
+        (u) => u.genderId === preferences.gender
+      );
+    }
+
+    if (!preferences.aroundTheWorld) {
+      // filter by distance
+      console.log(preferences.maxDistance);
+    }
+
+    filterUsers(currentFilteredUsers);
+  }, [preferences, users]);
 
   useEffect(() => {
     if (genders.length === 1) {
@@ -52,21 +67,6 @@ export default function UserPreferences(props) {
         [currentName]: parseInt(currentValue),
       };
     });
-
-    let currentFilteredUsers = users.filter((u) => u.age < preferences.maxAge);
-
-    if (preferences.gender !== -1) {
-      currentFilteredUsers = users.filter(
-        (u) => u.genderId === preferences.gender
-      );
-    }
-
-    if (!preferences.aroundTheWorld) {
-      // filter by distance
-      console.log(preferences.maxDistance);
-    }
-
-    filterUsers(currentFilteredUsers);
   };
 
   return (
