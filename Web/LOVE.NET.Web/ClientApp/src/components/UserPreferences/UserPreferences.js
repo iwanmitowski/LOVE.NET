@@ -29,7 +29,7 @@ export default function UserPreferences(props) {
     let currentFilteredUsers = users.filter((u) => u.age <= preferences.maxAge);
 
     if (preferences.gender !== -1) {
-      currentFilteredUsers = users.filter(
+      currentFilteredUsers = currentFilteredUsers.filter(
         (u) => u.genderId === preferences.gender
       );
     }

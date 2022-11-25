@@ -20,6 +20,9 @@ export default function Home() {
     setUsersToSwipe((prevState) => {
       return [...prevState.filter((u) => u.id !== swipedUserId)];
     });
+    setFilteredUsers((prevState) => {
+      return [...prevState.filter((u) => u.id !== swipedUserId)];
+    });
     if (dir === "right") {
       datingService
         .likeUser(swipedUserId)
@@ -68,19 +71,8 @@ export default function Home() {
 
   return (
     <Fragment>
-      <h1>Home</h1>
-      <UserPreferences
-        filterUsers={setFilteredUsers}
-        users={usersToSwipe}
-      />
-      {!!usersToSwipe?.length ? (
-        <SwipingCardContainer
-          users={filteredUsers}
-          swipe={swipe}
-        />
-      ) : (
-        <h1>Come back later</h1>
-      )}
+      <UserPreferences filterUsers={setFilteredUsers} users={usersToSwipe} />
+      <SwipingCardContainer users={filteredUsers} swipe={swipe} />
       <MatchModal
         show={matchModel.isMatch}
         user={matchModel.user}

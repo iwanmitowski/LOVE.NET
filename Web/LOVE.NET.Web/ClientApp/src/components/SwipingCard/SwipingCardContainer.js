@@ -8,9 +8,11 @@ export default function SwipingCardContainer(props) {
 
   return (
     <div className={styles["cards-container"]}>
-      {users.map((u) => (
-        <SwipingCard key={u.id} user={u} swipe={swipe} />
-      ))}
+      {!!users.length ? (
+        users.map((u) => <SwipingCard key={u.id} user={u} swipe={swipe} />)
+      ) : (
+        <h1>Come back later</h1>
+      )}
     </div>
   );
 }
