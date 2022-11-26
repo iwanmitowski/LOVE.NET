@@ -9,15 +9,14 @@ import * as genderService from "../../services/genderService";
 import * as distance from "../../utils/distance";
 
 export default function UserPreferences(props) {
+  const { location, preferences, setUserPreferences } = useIdentityContext();
   const defaultPreferences = {
     maxAge: 100,
     maxDistance: 600,
     aroundTheWorld: false,
     gender: -1,
   };
-  const { location } = useIdentityContext();
-  
-  const [preferences, setPreferences] = useState(defaultPreferences);
+
   const [genders, setGenders] = useState([
     {
       id: -1,
@@ -29,6 +28,12 @@ export default function UserPreferences(props) {
   const users = props.users;
 
   useEffect(() => {
+    if (!preferences){
+      setUserPreferences(defaultPreferences);
+    }
+  }, []);
+
+  useEffect(() => {
     let currentFilteredUsers = users.filter((u) => u.age <= preferences.maxAge);
 
     if (preferences.gender !== -1) {
@@ -38,11 +43,15 @@ export default function UserPreferences(props) {
     }
 
     if (!preferences.aroundTheWorld) {
-     currentFilteredUsers = currentFilteredUsers.filter((u) => distance.inKms(
-      location.latitude,
-      location.longitude,
-      u.latitude,
-      u.longitude) <= preferences.maxDistance);
+      currentFilteredUsers = currentFilteredUsers.filter(
+        (u) =>
+          distance.inKms(
+            location.latitude,
+            location.longitude,
+            u.latitude,
+            u.longitude
+          ) <= preferences.maxDistance
+      );
     }
 
     filterUsers(currentFilteredUsers);
@@ -57,22 +66,25 @@ export default function UserPreferences(props) {
   }, [genders.length]);
 
   const onInputChange = (e) => {
-    setPreferences((prevState) => {
-      let currentName = e.target.name;
-      let currentValue = e.target.value;
+    let currentName = e.target.name;
+    let currentValue = e.target.value;
 
-      if (currentName === "aroundTheWorld") {
-        return {
-          ...prevState,
-          [currentName]: !prevState.aroundTheWorld,
-        };
-      }
+    let newPreferences = {
+      ...preferences,
+    }
 
-      return {
-        ...prevState,
-        [currentName]: parseInt(currentValue),
+    if (currentName === "aroundTheWorld") {
+      newPreferences = {
+        ...newPreferences,
+        [currentName]: !preferences.aroundTheWorld,
       };
-    });
+    } else {
+      newPreferences = {...newPreferences,
+      [currentName]: parseInt(currentValue)
+      }
+    }
+
+    setUserPreferences(newPreferences);
   };
 
   return (
