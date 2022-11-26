@@ -3,14 +3,14 @@
     using System;
     using System.Collections.Generic;
 
+    using AutoMapper;
+
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.Common.Helpers;
-    using LOVE.NET.Web.ViewModels.Countries;
-    using LOVE.NET.Web.ViewModels.Genders;
     using LOVE.NET.Web.ViewModels.Images;
 
-    public class UserMatchViewModel : IMapFrom<ApplicationUser>
+    public class UserMatchViewModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
@@ -35,5 +35,16 @@
         public int CountryId { get; set; }
 
         public string CountryName { get; set; }
+
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<ApplicationUser, UserMatchViewModel>()
+                .ForMember(m => m.Latitude, opt => opt.MapFrom(x => x.City.Latitude))
+                .ForMember(m => m.Longitude, opt => opt.MapFrom(x => x.City.Longitude));
+        }
     }
 }

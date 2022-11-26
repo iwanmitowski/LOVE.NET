@@ -34,7 +34,7 @@ namespace LOVE.NET.Web.Controllers
 
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserMatchViewModel[]))]
         public async Task<IActionResult> GetNotSwipedUsersAsync()
         {
             var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;

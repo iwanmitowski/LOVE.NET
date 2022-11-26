@@ -11,7 +11,7 @@ import * as distance from "../../utils/distance";
 export default function UserPreferences(props) {
   const defaultPreferences = {
     maxAge: 100,
-    maxDistance: 15,
+    maxDistance: 600,
     aroundTheWorld: false,
     gender: -1,
   };
@@ -38,8 +38,11 @@ export default function UserPreferences(props) {
     }
 
     if (!preferences.aroundTheWorld) {
-      // filter by distance
-      console.log(preferences.maxDistance);
+     currentFilteredUsers = currentFilteredUsers.filter((u) => distance.inKms(
+      location.latitude,
+      location.longitude,
+      u.latitude,
+      u.longitude) <= preferences.maxDistance);
     }
 
     filterUsers(currentFilteredUsers);
@@ -98,6 +101,8 @@ export default function UserPreferences(props) {
           <Fragment>
             <h6>Max range in km</h6>
             <RangeSlider
+              step={10}
+              max={600}
               name="maxDistance"
               value={preferences.maxDistance}
               onChange={onInputChange}
