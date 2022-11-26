@@ -20,10 +20,16 @@ export const IdentityProvider = ({ children }) => {
     setLocation(null);
   };
 
+  const setUserLocation = (data) => {
+    setLocation(data);
+  }
+
   return (
     <IdentityContext.Provider
       value={{
         user,
+        location,
+        setUserLocation,
         userLogin,
         userLogout,
         isLogged: user && !!user.token,

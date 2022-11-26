@@ -14,8 +14,7 @@ import * as date from "../../utils/date";
 export default function UserDetails() {
   const params = useParams();
   const navigate = useNavigate();
-  const { userLogout } = useIdentityContext();
-  const [, setLocation] = useLocalStorage("location", null);
+  const { userLogout, setUserLocation } = useIdentityContext();
 
   const userInitialState = {
     email: "",
@@ -55,7 +54,7 @@ export default function UserDetails() {
         setUser(accountPromiseResult);
         setGenders(genderPromiseResult);
         setCountries(countryPromiseResult);
-        setLocation({
+        setUserLocation({
           latitude: accountPromiseResult.latitude,
           longitude: accountPromiseResult.longitude,
         });
@@ -156,7 +155,7 @@ export default function UserDetails() {
           ...res,
         });
         console.log(res);
-        setLocation({
+        setUserLocation({
           latitude: res.latitude,
           longitude: res.longitude,
         });

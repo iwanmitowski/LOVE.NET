@@ -3,8 +3,10 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Form } from "react-bootstrap";
 import RangeSlider from "react-bootstrap-range-slider";
+import { useIdentityContext } from "../../hooks/useIdentityContext";
 
 import * as genderService from "../../services/genderService";
+import * as distance from "../../utils/distance";
 
 export default function UserPreferences(props) {
   const defaultPreferences = {
@@ -13,7 +15,8 @@ export default function UserPreferences(props) {
     aroundTheWorld: false,
     gender: -1,
   };
-
+  const { location } = useIdentityContext();
+  
   const [preferences, setPreferences] = useState(defaultPreferences);
   const [genders, setGenders] = useState([
     {
