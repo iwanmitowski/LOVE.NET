@@ -3,7 +3,6 @@ import { useState, useEffect, Fragment } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import UserForm from "../User/UserForm";
 import ImagesContainer from "../Image/ImagesContainer";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useIdentityContext } from "../../hooks/useIdentityContext";
 
 import * as identityService from "../../services/identityService";
@@ -15,7 +14,7 @@ export default function UserDetails() {
   const params = useParams();
   const navigate = useNavigate();
   const { userLogout, setUserLocation } = useIdentityContext();
-
+  
   const userInitialState = {
     email: "",
     password: "",

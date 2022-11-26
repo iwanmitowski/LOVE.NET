@@ -4,7 +4,6 @@ import { Button } from "react-bootstrap";
 import TinderCard from "react-tinder-card";
 import SwipingCardCarousel from "./SwipingCardCarousel";
 
-
 import * as distance from "../../utils/distance";
 
 import styles from "./SwipingCard.module.css";
@@ -23,23 +22,16 @@ function debounce(func, timeout = 3000) {
 
 export default function SwipingCard(props) {
   const { location } = useIdentityContext();
-  
+
   const user = props.user;
   const swipe = props.swipe;
-
-  const leftSwipe = useCallback(() => {
-    debounce(() => swipe("left", user.id));
-  }, [swipe, user.id]);
-
-  const rightSwipe = useCallback(() => {
-    debounce(() => swipe("right", user.id));
-  }, [swipe, user.id]);
 
   const currentDistance = distance.inKms(
     location.latitude,
     location.longitude,
     user.latitude,
-    user.longitude)
+    user.longitude
+  );
 
   return (
     <TinderCard
@@ -71,16 +63,14 @@ export default function SwipingCard(props) {
           <Button
             variant="light"
             type="submit"
-            onClick={() => leftSwipe()}
+            onClick={() => swipe("left", user.id)}
           >
             ❌
           </Button>
           <Button
             variant="light"
             type="submit"
-            onClick={() => {
-              rightSwipe();
-            }}
+            onClick={() => swipe("right", user.id)}
           >
             💚
           </Button>
