@@ -2,6 +2,8 @@
 
 namespace LOVE.NET.Web.Controllers
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -49,6 +51,32 @@ namespace LOVE.NET.Web.Controllers
             var notSwipedUsers = this.datingService.GetNotSwipedUsers(loggedUserId);
 
             return this.Ok(notSwipedUsers);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route(MatchesRoute)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserMatchViewModel[]))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public IActionResult GetMatches([Required]string id)
+        {
+            if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out _))
+            {
+                return this.BadRequest();
+            }
+
+            var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (loggedUserId != id)
+            {
+                return this.Forbid();
+            }
+
+            var matches = this.datingService.GetMatches(loggedUserId);
+
+            return this.Ok(matches);
         }
 
         [HttpPost]

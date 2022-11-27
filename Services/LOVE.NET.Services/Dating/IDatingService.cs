@@ -12,6 +12,8 @@
 
         public UserMatchViewModel GetCurrentMatch(string userId);
 
+        public IEnumerable<UserMatchViewModel> GetMatches(string userId);
+
         public Task<Result> LikeAsync(string userId, string likedUserId);
     }
 }

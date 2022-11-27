@@ -89,6 +89,7 @@
             public const string GendersControllerName = Api + "genders";
 
             public const string DatingControllerName = Api + "dating";
+            public const string MatchesRoute = "matches";
             public const string LikeRoute = "like/{id:guid}";
         }
 

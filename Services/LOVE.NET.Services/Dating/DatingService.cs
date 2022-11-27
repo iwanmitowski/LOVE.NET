@@ -36,6 +36,23 @@
             return notSwipedUsers;
         }
 
+        public IEnumerable<UserMatchViewModel> GetMatches(string userId)
+        {
+            var user = this.usersRepository.WithAllInformation(u => u.Id == userId).FirstOrDefault();
+
+            var matches = user.LikesSent
+                        .Where(l =>
+                            user.LikesReceived
+                                .Select(lr => lr.UserId)
+                                .Intersect(
+                                    user.LikesSent
+                                        .Select(ls => ls.LikedUserId))
+                                .Contains(l.LikedUserId))
+                        .Select(x => AutoMapperConfig.MapperInstance.Map<UserMatchViewModel>(x.LikedUser));
+
+            return matches;
+        }
+
         public UserMatchViewModel GetCurrentMatch(string userId)
         {
             var match = this.usersRepository

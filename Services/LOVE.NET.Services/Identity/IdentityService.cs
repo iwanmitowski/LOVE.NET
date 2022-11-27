@@ -190,10 +190,6 @@
         {
             var user = this.usersRepository.WithAllInformation(u => u.Id == id).FirstOrDefault();
 
-            var matches = user.LikesSent
-                .Where(l =>
-                    user.LikesReceived.Select(lr => lr.UserId).Intersect(user.LikesSent.Select(ls => ls.LikedUserId)).Contains(l.LikedUserId));
-
             var result = AutoMapperConfig.MapperInstance.Map<UserDetailsViewModel>(user);
             result.Images = result.Images.OrderByDescending(i => i.IsProfilePicture).ToList();
 
