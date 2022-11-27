@@ -5,11 +5,14 @@ import { useIdentityContext } from "../hooks/useIdentityContext";
 import SwipingCardContainer from "./SwipingCard/SwipingCardContainer";
 
 import * as datingService from "../services/datingService";
+import { Fragment } from "react";
+import ChatModal from "./Modals/Chat/ChatModal";
 
 export default function Matches() {
   const navigate = useNavigate();
   const { user, isLogged, userLogout } = useIdentityContext();
   const [matches, setMatches] = useState([]);
+	const [chatUser, setChatUser] = useState();
 
   useEffect(() => {
     if (isLogged) {
@@ -39,5 +42,14 @@ export default function Matches() {
     }
   });
 
-  return <SwipingCardContainer users={matches} />;
+  return (
+    <Fragment>
+      <ChatModal
+        show={true}
+        user={{}}
+        onHide={() => setChatUser(null)}
+      />
+      <SwipingCardContainer users={matches} />
+    </Fragment>
+  );
 }

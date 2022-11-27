@@ -1,0 +1,86 @@
+import { Modal } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import styles from "./ChatModal.module.css";
+
+export default function ChatModal(props) {
+  // const onHide = props.onHide;
+  const user = props.user;
+
+  return (
+    <Modal
+      {...props}
+      size="md"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          <h1 className="text-uppercase">Username</h1>
+        </Modal.Title>
+      </Modal.Header>
+      {user && (
+        <Modal.Body>
+          <div className="container py-5 px-4">
+            <div className="row rounded-lg">
+              <div className="col-12 px-0">
+                <div className={`px-4 ${styles["chat-box"]} bg-white`}>
+                  <div className={`${styles.media} w-50 mb-3`}>
+                    <img
+                      src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg"
+                      alt="user"
+                      width="50"
+                      className="rounded-circle"
+                    />
+                    <div className="media-body ms-3">
+                      <div className="bg-light rounded py-2 px-3 mb-2">
+                        <p
+                          className={`${styles["text-small"]} mb-0 text-muted`}
+                        >
+                          Test which is a new approach all solutions
+                        </p>
+                      </div>
+                      <p className="small text-muted">12:00 PM | Aug 13</p>
+                    </div>
+                  </div>
+
+                  <div className={`${styles.media} w-50 ms-auto mb-3`}>
+                    <div className="media-body">
+                      <div className="bg-primary rounded py-2 px-3 mb-2">
+                        <p className="text-small mb-0 text-white">
+                          Test which is a new approach to have all solutions
+                        </p>
+                      </div>
+                      <p className="small text-muted">12:00 PM | Aug 13</p>
+                    </div>
+                  </div>
+                </div>
+
+                <form className="bg-light">
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      placeholder="Type a message"
+                      aria-describedby="button-addon2"
+                      className="form-control rounded-0 border-0 bg-light"
+                    />
+                    <div className="input-group-append">
+                      <button
+                        id="send"
+                        type="submit"
+                        className="btn btn-link"
+                      >
+                        {" "}
+                        <FontAwesomeIcon icon={faPaperPlane} className="me-2" />
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+      )}
+    </Modal>
+  );
+}

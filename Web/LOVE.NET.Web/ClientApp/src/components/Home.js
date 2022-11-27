@@ -4,7 +4,7 @@ import SwipingCardContainer from "./SwipingCard/SwipingCardContainer";
 
 import * as datingService from "../services/datingService";
 import { useNavigate } from "react-router-dom";
-import MatchModal from "./Modal/MatchModal";
+import MatchModal from "./Modals/Match/MatchModal";
 import UserPreferences from "./UserPreferences/UserPreferences";
 
 export default function Home() {

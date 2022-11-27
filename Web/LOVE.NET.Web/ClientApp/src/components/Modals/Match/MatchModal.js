@@ -1,7 +1,7 @@
 import { Button, Modal } from "react-bootstrap";
-import SwipingCardCarousel from "../SwipingCard/SwipingCardCarousel";
+import SwipingCardCarousel from "../../SwipingCard/SwipingCardCarousel";
 
-import styles from "../SwipingCard/SwipingCard.module.css";
+import styles from "../../SwipingCard/SwipingCard.module.css";
 
 export default function MatchModal(props) {
   const onHide = props.onHide;

@@ -1,0 +1,45 @@
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+::-webkit-scrollbar-track {
+    width: 5px;
+    background: #f5f5f5;
+  }
+  
+::-webkit-scrollbar-thumb {
+    width: 1em;
+    background-color: #ddd;
+    border-radius: 1rem;
+  }
+  
+  .text-small {
+    font-size: 0.9rem;
+  }
+  
+  .messages-box,
+  .chat-box {
+    height: 510px;
+    overflow-y: scroll;
+  }
+
+  .media { 
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: start;
+    align-items: flex-start;
+  }
+  
+  .rounded-lg {
+    border-radius: 0.5rem;
+  }
+
+  .ml-auto {
+    margin-left: auto;
+  }
+  
+  input::placeholder {
+    font-size: 0.9rem;
+    color: #999;
+  }
+  
