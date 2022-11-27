@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { useCallback } from "react";
+import { Fragment, useCallback } from "react";
 import { Button } from "react-bootstrap";
 import TinderCard from "react-tinder-card";
 import SwipingCardCarousel from "./SwipingCardCarousel";
@@ -33,6 +33,49 @@ export default function SwipingCard(props) {
     user.longitude
   );
 
+  const cardContent = (
+    <div
+      className={`${styles["card"]} ${styles["no-selecting"]}`}
+      style={{ width: "30rem", margin: "0px auto" }}
+    >
+      <SwipingCardCarousel images={user.images} />
+      <div className={`m-3 ${styles["card-body"]}`}>
+        <p className={`card-text ${styles.userName}`}>
+          <strong>{user.userName}</strong> {user.age} - {currentDistance} kms
+        </p>
+        <p className={`card-text ${styles.bio}`}>{user.bio}</p>
+      </div>
+      <ul className="list-group list-group-flush">
+        <li className="list-group-item">{user.genderName}</li>
+        <li className="list-group-item">{user.cityName}</li>
+      </ul>
+      <div className="card-body">
+        {!!swipe && (
+          <Fragment>
+            <Button
+              variant="light"
+              type="submit"
+              onClick={() => swipe("left", user.id)}
+            >
+              ❌
+            </Button>
+            <Button
+              variant="light"
+              type="submit"
+              onClick={() => swipe("right", user.id)}
+            >
+              💚
+            </Button>
+          </Fragment>
+        )}
+      </div>
+    </div>
+  );
+
+  if(!swipe) {
+    return cardContent;
+  }
+
   return (
     <TinderCard
       className={styles["swipe"]}
@@ -44,38 +87,7 @@ export default function SwipingCard(props) {
         }, 1000);
       }}
     >
-      <div
-        className={`${styles["card"]} ${styles["no-selecting"]}`}
-        style={{ width: "30rem", margin: "0px auto" }}
-      >
-        <SwipingCardCarousel images={user.images} />
-        <div className={`m-3 ${styles["card-body"]}`}>
-          <p className={`card-text ${styles.userName}`}>
-            <strong>{user.userName}</strong> {user.age} - {currentDistance} kms
-          </p>
-          <p className={`card-text ${styles.bio}`}>{user.bio}</p>
-        </div>
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item">{user.genderName}</li>
-          <li className="list-group-item">{user.cityName}</li>
-        </ul>
-        <div className="card-body">
-          <Button
-            variant="light"
-            type="submit"
-            onClick={() => swipe("left", user.id)}
-          >
-            ❌
-          </Button>
-          <Button
-            variant="light"
-            type="submit"
-            onClick={() => swipe("right", user.id)}
-          >
-            💚
-          </Button>
-        </div>
-      </div>
+      {cardContent}
     </TinderCard>
   );
 }

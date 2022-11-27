@@ -13,6 +13,16 @@ export async function getUsersToSwipe() {
       }
 }
 
+export async function getMatches(userId) {
+  try {
+    const response = await instance.get(`${baseUrl}/matches/?id=${userId}`);
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
 export async function likeUser(userId) {
   try {
       // Throttle reduces the backend calls due to bug in react-tinder-card

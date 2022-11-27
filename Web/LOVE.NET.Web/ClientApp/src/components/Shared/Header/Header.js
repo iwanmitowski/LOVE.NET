@@ -23,12 +23,15 @@ export default function Header() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
+              {isLogged && (
+                <Link className="nav-link" to="/matches">
+                  Matches
+                </Link>
+              )}
               <Link className="nav-link" to="/likes">
                 Likes
               </Link>
-              <Link className="nav-link" to="/matches">
-                Matches
-              </Link>
+
               <NavDropdown
                 title="Dating information"
                 id="collasible-nav-dropdown"

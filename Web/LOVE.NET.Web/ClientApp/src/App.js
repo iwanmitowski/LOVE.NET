@@ -14,6 +14,7 @@ import Verify from "./components/Auth/Verify/Verify";
 import Forbidden from "./components/Shared/Error/Forbidden/Forbidden";
 import NotFound from "./components/Shared/Error/NotFound/NotFound";
 import UserDetails from "./components/User/UserDetails";
+import Matches from "./components/Matches";
 
 import { useIdentityContext } from "./hooks/useIdentityContext";
 import * as identityService from "./services/identityService";
@@ -35,6 +36,14 @@ function App() {
       <Main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route
+            path="/matches"
+            element={
+              <AuthGuard>
+                <Matches />
+              </AuthGuard>
+            }
+          />
           <Route
             path="/login"
             element={
