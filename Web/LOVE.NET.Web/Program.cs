@@ -13,6 +13,7 @@
     using LOVE.NET.Data.Repositories.Countries;
     using LOVE.NET.Data.Repositories.Users;
     using LOVE.NET.Data.Seeding;
+    using LOVE.NET.Services.Chats;
     using LOVE.NET.Services.Countries;
     using LOVE.NET.Services.Dating;
     using LOVE.NET.Services.Email;
@@ -136,6 +137,7 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<ICountriesRepository, CountriesRepository>();
+            services.AddSignalR();
 
             // Application services
             services.AddTransient<IEmailSender>(x =>
@@ -193,6 +195,7 @@
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.MapHub<ChatHub>("/chat");
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();

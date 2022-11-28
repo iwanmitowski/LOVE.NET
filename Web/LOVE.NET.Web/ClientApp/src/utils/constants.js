@@ -1,4 +1,5 @@
 export const globalConstants = {
+  BASE_URL: "https://localhost:44319",
   API_URL: "https://localhost:44319/api/",
 };
 

@@ -1,18 +1,28 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIdentityContext } from "../hooks/useIdentityContext";
 import SwipingCardContainer from "./SwipingCard/SwipingCardContainer";
+import ChatModal from "./Modals/Chat/ChatModal";
 
 import * as datingService from "../services/datingService";
-import { Fragment } from "react";
-import ChatModal from "./Modals/Chat/ChatModal";
+import * as chatService from "../services/chatService";
 
 export default function Matches() {
   const navigate = useNavigate();
   const { user, isLogged, userLogout } = useIdentityContext();
   const [matches, setMatches] = useState([]);
   const [chatUser, setChatUser] = useState();
+  const [roomId, setRoomId] = useState(user?.id);
+  const [connection, setConnection] = useState();
+
+  useEffect(() => {
+    if (chatUser) {
+      setRoomId(() => `${user.id}${chatUser.id}`);
+      setConnection(chatService.joinRoom(user.id, roomId));
+    } else {
+      setRoomId(user.id);
+    }
+  }, [chatUser]);
 
   useEffect(() => {
     if (isLogged) {
