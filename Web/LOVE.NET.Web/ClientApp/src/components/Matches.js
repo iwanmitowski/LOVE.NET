@@ -12,7 +12,7 @@ export default function Matches() {
   const navigate = useNavigate();
   const { user, isLogged, userLogout } = useIdentityContext();
   const [matches, setMatches] = useState([]);
-	const [chatUser, setChatUser] = useState();
+  const [chatUser, setChatUser] = useState();
 
   useEffect(() => {
     if (isLogged) {
@@ -45,11 +45,11 @@ export default function Matches() {
   return (
     <Fragment>
       <ChatModal
-        show={true}
-        user={{}}
+        show={!!chatUser}
+        user={chatUser}
         onHide={() => setChatUser(null)}
       />
-      <SwipingCardContainer users={matches} />
+      <SwipingCardContainer users={matches} startChat={setChatUser} />
     </Fragment>
   );
 }

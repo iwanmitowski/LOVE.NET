@@ -6,6 +6,7 @@ import styles from "./ChatModal.module.css";
 export default function ChatModal(props) {
   // const onHide = props.onHide;
   const user = props.user;
+  const profilePicture = user?.images?.find((i) => i.isProfilePicture)?.url;
 
   return (
     <Modal
@@ -16,7 +17,7 @@ export default function ChatModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          <h1 className="text-uppercase">Username</h1>
+          <h1 className="text-uppercase">{user?.userName}</h1>
         </Modal.Title>
       </Modal.Header>
       {user && (
@@ -25,11 +26,12 @@ export default function ChatModal(props) {
             <div className="row rounded-lg">
               <div className="col-12 px-0">
                 <div className={`px-4 ${styles["chat-box"]} bg-white`}>
-                  <div className={`${styles.media} w-50 mb-3`}>
+                  <div className={`${styles.media} w-75 mb-3`}>
                     <img
-                      src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg"
+                      src={profilePicture}
                       alt="user"
                       width="50"
+                      height="50"
                       className="rounded-circle"
                     />
                     <div className="media-body ms-3">
@@ -65,11 +67,7 @@ export default function ChatModal(props) {
                       className="form-control rounded-0 border-0 bg-light"
                     />
                     <div className="input-group-append">
-                      <button
-                        id="send"
-                        type="submit"
-                        className="btn btn-link"
-                      >
+                      <button id="send" type="submit" className="btn btn-link">
                         {" "}
                         <FontAwesomeIcon icon={faPaperPlane} className="me-2" />
                       </button>

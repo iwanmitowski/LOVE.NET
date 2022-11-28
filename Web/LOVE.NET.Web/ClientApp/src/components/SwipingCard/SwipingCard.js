@@ -3,6 +3,8 @@ import { Fragment, useCallback } from "react";
 import { Button } from "react-bootstrap";
 import TinderCard from "react-tinder-card";
 import SwipingCardCarousel from "./SwipingCardCarousel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
 
 import * as distance from "../../utils/distance";
 
@@ -25,6 +27,7 @@ export default function SwipingCard(props) {
 
   const user = props.user;
   const swipe = props.swipe;
+  const startChat = props.startChat;
 
   const currentDistance = distance.inKms(
     location.latitude,
@@ -68,11 +71,16 @@ export default function SwipingCard(props) {
             </Button>
           </Fragment>
         )}
+        {!!startChat && (
+          <Button variant="light" type="submit" onClick={() => startChat(user)}>
+            <FontAwesomeIcon icon={faCommentAlt} />
+          </Button>
+        )}
       </div>
     </div>
   );
 
-  if(!swipe) {
+  if (!swipe) {
     return cardContent;
   }
 
