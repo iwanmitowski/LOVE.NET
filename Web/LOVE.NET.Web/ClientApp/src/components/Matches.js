@@ -17,15 +17,15 @@ export default function Matches() {
 
   useEffect(() => {
     if (chatUser) {
-      setRoomId(() => `${user.id}${chatUser.id}`);
-      setConnection(chatService.joinRoom(user.id, roomId));
+      setRoomId(() => chatUser.roomId);
+      setConnection(chatService.joinRoom(user.id, chatUser.roomId));
     } else {
       setRoomId(user.id);
     }
   }, [chatUser]);
 
   useEffect(() => {
-    if (isLogged) {
+    if (isLogged && matches.length === 0) {
       datingService
         .getMatches(user.id)
         .then((res) => {
