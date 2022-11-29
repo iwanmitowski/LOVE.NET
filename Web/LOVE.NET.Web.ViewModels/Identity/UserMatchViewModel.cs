@@ -40,6 +40,8 @@
 
         public double Longitude { get; set; }
 
+        public string RoomId { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<ApplicationUser, UserMatchViewModel>()

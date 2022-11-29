@@ -48,7 +48,14 @@
                                     user.LikesSent
                                         .Select(ls => ls.LikedUserId))
                                 .Contains(l.LikedUserId))
-                        .Select(x => AutoMapperConfig.MapperInstance.Map<UserMatchViewModel>(x.LikedUser));
+                        .Select(x => AutoMapperConfig.MapperInstance.Map<UserMatchViewModel>(x.LikedUser))
+                        .ToList();
+
+            foreach (var match in matches)
+            {
+                var roomId = string.Join(string.Empty, new[] { match.Id, userId }.OrderBy(id => id));
+                match.RoomId = roomId;
+            }
 
             return matches;
         }
