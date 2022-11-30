@@ -11,17 +11,13 @@ import { useChat } from "../hooks/useChat";
 export default function Matches() {
   const navigate = useNavigate();
   const { user, isLogged, userLogout } = useIdentityContext();
-  const [
-    messages,
-    setUserConnection,
-    stopConnection,
-    sendMessage,
-  ] = useChat();
+  const [messages, setUserConnection, stopConnection, sendMessage] = useChat();
   const [matches, setMatches] = useState([]);
   const [chatUser, setChatUser] = useState();
+  const [chat, setChat] = useState([]);
 
   useEffect(() => {
-    console.log(messages);
+    setChat(() => [...messages]);
   }, [messages]);
 
   useEffect(() => {
@@ -72,6 +68,7 @@ export default function Matches() {
         show={!!chatUser}
         onHide={() => onCloseChat()}
         user={chatUser}
+        chat={chat}
         sendMessage={sendMessage}
       />
       <SwipingCardContainer users={matches} startChat={setChatUser} />

@@ -13,10 +13,6 @@
     border-radius: 1rem;
   }
   
-  .text-small {
-    font-size: 0.9rem;
-  }
-  
   .messages-box,
   .chat-box {
     height: 510px;

@@ -55,6 +55,7 @@ export const useChat = () => {
   const stopConnection = async () => {
 		connection.stop()
 			.then(() => {
+				setMessages([]);
 				setConnection(null);
 			});
   };

@@ -4,6 +4,8 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import styles from "./ChatModal.module.css";
 import { useState } from "react";
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
+import HomeMessage from "./Messages/HomeMessage";
+import AwayMessage from "./Messages/AwayMessage";
 
 export default function ChatModal(props) {
   const { user } = useIdentityContext();
@@ -11,6 +13,7 @@ export default function ChatModal(props) {
 
   const currentUser = props.user;
   const sendMessage = props.sendMessage;
+  const chat = props.chat;
 
   const profilePicture = currentUser?.images?.find(
     (i) => i.isProfilePicture
@@ -18,6 +21,10 @@ export default function ChatModal(props) {
 
   const onSendingMessage = (e) => {
     e.preventDefault();
+
+    if (!currentMessage) {
+      return;
+    }
 
     sendMessage({
       roomId: currentUser.roomId,
@@ -52,36 +59,17 @@ export default function ChatModal(props) {
             <div className="row rounded-lg">
               <div className="col-12 px-0">
                 <div className={`px-4 ${styles["chat-box"]} bg-white`}>
-                  <div className={`${styles.media} w-75 mb-3`}>
-                    <img
-                      src={profilePicture}
-                      alt="user"
-                      width="50"
-                      height="50"
-                      className="rounded-circle"
-                    />
-                    <div className="media-body ms-3">
-                      <div className="bg-light rounded py-2 px-3 mb-2">
-                        <p
-                          className={`${styles["text-small"]} mb-0 text-muted`}
-                        >
-                          Test which is a new approach all solutions
-                        </p>
-                      </div>
-                      <p className="small text-muted">12:00 PM | Aug 13</p>
-                    </div>
-                  </div>
-
-                  <div className={`${styles.media} w-50 ms-auto mb-3`}>
-                    <div className="media-body">
-                      <div className="bg-primary rounded py-2 px-3 mb-2">
-                        <p className="text-small mb-0 text-white">
-                          Test which is a new approach to have all solutions
-                        </p>
-                      </div>
-                      <p className="small text-muted">12:00 PM | Aug 13</p>
-                    </div>
-                  </div>
+                  {chat.map((message, index) =>
+                    message.userId === user.id ? (
+                      <HomeMessage key={index + 1} message={message} />
+                    ) : (
+                      <AwayMessage
+                        key={index + 1}
+                        message={message}
+                        profilePicture={profilePicture}
+                      />
+                    )
+                  )}
                 </div>
 
                 <form className="bg-light" onSubmit={onSendingMessage}>
