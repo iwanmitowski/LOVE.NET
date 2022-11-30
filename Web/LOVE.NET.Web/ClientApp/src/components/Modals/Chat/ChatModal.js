@@ -2,25 +2,51 @@ import { Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import styles from "./ChatModal.module.css";
+import { useState } from "react";
+import { useIdentityContext } from "../../../hooks/useIdentityContext";
 
 export default function ChatModal(props) {
-  // const onHide = props.onHide;
-  const user = props.user;
-  const profilePicture = user?.images?.find((i) => i.isProfilePicture)?.url;
+  const { user } = useIdentityContext();
+  const [currentMessage, setCurrentMessage] = useState("");
+
+  const currentUser = props.user;
+  const sendMessage = props.sendMessage;
+
+  const profilePicture = currentUser?.images?.find(
+    (i) => i.isProfilePicture
+  )?.url;
+
+  const onSendingMessage = (e) => {
+    e.preventDefault();
+
+    sendMessage({
+      roomId: currentUser.roomId,
+      userId: user.id,
+      text: currentMessage,
+    });
+
+    setCurrentMessage("");
+  };
+
+  const onInputChange = (e) => {
+    let currentValue = e.target.value;
+    setCurrentMessage(currentValue);
+  };
 
   return (
     <Modal
-      {...props}
+      show={props.show}
+      onHide={props.onHide}
       size="md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          <h1 className="text-uppercase">{user?.userName}</h1>
+          <h1 className="text-uppercase">{currentUser?.userName}</h1>
         </Modal.Title>
       </Modal.Header>
-      {user && (
+      {currentUser && (
         <Modal.Body>
           <div className="container py-5 px-4">
             <div className="row rounded-lg">
@@ -58,13 +84,15 @@ export default function ChatModal(props) {
                   </div>
                 </div>
 
-                <form className="bg-light">
+                <form className="bg-light" onSubmit={onSendingMessage}>
                   <div className="input-group">
                     <input
                       type="text"
                       placeholder="Type a message"
                       aria-describedby="button-addon2"
                       className="form-control rounded-0 border-0 bg-light"
+                      value={currentMessage}
+                      onChange={onInputChange}
                     />
                     <div className="input-group-append">
                       <button id="send" type="submit" className="btn btn-link">

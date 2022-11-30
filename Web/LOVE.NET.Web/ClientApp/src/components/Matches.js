@@ -5,22 +5,30 @@ import SwipingCardContainer from "./SwipingCard/SwipingCardContainer";
 import ChatModal from "./Modals/Chat/ChatModal";
 
 import * as datingService from "../services/datingService";
-import * as chatService from "../services/chatService";
+
+import { useChat } from "../hooks/useChat";
 
 export default function Matches() {
   const navigate = useNavigate();
   const { user, isLogged, userLogout } = useIdentityContext();
+  const [
+    messages,
+    setUserConnection,
+    stopConnection,
+    sendMessage,
+  ] = useChat();
   const [matches, setMatches] = useState([]);
   const [chatUser, setChatUser] = useState();
-  const [roomId, setRoomId] = useState(user?.id);
-  const [connection, setConnection] = useState();
+
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
 
   useEffect(() => {
     if (chatUser) {
-      setRoomId(() => chatUser.roomId);
-      setConnection(chatService.joinRoom(user.id, chatUser.roomId));
+      setUserConnection({ userId: user.id, roomId: chatUser.roomId });
     } else {
-      setRoomId(user.id);
+      // remove connection
     }
   }, [chatUser]);
 
@@ -52,12 +60,19 @@ export default function Matches() {
     }
   });
 
+  const onCloseChat = () => {
+    stopConnection().then(() => {
+      setChatUser(null);
+    });
+  };
+
   return (
     <Fragment>
       <ChatModal
         show={!!chatUser}
+        onHide={() => onCloseChat()}
         user={chatUser}
-        onHide={() => setChatUser(null)}
+        sendMessage={sendMessage}
       />
       <SwipingCardContainer users={matches} startChat={setChatUser} />
     </Fragment>
