@@ -43,6 +43,8 @@
 
         public const int MaxFileSizeInBytes = 20 * 1024 * 1024;
 
+        public const int DefaultTake = 10;
+
         public const string DefaultProfilePictureUrl = "https://res.cloudinary.com/dojl8gfnd/image/upload/v1666714042/24-248253_user-profile-default-image-png-clipart-png-download_tuamuf.png";
 
         public class JWTSecurityScheme

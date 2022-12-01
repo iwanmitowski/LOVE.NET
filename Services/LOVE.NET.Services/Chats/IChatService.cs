@@ -8,7 +8,7 @@
 
     public interface IChatService
     {
-        public IEnumerable<MessageViewModel> GetChat(string userId);
+        public ChatViewModel GetChat(ChatRequestViewModel request);
 
         public Task SaveMessageAsync(MessageDto message);
     }

@@ -8,7 +8,8 @@
     using LOVE.NET.Data.Repositories.Chat;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.ViewModels.Chat;
-    using LOVE.NET.Web.ViewModels.Identity;
+
+    using static LOVE.NET.Common.GlobalConstants;
 
     public class ChatService : IChatService
     {
@@ -19,15 +20,33 @@
             this.chatRepository = chatRepository;
         }
 
-        public IEnumerable<MessageViewModel> GetChat(string roomId)
+        public ChatViewModel GetChat(ChatRequestViewModel request)
         {
-            // Add skip and take
-            var messages = this.chatRepository
-                .AllAsNoTracking(m => m.RoomId == roomId)
-                .OrderByDescending(x => x.CreatedOn)
-                .To<MessageViewModel>();
+            var messagesCount = request.Page * DefaultTake;
 
-            return messages;
+            // Add skip and take
+            var messagesQuery = this.chatRepository
+                .AllAsNoTracking(m => m.RoomId == request.RoomId)
+                .OrderByDescending(x => x.CreatedOn);
+
+            var messages = messagesQuery
+                .Skip(messagesCount - 1)
+                .Take(messagesCount)
+                .Select(m => new MessageDto()
+                {
+                    RoomId = m.RoomId,
+                    UserId = m.UserId,
+                    CreatedOn = m.CreatedOn,
+                    Text = m.Text,
+                });
+
+            var count = messagesQuery.Count();
+
+            return new ChatViewModel()
+            {
+                Messages = messages,
+                TotalMessages = count,
+            };
         }
 
         public async Task SaveMessageAsync(MessageDto message)

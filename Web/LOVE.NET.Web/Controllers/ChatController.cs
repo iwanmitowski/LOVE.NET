@@ -18,12 +18,12 @@
             this.chatService = chatService;
         }
 
-        [HttpGet]
-        [Route(ByRoomId)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MessageViewModel[]))]
-        public IActionResult GetChatMessages(string id)
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChatViewModel))]
+        public IActionResult GetChatMessages(ChatRequestViewModel request)
         {
-            var chat = this.chatService.GetChat(id);
+            // check user id is contained in the roomid
+            var chat = this.chatService.GetChat(request);
 
             return this.Ok(chat);
         }
