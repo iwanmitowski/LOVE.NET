@@ -1,20 +1,18 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using LOVE.NET.Data.Models;
-using LOVE.NET.Services.Identity;
-
-using Microsoft.AspNetCore.SignalR;
-
-namespace LOVE.NET.Services.Chats
+﻿namespace LOVE.NET.Services.Chats
 {
+    using System;
+    using System.Threading.Tasks;
+
+    using LOVE.NET.Data.Models;
+    using Microsoft.AspNetCore.SignalR;
+
     public class ChatHub : Hub
     {
-        private readonly IIdentityService identityService;
+        private readonly IChatService chatService;
 
-        public ChatHub(IIdentityService identityService)
+        public ChatHub(IChatService chatService)
         {
-            this.identityService = identityService;
+            this.chatService = chatService;
         }
 
         public async Task JoinRoom(UserConnection userConnection)
@@ -29,6 +27,8 @@ namespace LOVE.NET.Services.Chats
             await this.Clients
                 .Group(message.RoomId)
                 .SendAsync("ReceiveMessage", message);
+
+            await this.chatService.SaveMessageAsync(message);
         }
     }
 }

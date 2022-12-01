@@ -1,9 +1,9 @@
-﻿using System;
-
-using LOVE.NET.Data.Common.Models;
-
-namespace LOVE.NET.Data.Models
+﻿namespace LOVE.NET.Data.Models
 {
+    using System;
+
+    using LOVE.NET.Data.Common.Models;
+
     public class Message : BaseModel<string>
     {
         public Message()

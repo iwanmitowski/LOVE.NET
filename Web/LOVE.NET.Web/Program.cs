@@ -10,6 +10,7 @@
     using LOVE.NET.Data.Common.Repositories;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories;
+    using LOVE.NET.Data.Repositories.Chat;
     using LOVE.NET.Data.Repositories.Countries;
     using LOVE.NET.Data.Repositories.Users;
     using LOVE.NET.Data.Seeding;
@@ -137,9 +138,10 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<ICountriesRepository, CountriesRepository>();
-            services.AddSignalR();
+            services.AddScoped<IChatRepository, ChatRepository>();
 
             // Application services
+            services.AddSignalR();
             services.AddTransient<IEmailSender>(x =>
                 new SendGridEmailSender(configuration[SendGridApiKey]));
             services.AddTransient<IIdentityService, IdentityService>();
@@ -148,6 +150,7 @@
             services.AddSingleton<IImagesService, ImagesService>();
             services.AddTransient<IGendersService, GendersService>();
             services.AddTransient<IDatingService, DatingService>();
+            services.AddScoped<IChatService, ChatService>();
         }
 
         private static void Configure(WebApplication app)
