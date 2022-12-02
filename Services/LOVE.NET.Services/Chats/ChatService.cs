@@ -22,16 +22,14 @@
 
         public ChatViewModel GetChat(ChatRequestViewModel request)
         {
-            var messagesCount = request.Page * DefaultTake;
-
             // Add skip and take
             var messagesQuery = this.chatRepository
                 .AllAsNoTracking(m => m.RoomId == request.RoomId)
                 .OrderByDescending(x => x.CreatedOn);
 
             var messages = messagesQuery
-                .Skip(messagesCount - 1)
-                .Take(messagesCount)
+                .Skip((request.Page - 1) * DefaultTake)
+                .Take(DefaultTake)
                 .Select(m => new MessageDto()
                 {
                     RoomId = m.RoomId,

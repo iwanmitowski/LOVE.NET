@@ -20,7 +20,7 @@
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ChatViewModel))]
-        public IActionResult GetChatMessages(ChatRequestViewModel request)
+        public IActionResult GetChatMessages([FromBody] ChatRequestViewModel request)
         {
             // check user id is contained in the roomid
             var chat = this.chatService.GetChat(request);
