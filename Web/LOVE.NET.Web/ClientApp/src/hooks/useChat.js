@@ -2,6 +2,8 @@ import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { useState, useRef, useEffect } from "react";
 import { globalConstants } from "../utils/constants";
 
+import * as chatService from "../services/chatService";
+
 export const useChat = () => {
   const [connection, setConnection] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -20,6 +22,9 @@ export const useChat = () => {
 
       setConnection(newConnection);
       setUserConnection(userConnection);
+      chatService
+        .getChat(userConnection.roomId)
+        .then((res) => setMessages((prevState) => [...prevState, res]));
     }
   }, [userConnection]);
 
@@ -38,7 +43,7 @@ export const useChat = () => {
           });
         })
         .catch((error) => console.log("Connection failed: ", error));
-      console.log(userConnection);
+      console.log("messages");
     }
   }, [connection, userConnection]);
 
@@ -53,17 +58,11 @@ export const useChat = () => {
   };
 
   const stopConnection = async () => {
-		connection.stop()
-			.then(() => {
-				setMessages([]);
-				setConnection(null);
-			});
+    connection.stop().then(() => {
+      setMessages([]);
+      setConnection(null);
+    });
   };
 
-  return [
-    messages,
-    setUserConnection,
-    stopConnection,
-    sendMessage,
-  ];
+  return [messages, setUserConnection, stopConnection, sendMessage];
 };

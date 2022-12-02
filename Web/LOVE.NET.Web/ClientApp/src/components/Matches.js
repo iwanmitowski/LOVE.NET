@@ -22,9 +22,8 @@ export default function Matches() {
 
   useEffect(() => {
     if (chatUser) {
+      
       setUserConnection({ userId: user.id, roomId: chatUser.roomId });
-    } else {
-      // remove connection
     }
   }, [chatUser]);
 
