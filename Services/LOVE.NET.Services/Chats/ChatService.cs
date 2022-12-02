@@ -36,7 +36,8 @@
                     UserId = m.UserId,
                     CreatedOn = m.CreatedOn,
                     Text = m.Text,
-                });
+                })
+                .OrderBy(m => m.CreatedOn);
 
             var count = messagesQuery.Count();
 
