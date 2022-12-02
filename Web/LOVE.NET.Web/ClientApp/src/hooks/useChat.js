@@ -24,7 +24,7 @@ export const useChat = () => {
       setUserConnection(userConnection);
       chatService
         .getChat(userConnection.roomId)
-        .then((res) => setMessages((prevState) => [...prevState, res]));
+        .then((res) => setMessages((prevState) => [...prevState, ...res]));
     }
   }, [userConnection]);
 

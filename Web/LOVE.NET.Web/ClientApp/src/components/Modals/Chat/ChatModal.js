@@ -2,18 +2,32 @@ import { Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import styles from "./ChatModal.module.css";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
 import HomeMessage from "./Messages/HomeMessage";
 import AwayMessage from "./Messages/AwayMessage";
+import { useEffect } from "react";
 
 export default function ChatModal(props) {
   const { user } = useIdentityContext();
   const [currentMessage, setCurrentMessage] = useState("");
 
+  const scrollRef = useRef();
+
   const currentUser = props.user;
   const sendMessage = props.sendMessage;
   const chat = props.chat;
+
+  useEffect(() => {
+    if (chat && scrollRef && scrollRef.current) {
+      const { scrollHeight, clientHeight } = scrollRef.current;
+      scrollRef.current.scrollTo({
+        left: 0,
+        top: scrollHeight - clientHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [chat]);
 
   const profilePicture = currentUser?.images?.find(
     (i) => i.isProfilePicture
@@ -58,7 +72,10 @@ export default function ChatModal(props) {
           <div className="container py-5 px-4">
             <div className="row rounded-lg">
               <div className="col-12 px-0">
-                <div className={`px-4 ${styles["chat-box"]} bg-white`}>
+                <div
+                  ref={scrollRef}
+                  className={`px-4 ${styles["chat-box"]} bg-white`}
+                >
                   {chat.map((message, index) =>
                     message.userId === user.id ? (
                       <HomeMessage key={index + 1} message={message} />
