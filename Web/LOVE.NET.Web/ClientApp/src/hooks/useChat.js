@@ -36,8 +36,7 @@ export const useChat = () => {
           connection.invoke("JoinRoom", userConnection);
 
           connection.on("ReceiveMessage", (message) => {
-            const updatedMessages = [...latestMessages.current];
-            updatedMessages.push(message);
+            const updatedMessages = [message, ...latestMessages.current];
 
             setMessages(updatedMessages);
           });
