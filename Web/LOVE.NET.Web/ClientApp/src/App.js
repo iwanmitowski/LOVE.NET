@@ -19,6 +19,8 @@ import Matches from "./components/Matches";
 import { useIdentityContext } from "./hooks/useIdentityContext";
 import * as identityService from "./services/identityService";
 import "./App.css";
+import Dashboard from "./components/Admin/Dashboard/Dashboard";
+import AdminGuard from "./components/Shared/guards/AdminGuard";
 
 function App() {
   const { isLogged, userLogout } = useIdentityContext();
@@ -36,6 +38,16 @@ function App() {
       <Main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AuthGuard>
+                <AdminGuard>
+                  <Dashboard />
+                </AdminGuard>
+              </AuthGuard>
+            }
+          />
           <Route
             path="/matches"
             element={
