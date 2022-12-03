@@ -12,6 +12,7 @@
     using static LOVE.NET.Common.GlobalConstants.ControllerRoutesConstants;
 
     [Route(ChatControllerName)]
+    [ApiController]
     public class ChatController : ControllerBase
     {
         private readonly IChatService chatService;
@@ -35,7 +36,6 @@
                 return this.Forbid();
             }
 
-            // check user id is contained in the roomid
             var chat = this.chatService.GetChat(request);
 
             return this.Ok(chat);

@@ -10,6 +10,7 @@
     using static LOVE.NET.Common.GlobalConstants.ControllerRoutesConstants;
 
     [Route(CountriesControllerName)]
+    [ApiController]
     public class CountriesController : ControllerBase
     {
         private readonly ICountriesService countriesService;
