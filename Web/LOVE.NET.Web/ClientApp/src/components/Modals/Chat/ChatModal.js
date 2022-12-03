@@ -12,15 +12,7 @@ import styles from "./ChatModal.module.css";
 
 export default function ChatModal(props) {
   const { user } = useIdentityContext();
-  const [
-    messages,
-    hasMoreMessagesToLoad,
-    setHasMoreMessagesToLoad,
-    ,
-    ,
-    ,
-    setMessages,
-  ] = useChat();
+  const { hasMoreMessagesToLoad } = useChat();
   const [currentMessage, setCurrentMessage] = useState("");
 
   const currentUser = props.user;
@@ -79,7 +71,7 @@ export default function ChatModal(props) {
                     dataLength={chat.length}
                     next={fetchMessages}
                     style={{ display: "flex", flexDirection: "column-reverse" }} //To put endMessage and loader to the top.
-                    inverse={true} //
+                    inverse={true}
                     hasMore={hasMoreMessagesToLoad}
                     scrollableTarget="scrollableDiv"
                   >

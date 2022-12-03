@@ -64,7 +64,7 @@ export const useChat = () => {
     });
   };
 
-  return [
+  return {
     messages,
     hasMoreMessagesToLoad,
     setHasMoreMessagesToLoad,
@@ -72,5 +72,5 @@ export const useChat = () => {
     stopConnection,
     sendMessage,
     setMessages,
-  ];
+  };
 };

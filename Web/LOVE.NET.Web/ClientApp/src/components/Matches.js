@@ -12,27 +12,19 @@ import { useChat } from "../hooks/useChat";
 export default function Matches() {
   const navigate = useNavigate();
   const { user, isLogged, userLogout } = useIdentityContext();
-  const [
-    messages,
-    hasMoreMessagesToLoad,
-    setHasMoreMessagesToLoad,
-    setUserConnection,
-    stopConnection,
-    sendMessage,
-    setMessages,
-  ] = useChat();
+  const chatState = useChat();
 
   const [matches, setMatches] = useState([]);
   const [chatUser, setChatUser] = useState();
   const [chat, setChat] = useState([]);
 
   useEffect(() => {
-    setChat(() => [...messages]);
-  }, [messages]);
+    setChat(() => [...chatState.messages]);
+  }, [chatState.messages]);
 
   useEffect(() => {
     if (chatUser) {
-      setUserConnection({ userId: user.id, roomId: chatUser.roomId });
+      chatState.setUserConnection({ userId: user.id, roomId: chatUser.roomId });
     }
   }, [chatUser]);
 
@@ -65,20 +57,20 @@ export default function Matches() {
   });
 
   const onCloseChat = () => {
-    stopConnection().then(() => {
+    chatState.stopConnection().then(() => {
       setChatUser(null);
     });
   };
 
   const fetchMessages = () => {
-    if (hasMoreMessagesToLoad) {
+    if (chatState.hasMoreMessagesToLoad) {
       chatService
-        .getChat(chatUser.roomId, Math.floor(messages.length / 10) + 1)
+        .getChat(chatUser.roomId, Math.floor(chatState.messages.length / 10) + 1)
         .then((res) => {
-          setMessages((prevState) => {
+          chatState.setMessages((prevState) => {
             const currentMessages = [...prevState, ...res.messages];
             const hasMore = currentMessages.length < res.totalMessages;
-            setHasMoreMessagesToLoad(hasMore);
+            chatState.setHasMoreMessagesToLoad(hasMore);
             return currentMessages;
           });
         });
@@ -91,7 +83,7 @@ export default function Matches() {
         onHide={() => onCloseChat()}
         user={chatUser}
         chat={chat}
-        sendMessage={sendMessage}
+        sendMessage={chatState.sendMessage}
         fetchMessages={fetchMessages}
       />
       <SwipingCardContainer users={matches} startChat={setChatUser} />
