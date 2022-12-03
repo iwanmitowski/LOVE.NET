@@ -14,7 +14,7 @@ export default function UserDetails() {
   const params = useParams();
   const navigate = useNavigate();
   const { userLogout, setUserLocation } = useIdentityContext();
-  
+
   const userInitialState = {
     email: "",
     password: "",
@@ -153,7 +153,6 @@ export default function UserDetails() {
         setUser({
           ...res,
         });
-        console.log(res);
         setUserLocation({
           latitude: res.latitude,
           longitude: res.longitude,
