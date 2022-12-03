@@ -28,20 +28,11 @@ export default function Header() {
                   Matches
                 </Link>
               )}
-              <Link className="nav-link" to="/likes">
-                Likes
-              </Link>
-
-              <NavDropdown
-                title="Dating information"
-                id="collasible-nav-dropdown"
-              >
-                <NavDropdown.Item href="#action/3.1">Info 1</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">Info 2</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Info 3</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Info 4</NavDropdown.Item>
-              </NavDropdown>
+              {isLogged && user.isAdmin && (
+                <Link className="nav-link" to="/admin/dashboard">
+                  Dashboard
+                </Link>
+              )}
             </Nav>
             <Nav>
               {!isLogged && (
@@ -56,9 +47,15 @@ export default function Header() {
               )}
               {isLogged && (
                 <Fragment>
-                  <Link className="nav-link" to={`/user/${user.id}`}>
-                    {user.userName}
-                  </Link>
+                  {user.isAdmin ? (
+                    <div>
+                      <Link className="nav-link"> {user.userName}</Link>
+                    </div>
+                  ) : (
+                    <Link className="nav-link" to={`/user/${user.id}`}>
+                      {user.userName}
+                    </Link>
+                  )}
                   <Nav>
                     <Link className="nav-link" to="/logout">
                       Logout
