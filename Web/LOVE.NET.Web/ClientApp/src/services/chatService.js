@@ -9,8 +9,7 @@ export async function getChat(roomId, page = 1) {
       roomId: roomId,
       page: page,
     });
-
-    return response.data.messages;
+    return response.data;
   } catch (error) {
     console.log(error);
   }

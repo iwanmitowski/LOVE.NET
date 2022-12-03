@@ -7,6 +7,7 @@ import * as chatService from "../services/chatService";
 export const useChat = () => {
   const [connection, setConnection] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [hasMoreMessagesToLoad, setHasMoreMessagesToLoad] = useState(true);
   const [userConnection, setUserConnection] = useState(null);
   const latestMessages = useRef(null);
 
@@ -22,9 +23,10 @@ export const useChat = () => {
 
       setConnection(newConnection);
       setUserConnection(userConnection);
-      chatService
-        .getChat(userConnection.roomId)
-        .then((res) => setMessages((prevState) => [...prevState, ...res]));
+      chatService.getChat(userConnection.roomId).then((res) => {
+        setMessages((prevState) => [...prevState, ...res.messages]);
+        setHasMoreMessagesToLoad(messages.length < res.totalMessages);
+      });
     }
   }, [userConnection]);
 
@@ -42,7 +44,6 @@ export const useChat = () => {
           });
         })
         .catch((error) => console.log("Connection failed: ", error));
-      console.log("messages");
     }
   }, [connection, userConnection]);
 
@@ -57,11 +58,19 @@ export const useChat = () => {
   };
 
   const stopConnection = async () => {
-    connection.stop().then(() => {
+    await connection.stop().then(() => {
       setMessages([]);
       setConnection(null);
     });
   };
 
-  return [messages, setUserConnection, stopConnection, sendMessage];
+  return [
+    messages,
+    hasMoreMessagesToLoad,
+    setHasMoreMessagesToLoad,
+    setUserConnection,
+    stopConnection,
+    sendMessage,
+    setMessages,
+  ];
 };

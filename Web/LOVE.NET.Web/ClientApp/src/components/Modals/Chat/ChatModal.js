@@ -1,20 +1,32 @@
 import { Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import styles from "./ChatModal.module.css";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
 import HomeMessage from "./Messages/HomeMessage";
 import AwayMessage from "./Messages/AwayMessage";
-import { useEffect } from "react";
+import { useChat } from "../../../hooks/useChat";
+import InfiniteScroll from "react-infinite-scroll-component";
+
+import styles from "./ChatModal.module.css";
 
 export default function ChatModal(props) {
   const { user } = useIdentityContext();
+  const [
+    messages,
+    hasMoreMessagesToLoad,
+    setHasMoreMessagesToLoad,
+    ,
+    ,
+    ,
+    setMessages,
+  ] = useChat();
   const [currentMessage, setCurrentMessage] = useState("");
 
   const currentUser = props.user;
   const sendMessage = props.sendMessage;
   const chat = props.chat;
+  const fetchMessages = props.fetchMessages;
 
   const profilePicture = currentUser?.images?.find(
     (i) => i.isProfilePicture
@@ -60,22 +72,30 @@ export default function ChatModal(props) {
             <div className="row rounded-lg">
               <div className="col-12 px-0">
                 <div
-                  ref={scrollRef}
+                  id="scrollableDiv"
                   className={`px-4 ${styles["chat-box"]} bg-white`}
                 >
-                  {chat.map((message, index) =>
-                    message.userId === user.id ? (
-                      <HomeMessage key={index + 1} message={message} />
-                    ) : (
-                      <AwayMessage
-                        key={index + 1}
-                        message={message}
-                        profilePicture={profilePicture}
-                      />
-                    )
-                  )}
+                  <InfiniteScroll
+                    dataLength={chat.length}
+                    next={fetchMessages}
+                    style={{ display: "flex", flexDirection: "column-reverse" }} //To put endMessage and loader to the top.
+                    inverse={true} //
+                    hasMore={hasMoreMessagesToLoad}
+                    scrollableTarget="scrollableDiv"
+                  >
+                    {chat.map((message, index) =>
+                      message.userId === user.id ? (
+                        <HomeMessage key={index + 1} message={message} />
+                      ) : (
+                        <AwayMessage
+                          key={index + 1}
+                          message={message}
+                          profilePicture={profilePicture}
+                        />
+                      )
+                    )}
+                  </InfiniteScroll>
                 </div>
-
                 <form className="bg-light" onSubmit={onSendingMessage}>
                   <div className="input-group">
                     <input

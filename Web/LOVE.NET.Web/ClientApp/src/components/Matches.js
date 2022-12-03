@@ -5,13 +5,23 @@ import SwipingCardContainer from "./SwipingCard/SwipingCardContainer";
 import ChatModal from "./Modals/Chat/ChatModal";
 
 import * as datingService from "../services/datingService";
+import * as chatService from "../services/chatService";
 
 import { useChat } from "../hooks/useChat";
 
 export default function Matches() {
   const navigate = useNavigate();
   const { user, isLogged, userLogout } = useIdentityContext();
-  const [messages, setUserConnection, stopConnection, sendMessage] = useChat();
+  const [
+    messages,
+    hasMoreMessagesToLoad,
+    setHasMoreMessagesToLoad,
+    setUserConnection,
+    stopConnection,
+    sendMessage,
+    setMessages,
+  ] = useChat();
+
   const [matches, setMatches] = useState([]);
   const [chatUser, setChatUser] = useState();
   const [chat, setChat] = useState([]);
@@ -60,6 +70,20 @@ export default function Matches() {
     });
   };
 
+  const fetchMessages = () => {
+    if (hasMoreMessagesToLoad) {
+      chatService
+        .getChat(chatUser.roomId, Math.floor(messages.length / 10) + 1)
+        .then((res) => {
+          setMessages((prevState) => {
+            const currentMessages = [...prevState, ...res.messages];
+            const hasMore = currentMessages.length < res.totalMessages;
+            setHasMoreMessagesToLoad(hasMore);
+            return currentMessages;
+          });
+        });
+    }
+  };
   return (
     <Fragment>
       <ChatModal
@@ -68,6 +92,7 @@ export default function Matches() {
         user={chatUser}
         chat={chat}
         sendMessage={sendMessage}
+        fetchMessages={fetchMessages}
       />
       <SwipingCardContainer users={matches} startChat={setChatUser} />
     </Fragment>
