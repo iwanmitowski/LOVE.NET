@@ -96,6 +96,8 @@
 
             public const string ChatControllerName = Api + "chat";
             public const string ByRoomId = "room/{id}";
+
+            public const string DashboardControllerName = Api + "admin/dashboard";
         }
 
         public class ControllerResponseMessages

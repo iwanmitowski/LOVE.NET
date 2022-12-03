@@ -16,6 +16,7 @@
     using LOVE.NET.Data.Seeding;
     using LOVE.NET.Services.Chats;
     using LOVE.NET.Services.Countries;
+    using LOVE.NET.Services.Dashboard;
     using LOVE.NET.Services.Dating;
     using LOVE.NET.Services.Email;
     using LOVE.NET.Services.Genders;
@@ -150,6 +151,7 @@
             services.AddSingleton<IImagesService, ImagesService>();
             services.AddTransient<IGendersService, GendersService>();
             services.AddTransient<IDatingService, DatingService>();
+            services.AddTransient<IDashboardService, DashboardService>();
             services.AddScoped<IChatService, ChatService>();
         }
 
