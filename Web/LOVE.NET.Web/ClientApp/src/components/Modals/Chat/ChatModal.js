@@ -12,22 +12,9 @@ export default function ChatModal(props) {
   const { user } = useIdentityContext();
   const [currentMessage, setCurrentMessage] = useState("");
 
-  const scrollRef = useRef();
-
   const currentUser = props.user;
   const sendMessage = props.sendMessage;
   const chat = props.chat;
-
-  useEffect(() => {
-    if (chat && scrollRef && scrollRef.current) {
-      const { scrollHeight, clientHeight } = scrollRef.current;
-      scrollRef.current.scrollTo({
-        left: 0,
-        top: scrollHeight - clientHeight,
-        behavior: "smooth",
-      });
-    }
-  }, [chat]);
 
   const profilePicture = currentUser?.images?.find(
     (i) => i.isProfilePicture
