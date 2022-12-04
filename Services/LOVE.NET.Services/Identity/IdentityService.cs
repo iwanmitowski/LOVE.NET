@@ -145,15 +145,16 @@
                 throw new ArgumentException(WrongPassword);
             }
 
-            if (user.LockoutEnabled)
+            if (!user.EmailConfirmed)
             {
                 throw new ArgumentException(EmailNotConfirmed);
             }
-            //  Enable when done
-            // if (!user.EmailConfirmed)
-            // {
-            //     throw new ArgumentException("Please confirm your email");
-            // }
+
+            if (user.LockoutEnd != null)
+            {
+                throw new ArgumentException(string.Format(BannedUnitl, user.LockoutEnd));
+            }
+
             // https://jwt.io/ for debug
             var token = await this.GenerateJwtToken(user);
 

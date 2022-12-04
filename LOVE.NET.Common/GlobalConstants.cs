@@ -112,6 +112,7 @@
             public const string YouCantLikeYourself = "You can't like yourself";
             public const string UserAlreadyLiked = "User is already liked";
             public const string WrongPassword = "Wrong password";
+            public const string BannedUnitl = "You are banned until {0}";
             public const string WrongOldPassword = "Old password is invalid";
             public const string ChangePasswordsDontMatch = "New password and confirm password must match";
             public const string PasswordChangedSuccessfully = "Password changed successfully";
