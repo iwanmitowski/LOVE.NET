@@ -37,8 +37,8 @@
 
         [HttpPost]
         [Route(UsersRoute)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDetailsViewModel[]))]
-        public async Task<IActionResult> GetUsers([FromBody] DashboardUserViewModel request)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DashboardUserViewModel))]
+        public async Task<IActionResult> GetUsers([FromBody] DashboardUserRequestViewModel request)
         {
             var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 

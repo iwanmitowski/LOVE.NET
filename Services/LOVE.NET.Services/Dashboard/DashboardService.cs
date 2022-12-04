@@ -66,8 +66,8 @@
             return result;
         }
 
-        public async Task<IEnumerable<UserDetailsViewModel>> GetUsersAsync(
-            DashboardUserViewModel request,
+        public async Task<DashboardUserViewModel> GetUsersAsync(
+            DashboardUserRequestViewModel request,
             string loggedUserId)
         {
             var users = this.usersRepository.AllAsNoTracking()
@@ -93,11 +93,19 @@
                 users = users.Where(u => u.LockoutEnd != null);
             }
 
+            var totalUsers = users.Count();
+
             users = users.OrderByDescending(u => u.CreatedOn)
                 .Skip((request.Page - 1) * DefaultTake)
                 .Take(DefaultTake);
 
-            var result = await users.To<UserDetailsViewModel>().ToListAsync();
+            var mappedUsers = await users.To<UserDetailsViewModel>().ToListAsync();
+
+            var result = new DashboardUserViewModel()
+            {
+                Users = mappedUsers,
+                TotalUsers = totalUsers,
+            };
 
             return result;
         }
