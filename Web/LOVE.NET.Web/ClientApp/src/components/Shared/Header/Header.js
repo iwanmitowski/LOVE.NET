@@ -23,12 +23,11 @@ export default function Header() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              {isLogged && (
+              {isLogged && !user.isAdmin ? (
                 <Link className="nav-link" to="/matches">
                   Matches
                 </Link>
-              )}
-              {isLogged && user.isAdmin && (
+              ) : (
                 <Link className="nav-link" to="/admin/dashboard">
                   Dashboard
                 </Link>
