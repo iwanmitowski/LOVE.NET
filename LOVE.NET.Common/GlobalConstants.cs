@@ -9,6 +9,8 @@
 
         public const string AdministratorRoleName = "Administrator";
 
+        public const string AdministratorEmail = "admin@admin.admin";
+
         public const string Data = "Data";
 
         public const string JWT = "JWT";
@@ -98,6 +100,7 @@
             public const string ByRoomId = "room/{id}";
 
             public const string DashboardControllerName = Api + "admin/dashboard";
+            public const string UsersRoute = "users";
         }
 
         public class ControllerResponseMessages

@@ -1,14 +1,19 @@
 ﻿namespace LOVE.NET.Services.Dashboard
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using LOVE.NET.Data.Common.Repositories;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories.Users;
+    using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.ViewModels.Dashboard;
+    using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.EntityFrameworkCore;
+
+    using static LOVE.NET.Common.GlobalConstants;
 
     public class DashboardService : IDashboardService
     {
@@ -57,6 +62,25 @@
                 ImagesCount = imagesCount,
                 MessagesCount = messagesCount,
             };
+
+            return result;
+        }
+
+        public async Task<IEnumerable<UserDetailsViewModel>> GetUsersAsync(DashboardUserViewModel request)
+        {
+            var users = this.usersRepository.AllAsNoTracking()
+                .Where(u => u.Email != AdministratorEmail);
+
+            if (request.ShowBanned)
+            {
+                users = users.Where(u => u.LockoutEnd != null);
+            }
+
+            users = users.OrderByDescending(u => u.CreatedOn)
+                .Skip((request.Page - 1) * DefaultTake)
+                .Take(DefaultTake);
+
+            var result = await users.To<UserDetailsViewModel>().ToListAsync();
 
             return result;
         }

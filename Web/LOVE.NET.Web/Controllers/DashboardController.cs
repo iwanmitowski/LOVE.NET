@@ -4,6 +4,7 @@
 
     using LOVE.NET.Services.Dashboard;
     using LOVE.NET.Web.ViewModels.Dashboard;
+    using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -29,6 +30,16 @@
         public async Task<IActionResult> GetStatisticsAsync()
         {
             var result = await this.dashboardService.GetStatisticsAsync();
+
+            return this.Ok(result);
+        }
+
+        [HttpPost]
+        [Route(UsersRoute)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDetailsViewModel[]))]
+        public async Task<IActionResult> GetUsers([FromBody] DashboardUserViewModel request)
+        {
+            var result = await this.dashboardService.GetUsersAsync(request);
 
             return this.Ok(result);
         }
