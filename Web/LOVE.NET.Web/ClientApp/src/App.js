@@ -23,7 +23,7 @@ import Dashboard from "./components/Admin/Dashboard/Dashboard";
 import AdminGuard from "./components/Shared/guards/AdminGuard";
 
 function App() {
-  const { isLogged, userLogout } = useIdentityContext();
+  const { isLogged, userLogout, user } = useIdentityContext();
 
   // Logout if session is expired
   useEffect(() => {
@@ -32,12 +32,14 @@ function App() {
     }
   }, []);
 
+  const homeComponent = isLogged && user.isAdmin ? <Dashboard /> : <Home />;
+
   return (
     <div className="App">
       <Header />
       <Main>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={homeComponent} />
           <Route
             path="/admin/dashboard"
             element={
