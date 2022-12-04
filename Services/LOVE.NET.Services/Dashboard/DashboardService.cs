@@ -66,10 +66,27 @@
             return result;
         }
 
-        public async Task<IEnumerable<UserDetailsViewModel>> GetUsersAsync(DashboardUserViewModel request)
+        public async Task<IEnumerable<UserDetailsViewModel>> GetUsersAsync(
+            DashboardUserViewModel request,
+            string loggedUserId)
         {
             var users = this.usersRepository.AllAsNoTracking()
-                .Where(u => u.Email != AdministratorEmail);
+                .Where(u =>
+                    u.Email != AdministratorEmail &&
+                    u.Id != loggedUserId);
+
+            if (request.Search != null)
+            {
+                var searchTerm = $"%{request.Search.ToLower()}%";
+
+                users = users.Where(u =>
+                    EF.Functions.Like(u.Email.ToLower(), searchTerm) ||
+                    EF.Functions.Like(u.UserName.ToLower(), searchTerm) ||
+                    EF.Functions.Like(u.Bio.ToLower(), searchTerm) ||
+                    EF.Functions.Like(u.City.Name.ToLower(), searchTerm) ||
+                    EF.Functions.Like(u.Country.Name.ToLower(), searchTerm) ||
+                    EF.Functions.Like(u.Gender.Name.ToLower(), searchTerm));
+            }
 
             if (request.ShowBanned)
             {

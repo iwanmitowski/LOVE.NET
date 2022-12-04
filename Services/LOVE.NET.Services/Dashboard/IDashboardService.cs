@@ -10,6 +10,8 @@
     {
         public Task<StatisticsViewModel> GetStatisticsAsync();
 
-        Task<IEnumerable<UserDetailsViewModel>> GetUsersAsync(DashboardUserViewModel request);
+        Task<IEnumerable<UserDetailsViewModel>> GetUsersAsync(
+            DashboardUserViewModel request,
+            string loggedUserId);
     }
 }
