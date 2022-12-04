@@ -12,3 +12,13 @@ export async function getStatistics() {
     console.log(error);
   }
 }
+
+export async function getUsers(request) {
+  try {
+    const response = await instance.post(`${baseUrl}/users`, request);
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

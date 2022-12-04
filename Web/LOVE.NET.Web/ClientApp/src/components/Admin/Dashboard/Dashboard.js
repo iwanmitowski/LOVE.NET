@@ -1,16 +1,13 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Card } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as dashboardService from "../../../services/dashboardService";
 
-import styles from "./Dashboard.module.css";
 import StatisticCard from "./StatisticCard";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
   const [statistics, setStatistics] = useState();
-
+  
   useEffect(() => {
     dashboardService.getStatistics().then((res) => {
       console.log(res);

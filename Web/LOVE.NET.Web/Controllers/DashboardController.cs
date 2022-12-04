@@ -1,5 +1,6 @@
 ﻿namespace LOVE.NET.Web.Controllers
 {
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using LOVE.NET.Services.Dashboard;
@@ -39,7 +40,9 @@
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDetailsViewModel[]))]
         public async Task<IActionResult> GetUsers([FromBody] DashboardUserViewModel request)
         {
-            var result = await this.dashboardService.GetUsersAsync(request);
+            var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var result = await this.dashboardService.GetUsersAsync(request, loggedUserId);
 
             return this.Ok(result);
         }

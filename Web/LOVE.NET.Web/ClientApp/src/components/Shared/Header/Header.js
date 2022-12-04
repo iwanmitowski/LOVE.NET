@@ -1,7 +1,6 @@
 import Navbar from "react-bootstrap/NavBar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
 
@@ -23,11 +22,12 @@ export default function Header() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              {isLogged && !user.isAdmin ? (
+              {isLogged && !user.isAdmin && (
                 <Link className="nav-link" to="/matches">
                   Matches
                 </Link>
-              ) : (
+              )}
+              {isLogged && user.isAdmin && (
                 <Link className="nav-link" to="/admin/dashboard">
                   Dashboard
                 </Link>

@@ -21,6 +21,7 @@ import * as identityService from "./services/identityService";
 import "./App.css";
 import Dashboard from "./components/Admin/Dashboard/Dashboard";
 import AdminGuard from "./components/Shared/guards/AdminGuard";
+import UsersContainer from "./components/Admin/Users/UsersContainer";
 
 function App() {
   const { isLogged, userLogout, user } = useIdentityContext();
@@ -46,6 +47,26 @@ function App() {
               <AuthGuard>
                 <AdminGuard>
                   <Dashboard />
+                </AdminGuard>
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <AuthGuard>
+                <AdminGuard>
+                  <UsersContainer />
+                </AdminGuard>
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/admin/users/banned"
+            element={
+              <AuthGuard>
+                <AdminGuard>
+                  <UsersContainer showBanned />
                 </AdminGuard>
               </AuthGuard>
             }
