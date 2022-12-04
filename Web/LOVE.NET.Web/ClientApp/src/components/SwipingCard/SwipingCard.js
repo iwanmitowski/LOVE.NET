@@ -23,56 +23,76 @@ function debounce(func, timeout = 3000) {
 }
 
 export default function SwipingCard(props) {
-  const { location } = useIdentityContext();
+  const { user, location } = useIdentityContext();
 
-  const user = props.user;
+  const currentUser = props.user;
   const swipe = props.swipe;
   const startChat = props.startChat;
 
   const currentDistance = distance.inKms(
     location.latitude,
     location.longitude,
-    user.latitude,
-    user.longitude
+    currentUser.latitude,
+    currentUser.longitude
   );
 
   const cardContent = (
     <div
       className={`${styles["card"]} ${styles["no-selecting"]}`}
-      style={{ width: "30rem", margin: "0px auto" }}
+      style={{ width: "30rem", margin: "30px auto" }}
     >
-      <SwipingCardCarousel images={user.images} />
+      <SwipingCardCarousel images={currentUser.images} />
       <div className={`m-3 ${styles["card-body"]}`}>
         <p className={`card-text ${styles.userName}`}>
-          <strong>{user.userName}</strong> {user.age} - {currentDistance} kms
+          <strong>{currentUser.userName}</strong> {currentUser.age} -{" "}
+          {currentDistance} kms
         </p>
-        <p className={`card-text ${styles.bio}`}>{user.bio}</p>
+        <p className={`card-text ${styles.bio}`}>{currentUser.bio}</p>
       </div>
       <ul className="list-group list-group-flush">
-        <li className="list-group-item">{user.genderName}</li>
-        <li className="list-group-item">{user.cityName}</li>
+        <li className="list-group-item">{currentUser.genderName}</li>
+        <li className="list-group-item">{currentUser.cityName}</li>
       </ul>
       <div className="card-body">
         {!!swipe && (
           <Fragment>
             <Button
+              className="m-3"
               variant="light"
               type="submit"
-              onClick={() => swipe("left", user.id)}
+              onClick={() => swipe("left", currentUser.id)}
             >
               ❌
             </Button>
             <Button
+              className="m-3"
               variant="light"
               type="submit"
-              onClick={() => swipe("right", user.id)}
+              onClick={() => swipe("right", currentUser.id)}
             >
               💚
             </Button>
           </Fragment>
         )}
+        {user.isAdmin && (
+          <Fragment>
+            {!currentUser.isAdmin ? (
+              <Fragment>
+                <Button className="m-2"> Ban </Button>
+                <Button className="m-2"> Unban </Button>
+                <Button className="m-2"> To Admin </Button>
+              </Fragment>
+            ) : (
+              <Button className="m-2"> To User </Button>
+            )}
+          </Fragment>
+        )}
         {!!startChat && (
-          <Button variant="light" type="submit" onClick={() => startChat(user)}>
+          <Button
+            variant="light"
+            type="submit"
+            onClick={() => startChat(currentUser)}
+          >
             <FontAwesomeIcon icon={faCommentAlt} />
           </Button>
         )}
@@ -87,11 +107,11 @@ export default function SwipingCard(props) {
   return (
     <TinderCard
       className={styles["swipe"]}
-      key={user.id}
+      key={currentUser.id}
       preventSwipe={["up", "down"]}
       onSwipe={(dir) => {
         setTimeout(() => {
-          debounce(() => swipe(dir, user.id))();
+          debounce(() => swipe(dir, currentUser.id))();
         }, 1000);
       }}
     >
