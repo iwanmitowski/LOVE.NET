@@ -5,14 +5,18 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using AutoMapper.Configuration.Conventions;
+
     using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories.Users;
     using LOVE.NET.Services.Mapping;
+    using LOVE.NET.Web.ViewModels.Dating;
     using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.EntityFrameworkCore;
 
+    using static LOVE.NET.Common.GlobalConstants;
     using static LOVE.NET.Common.GlobalConstants.ControllerResponseMessages;
 
     public class DatingService : IDatingService
@@ -36,9 +40,9 @@
             return notSwipedUsers;
         }
 
-        public IEnumerable<UserMatchViewModel> GetMatches(string userId)
+        public MatchesViewModel GetMatches(MatchesRequestViewModel request)
         {
-            var user = this.usersRepository.WithAllInformation(u => u.Id == userId).FirstOrDefault();
+            var user = this.usersRepository.WithAllInformation(u => u.Id == request.UserId).FirstOrDefault();
 
             var matches = user.LikesSent
                         .Where(l =>
@@ -48,16 +52,29 @@
                                     user.LikesSent
                                         .Select(ls => ls.LikedUserId))
                                 .Contains(l.LikedUserId))
-                        .Select(x => AutoMapperConfig.MapperInstance.Map<UserMatchViewModel>(x.LikedUser))
-                        .ToList();
+                        .OrderByDescending(ls => ls.CreatedOn)
+                        .Select(x => AutoMapperConfig.MapperInstance.Map<UserMatchViewModel>(x.LikedUser));
+
+            var totalMatches = matches.Count();
+
+            matches = matches
+                .Skip((request.Page - 1) * DefaultTake)
+                .Take(DefaultTake)
+                .ToList();
 
             foreach (var match in matches)
             {
-                var roomId = string.Join(string.Empty, new[] { match.Id, userId }.OrderBy(id => id));
+                var roomId = string.Join(string.Empty, new[] { match.Id, request.UserId }.OrderBy(id => id));
                 match.RoomId = roomId;
             }
 
-            return matches;
+            var result = new MatchesViewModel()
+            {
+                Matches = matches,
+                TotalMatches = totalMatches,
+            };
+
+            return result;
         }
 
         public UserMatchViewModel GetCurrentMatch(string userId)

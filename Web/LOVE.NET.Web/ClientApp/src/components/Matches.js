@@ -13,7 +13,7 @@ export default function Matches() {
   const navigate = useNavigate();
   const { user, isLogged, userLogout } = useIdentityContext();
   const chatState = useChat();
-
+  const [hasMore, setHasMore] = useState(true);
   const [matches, setMatches] = useState([]);
   const [chatUser, setChatUser] = useState();
   const [chat, setChat] = useState([]);
@@ -28,12 +28,19 @@ export default function Matches() {
     }
   }, [chatUser]);
 
-  useEffect(() => {
-    if (isLogged && matches.length === 0) {
+  const fetchUsers = () => {
+    if (hasMore) {
+      const page = Math.floor(matches.length / 10) + 1;
+
       datingService
-        .getMatches(user.id)
+        .getMatches({ userId: user.id, page })
         .then((res) => {
-          setMatches(res);
+          setMatches((prevState) => {
+            const currentMatches = [...prevState, ...res.matches];
+            const hasMore = currentMatches.length < res.totalMatches;
+            setHasMore(hasMore);
+            return currentMatches;
+          });
         })
         .catch((error) => {
           if (
@@ -54,7 +61,13 @@ export default function Matches() {
           }
         });
     }
-  });
+  };
+
+  useEffect(() => {
+    if (isLogged && matches.length === 0) {
+      fetchUsers();
+    }
+  }, [isLogged]);
 
   const onCloseChat = () => {
     chatState.stopConnection().then(() => {
@@ -65,7 +78,10 @@ export default function Matches() {
   const fetchMessages = () => {
     if (chatState.hasMoreMessagesToLoad) {
       chatService
-        .getChat(chatUser.roomId, Math.floor(chatState.messages.length / 10) + 1)
+        .getChat(
+          chatUser.roomId,
+          Math.floor(chatState.messages.length / 10) + 1
+        )
         .then((res) => {
           chatState.setMessages((prevState) => {
             const currentMessages = [...prevState, ...res.messages];
@@ -86,7 +102,12 @@ export default function Matches() {
         sendMessage={chatState.sendMessage}
         fetchMessages={fetchMessages}
       />
-      <SwipingCardContainer users={matches} startChat={setChatUser} />
+      <SwipingCardContainer
+        fetchUsers={fetchUsers}
+        hasMoreUsersToLoad={hasMore}
+        users={matches}
+        startChat={setChatUser}
+      />
     </Fragment>
   );
 }

@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using LOVE.NET.Common;
+    using LOVE.NET.Web.ViewModels.Dating;
     using LOVE.NET.Web.ViewModels.Identity;
 
     public interface IDatingService
@@ -12,7 +13,7 @@
 
         public UserMatchViewModel GetCurrentMatch(string userId);
 
-        public IEnumerable<UserMatchViewModel> GetMatches(string userId);
+        public MatchesViewModel GetMatches(MatchesRequestViewModel request);
 
         public Task<Result> LikeAsync(string userId, string likedUserId);
     }

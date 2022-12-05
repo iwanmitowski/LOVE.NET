@@ -10,6 +10,7 @@ namespace LOVE.NET.Web.Controllers
     using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Dating;
+    using LOVE.NET.Web.ViewModels.Dating;
     using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.AspNetCore.Authorization;
@@ -53,30 +54,30 @@ namespace LOVE.NET.Web.Controllers
             return this.Ok(notSwipedUsers);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         [Route(MatchesRoute)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserMatchViewModel[]))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MatchesViewModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public IActionResult GetMatches([Required]string id)
+        public IActionResult GetMatches([FromBody] MatchesRequestViewModel request)
         {
-            if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out _))
+            if (string.IsNullOrEmpty(request.UserId) || !Guid.TryParse(request.UserId, out _))
             {
                 return this.BadRequest();
             }
 
             var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            if (loggedUserId != id)
+            if (loggedUserId != request.UserId)
             {
                 return this.Forbid();
             }
 
-            var matches = this.datingService.GetMatches(loggedUserId);
+            var result = this.datingService.GetMatches(request);
 
-            return this.Ok(matches);
+            return this.Ok(result);
         }
 
         [HttpPost]
