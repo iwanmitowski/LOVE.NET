@@ -12,27 +12,27 @@ export default function SwipingCardContainer(props) {
   const hasMoreUsersToLoad = props.hasMoreUsersToLoad;
 
   return (
-    <div className={styles["cards-container"]}>
-      <InfiniteScroll
-        dataLength={users.length}
-        next={fetchUsers}
-        hasMore={hasMoreUsersToLoad}
-        style={{ display: "flex", flexWrap: "wrap"}}
-        scrollableTarget="scrollableDiv"
-      >
-        {!!users.length ? (
-          users.map((u) => (
-            <SwipingCard
-              key={u.id}
-              user={u}
-              swipe={swipe}
-              startChat={startChat}
-            />
-          ))
-        ) : (
-          <h1>Come back later</h1>
-        )}
-      </InfiniteScroll>
-    </div>
+    <InfiniteScroll
+      dataLength={users.length}
+      next={fetchUsers}
+      hasMore={hasMoreUsersToLoad}
+      style={{ display: "flex", flexWrap: "wrap" }}
+      scrollableTarget="scrollableDiv"
+    >
+      {!!users.length ? (
+        users.map((u) => (
+          <SwipingCard
+            key={u.id}
+            user={u}
+            swipe={swipe}
+            startChat={startChat}
+          />
+        ))
+      ) : (
+        <div className="container">
+          <h1 className="text-center">Come back later</h1>
+        </div>
+      )}
+    </InfiniteScroll>
   );
 }
