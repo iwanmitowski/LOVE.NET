@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using LOVE.NET.Common;
     using LOVE.NET.Data.Common.Repositories;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories.Users;
@@ -11,24 +12,30 @@
     using LOVE.NET.Web.ViewModels.Dashboard;
     using LOVE.NET.Web.ViewModels.Identity;
 
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
     using static LOVE.NET.Common.GlobalConstants;
+    using static LOVE.NET.Common.GlobalConstants.ControllerResponseMessages;
+
 
     public class DashboardService : IDashboardService
     {
         private readonly IUsersRepository usersRepository;
         private readonly IRepository<Image> imagesRepository;
         private readonly IRepository<Message> messagesRepository;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public DashboardService(
             IUsersRepository usersRepository,
             IRepository<Image> imagesRepository,
-            IRepository<Message> messagesRepository)
+            IRepository<Message> messagesRepository,
+            UserManager<ApplicationUser> userManager)
         {
             this.usersRepository = usersRepository;
             this.imagesRepository = imagesRepository;
             this.messagesRepository = messagesRepository;
+            this.userManager = userManager;
         }
 
         public async Task<StatisticsViewModel> GetStatisticsAsync()
@@ -108,6 +115,25 @@
             };
 
             return result;
+        }
+
+        public async Task<Result> ModerateAsync(ModerateUserViewModel request)
+        {
+            var user = this.usersRepository.All().FirstOrDefault(u => u.Id == request.UserId);
+
+            if (user == null)
+            {
+                return UserNotFound;
+            }
+
+            var result = await this.userManager.SetLockoutEndDateAsync(user, request.BannedUntil);
+
+            if (!result.Succeeded)
+            {
+                return UserCouldNotBeBanned;
+            }
+
+            return true;
         }
     }
 }

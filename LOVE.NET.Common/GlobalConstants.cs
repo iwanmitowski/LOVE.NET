@@ -1,8 +1,5 @@
 ﻿namespace LOVE.NET.Common
 {
-    using System.IO;
-    using static System.Net.WebRequestMethods;
-
     public static class GlobalConstants
     {
         public const string SystemName = "LOVE.NET";
@@ -101,6 +98,7 @@
 
             public const string DashboardControllerName = Api + "admin/dashboard";
             public const string UsersRoute = "users";
+            public const string ModerateRoute = "moderate";
         }
 
         public class ControllerResponseMessages
@@ -112,6 +110,9 @@
             public const string LogoutSuccessfully = "Logout successfully";
             public const string FillAllTheInformation = "Fill all the information";
             public const string UserNotFound = "User not found";
+            public const string UserCouldNotBeBanned = "User could not be banned";
+            public const string CantBanUserInThePast = "Can't ban user in the past";
+            public const string CantBanYourself = "You can't ban yourself";
             public const string YouCantLikeYourself = "You can't like yourself";
             public const string UserAlreadyLiked = "User is already liked";
             public const string WrongPassword = "Wrong password";

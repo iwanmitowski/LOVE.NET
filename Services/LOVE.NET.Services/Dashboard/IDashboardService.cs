@@ -1,10 +1,9 @@
 ﻿namespace LOVE.NET.Services.Dashboard
 {
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using LOVE.NET.Common;
     using LOVE.NET.Web.ViewModels.Dashboard;
-    using LOVE.NET.Web.ViewModels.Identity;
 
     public interface IDashboardService
     {
@@ -13,5 +12,7 @@
         Task<DashboardUserViewModel> GetUsersAsync(
             DashboardUserRequestViewModel request,
             string loggedUserId);
+
+        public Task<Result> ModerateAsync(ModerateUserViewModel request);
     }
 }
