@@ -28,6 +28,7 @@ export default function SwipingCard(props) {
   const currentUser = props.user;
   const swipe = props.swipe;
   const startChat = props.startChat;
+  const setUserBanRequest = props.setUserBanRequest;
 
   const currentDistance = distance.inKms(
     location.latitude,
@@ -76,14 +77,44 @@ export default function SwipingCard(props) {
         )}
         {user.isAdmin && (
           <Fragment>
-            {!currentUser.isAdmin ? (
+            {!currentUser.isAdmin && (
               <Fragment>
-                <Button className="m-2"> Ban </Button>
-                <Button className="m-2"> Unban </Button>
-                <Button className="m-2"> To Admin </Button>
+                {currentUser.isBanned ? (
+                  <Button
+                    className="m-2"
+                    onClick={() =>
+                      setUserBanRequest((prevState) => {
+                        return {
+                          ...prevState,
+                          user: currentUser,
+                          userId: currentUser.id,
+                          isBan: false,
+                        };
+                      })
+                    }
+                  >
+                    {" "}
+                    Unban{" "}
+                  </Button>
+                ) : (
+                  <Button
+                    className="m-2"
+                    onClick={() =>
+                      setUserBanRequest((prevState) => {
+                        return {
+                          ...prevState,
+                          user: currentUser,
+                          userId: currentUser.id,
+                          isBan: true,
+                        };
+                      })
+                    }
+                  >
+                    {" "}
+                    Ban{" "}
+                  </Button>
+                )}
               </Fragment>
-            ) : (
-              <Button className="m-2"> To User </Button>
             )}
           </Fragment>
         )}

@@ -1,8 +1,6 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import SwipingCard from "./SwipingCard";
 
-import styles from "./SwipingCard.module.css";
-
 export default function SwipingCardContainer(props) {
   const users = props.users;
   const swipe = props.swipe;
@@ -10,6 +8,7 @@ export default function SwipingCardContainer(props) {
 
   const fetchUsers = props.fetchUsers;
   const hasMoreUsersToLoad = props.hasMoreUsersToLoad;
+  const setUserBanRequest = props.setUserBanRequest;
 
   return (
     <InfiniteScroll
@@ -26,6 +25,7 @@ export default function SwipingCardContainer(props) {
             user={u}
             swipe={swipe}
             startChat={startChat}
+            setUserBanRequest={setUserBanRequest}
           />
         ))
       ) : (

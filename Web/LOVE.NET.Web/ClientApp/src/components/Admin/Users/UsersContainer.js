@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import SwipingCardContainer from "../../SwipingCard/SwipingCardContainer";
+import ModerateModal from "../../Modals/Moderate/ModerateModal";
 
 import * as dashboardService from "../../../services/dashboardService";
 
@@ -12,6 +12,25 @@ export default function UsersContainer(props) {
     search: null,
     page: 1,
   });
+
+  const defaultUserBanRequest = {
+    user: null,
+    userId: "",
+    bannedUntil: new Date().toISOString().split("T")[0],
+  };
+
+  const [userBanRequest, setUserBanRequest] = useState(defaultUserBanRequest);
+  const onUserModerateClose = (updatedUser) => {
+    setUserBanRequest(defaultUserBanRequest);
+    if (!!updatedUser) {
+      setUsers((prevState) => {
+        const updatedUsers = prevState.map((u) =>
+          u.id === updatedUser.id ? { ...u, isBanned: updatedUser.isBan } : u
+        );
+        return updatedUsers;
+      });
+    }
+  };
 
   const fetchUsers = () => {
     if (hasMore) {
@@ -41,10 +60,19 @@ export default function UsersContainer(props) {
   }, []);
 
   return (
-    <SwipingCardContainer
-      fetchUsers={fetchUsers}
-      hasMoreUsersToLoad={hasMore}
-      users={users}
-    />
+    <Fragment>
+      <SwipingCardContainer
+        fetchUsers={fetchUsers}
+        hasMoreUsersToLoad={hasMore}
+        users={users}
+        setUserBanRequest={setUserBanRequest}
+      />
+      <ModerateModal
+        onHide={onUserModerateClose}
+        show={!!userBanRequest.user}
+        userBanRequest={userBanRequest}
+        setUserBanRequest={setUserBanRequest}
+      />
+    </Fragment>
   );
 }

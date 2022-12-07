@@ -68,7 +68,7 @@
                 return this.BadRequest(CantBanYourself);
             }
 
-            if (request?.BannedUntil.Value.Date < DateTime.UtcNow.Date)
+            if (request.BannedUntil.HasValue && request.BannedUntil.Value.Date < DateTime.UtcNow.Date)
             {
                 return this.BadRequest(CantBanUserInThePast);
             }

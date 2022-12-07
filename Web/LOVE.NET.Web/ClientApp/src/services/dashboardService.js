@@ -22,3 +22,14 @@ export async function getUsers(request) {
     console.log(error);
   }
 }
+
+export async function moderateUser(request) {
+  try {
+    if (new Date(request.bannedUntil) < new Date()) {
+      throw new Error("Can't ban user in the past");
+    }
+    await instance.post(`${baseUrl}/moderate`, request);
+  } catch (error) {
+    throw new Error(error?.response?.data || error?.message);
+  }
+}
