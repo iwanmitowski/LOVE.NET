@@ -1,16 +1,31 @@
-﻿using System.Xml.Linq;
+﻿using System.Linq.Expressions;
+using System.Reflection;
+
+using CloudinaryDotNet;
 
 using LOVE.NET.Data;
 using LOVE.NET.Data.Models;
-using LOVE.NET.Data.Seeding;
+using LOVE.NET.Data.Repositories.Users;
+using LOVE.NET.Services.Images;
+using LOVE.NET.Services.Mapping;
+using LOVE.NET.Web.ViewModels;
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+
+using Moq;
 
 namespace LOVE.NET.Services.Tests
 {
+    using static LOVE.NET.Common.GlobalConstants;
+
     public class TestsSetUp
     {
+        protected const string MockUrl1 = "MockUrl1";
+        protected const string MockUrl2 = "MockUrl2";
+
         protected ApplicationDbContext dbContext;
 
         protected List<ApplicationUser> users;
@@ -22,17 +37,17 @@ namespace LOVE.NET.Services.Tests
         protected List<Like> likes;
         protected List<Message> messages;
 
-        public async Task InitializeDbContext()
+        public async Task GlobalInitialization()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase("InMemoryDB").Options;
-
-            dbContext = new ApplicationDbContext(options);
 
             if (dbContext != null)
             {
                 await dbContext.Database.EnsureDeletedAsync();
             }
+
+            dbContext = new ApplicationDbContext(options);
 
             images = new List<Image>()
             {
@@ -118,6 +133,7 @@ namespace LOVE.NET.Services.Tests
                     Id = 5878,
                     CountryId = 30,
                     Name = "Svilengrad",
+                    NameAscii = "Svilengrad",
                     Latitude = 41.7652,
                     Longitude = 26.203,
                 }
@@ -192,6 +208,15 @@ namespace LOVE.NET.Services.Tests
                 },
             };
 
+            roles = new List<ApplicationRole>()
+            {
+                new ApplicationRole()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = AdministratorRoleName,
+                }
+            };
+
             await dbContext.AddRangeAsync(users);
             await dbContext.AddRangeAsync(roles);
             await dbContext.AddRangeAsync(countries);
@@ -200,6 +225,71 @@ namespace LOVE.NET.Services.Tests
             await dbContext.AddRangeAsync(likes);
             await dbContext.AddRangeAsync(messages);
             await dbContext.SaveChangesAsync();
+
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+        }
+
+        public static IConfigurationRoot GetIConfiguration()
+        {
+            return new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Build();
+        }
+
+        public Mock<UserManager<ApplicationUser>> GetUserManagerMock()
+        {
+            var store = new Mock<IUserStore<ApplicationUser>>();
+            var manager = new Mock<UserManager<ApplicationUser>>(
+                store.Object, null, null, null, null, null, null, null, null);
+
+            manager.Object.UserValidators.Add(new UserValidator<ApplicationUser>());
+            manager.Object.PasswordValidators.Add(new PasswordValidator<ApplicationUser>());
+
+            manager.Setup(x =>
+                x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                    .ReturnsAsync(IdentityResult.Success)
+                    .Callback<ApplicationUser, string>((x, y) => users.Add(x));
+
+            manager.Setup(x =>
+                x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                 .ReturnsAsync(true);
+
+            manager.Setup(x =>
+                x.GetRolesAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(dbContext.Roles.Select(x => x.Name).ToList());
+
+            return manager;
+        }
+
+        public IUsersRepository GetIUsersRepository()
+        {
+            var mockRepository = new Mock<IUsersRepository>();
+
+            mockRepository.Setup(x =>
+                x.WithAllInformation(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
+                .Returns(dbContext.Set<ApplicationUser>().AsQueryable());
+
+            mockRepository.Setup(x =>
+                x.WithAllInformation())
+                .Returns(dbContext.Set<ApplicationUser>().AsQueryable());
+
+            return mockRepository.Object;
+        }
+
+        public IImagesService GetIImagesService()
+        {
+            var mockService = new Mock<IImagesService>();
+
+            mockService.Setup(x =>
+                x.UploadImagesAsync(It.IsAny<IEnumerable<IFormFile>>()))
+                .ReturnsAsync(new[] { MockUrl1, MockUrl2 });
+
+            mockService.Setup(x =>
+               x.UploadImageAsync(It.IsAny<IFormFile>()))
+               .ReturnsAsync(MockUrl1);
+
+            return mockService.Object;
         }
     }
 }

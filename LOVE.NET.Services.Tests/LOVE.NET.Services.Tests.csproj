@@ -9,7 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +37,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Data\LOVE.NET.Data\LOVE.NET.Data.csproj" />
     <ProjectReference Include="..\LOVE.NET.Common\LOVE.NET.Common.csproj" />
+    <ProjectReference Include="..\Services\LOVE.NET.Services.Mapping\LOVE.NET.Services.Mapping.csproj" />
+    <ProjectReference Include="..\Services\LOVE.NET.Services.Messaging\LOVE.NET.Services.Messaging.csproj" />
     <ProjectReference Include="..\Services\LOVE.NET.Services\LOVE.NET.Services.csproj" />
   </ItemGroup>
 
