@@ -219,6 +219,29 @@
         }
 
         [Test]
+        public async Task FailLoginNotExistingEmail()
+        {
+            var request = new LoginViewModel()
+            {
+                Email = "aaaaaaaaaaaaar@abv.bg",
+                Password = "Wrong password",
+            };
+
+            string errorMessage = string.Empty;
+
+            try
+            {
+                var result = await identityService.LoginAsync(request);
+            }
+            catch (ArgumentException ae)
+            {
+                errorMessage = ae.Message;
+            }
+
+            Assert.That(errorMessage, Is.EqualTo(UserNotFound));
+        }
+
+        [Test]
         public async Task FailLoginBannedUser()
         {
             var request = new LoginViewModel()
