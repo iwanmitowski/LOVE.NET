@@ -84,7 +84,7 @@ namespace LOVE.NET.Services.Tests
                     Id = "6666",
                     UserName = "Pet3r",
                     Bio = "UwU, OwO 🌺",
-                    Email = "Pet3r@abv.bg\"",
+                    Email = "Pet3r@abv.bg",
                     EmailConfirmed = true,
                     GenderId = 3,
                     CountryId = 30,
@@ -107,6 +107,20 @@ namespace LOVE.NET.Services.Tests
                     Birthdate = Convert.ToDateTime("2004-10-17T00:00:00"),
                     Images = new List<Image>(images),
                     LockoutEnabled = false,
+                },
+                new ApplicationUser
+                {
+                    Id = "77777",
+                    UserName = "Pet4r",
+                    Bio = "UwU, OwO 🌺",
+                    Email = "Pet4r@abv.bg",
+                    EmailConfirmed = false,
+                    GenderId = 3,
+                    CountryId = 30,
+                    CityId = 5878,
+                    CreatedOn = DateTime.UtcNow,
+                    Birthdate = Convert.ToDateTime("2004-10-17T00:00:00"),
+                    Images = new List<Image>(images),
                 },
                 new ApplicationUser
                 {
@@ -243,13 +257,14 @@ namespace LOVE.NET.Services.Tests
             var manager = new Mock<UserManager<ApplicationUser>>(
                 store.Object, null, null, null, null, null, null, null, null);
 
-            manager.Object.UserValidators.Add(new UserValidator<ApplicationUser>());
-            manager.Object.PasswordValidators.Add(new PasswordValidator<ApplicationUser>());
-
             manager.Setup(x =>
                 x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
                     .ReturnsAsync(IdentityResult.Success)
-                    .Callback<ApplicationUser, string>((x, y) => users.Add(x));
+                    .Callback<ApplicationUser, string>(async (x, y) =>
+                    {
+                        await dbContext.Users.AddAsync(x);
+                        await dbContext.SaveChangesAsync();
+                    });
 
             manager.Setup(x =>
                 x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
