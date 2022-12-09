@@ -5,12 +5,12 @@ using CloudinaryDotNet;
 
 using LOVE.NET.Data;
 using LOVE.NET.Data.Models;
+using LOVE.NET.Data.Repositories.Chat;
 using LOVE.NET.Data.Repositories.Countries;
 using LOVE.NET.Data.Repositories.Users;
 using LOVE.NET.Services.Images;
 using LOVE.NET.Services.Mapping;
 using LOVE.NET.Web.ViewModels;
-using LOVE.NET.Web.ViewModels.Countries;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -43,10 +43,10 @@ namespace LOVE.NET.Services.Tests
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase("InMemoryDB").Options;
-
+            
             if (dbContext != null)
             {
-                await dbContext.Database.EnsureDeletedAsync();
+                dbContext.Database.EnsureDeleted();
             }
 
             dbContext = new ApplicationDbContext(options);
@@ -206,23 +206,19 @@ namespace LOVE.NET.Services.Tests
                 },
             };
 
-            messages = new List<Message>()
+            messages = new List<Message>();
+
+            for (int i = 1; i <= 11; i++)
             {
-                new Message()
+                messages.Add(new Message()
                 {
                     Id = Guid.NewGuid().ToString(),
                     RoomId = "666666666",
                     UserId = "6666",
-                    Text = "text1",
-                },
-                 new Message()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    RoomId = "666666666",
-                    UserId = "66666",
-                    Text = "text2",
-                },
-            };
+                    Text = $"text{i}",
+                    CreatedOn = DateTime.Now.AddDays(i),
+                });
+            }
 
             roles = new List<ApplicationRole>()
             {
@@ -305,6 +301,25 @@ namespace LOVE.NET.Services.Tests
             mockRepository.Setup(x =>
                x.WithAllInformation(It.IsAny<Expression<Func<Country, bool>>>()))
                 .Returns(dbContext.Set<Country>().AsQueryable());
+
+            return mockRepository.Object;
+        }
+
+        public IChatRepository GetIChatRepository()
+        {
+            var mockRepository = new Mock<IChatRepository>();
+
+            mockRepository.Setup(x =>
+                x.AllAsNoTracking(It.IsAny<Expression<Func<Message, bool>>>()))
+                .Returns(dbContext.Set<Message>().AsQueryable());
+
+            mockRepository.Setup(x =>
+               x.SaveMessageAsync(It.IsAny<Message>()))
+                .Callback(async (Message x) =>
+                {
+                    await dbContext.Messages.AddAsync(x);
+                    await dbContext.SaveChangesAsync();
+                });
 
             return mockRepository.Object;
         }

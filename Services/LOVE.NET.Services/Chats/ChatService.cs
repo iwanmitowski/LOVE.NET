@@ -1,12 +1,10 @@
 ﻿namespace LOVE.NET.Services.Chats
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories.Chat;
-    using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.ViewModels.Chat;
 
     using static LOVE.NET.Common.GlobalConstants;
