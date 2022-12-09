@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories.Countries;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.ViewModels.Countries;

@@ -5,10 +5,12 @@ using CloudinaryDotNet;
 
 using LOVE.NET.Data;
 using LOVE.NET.Data.Models;
+using LOVE.NET.Data.Repositories.Countries;
 using LOVE.NET.Data.Repositories.Users;
 using LOVE.NET.Services.Images;
 using LOVE.NET.Services.Mapping;
 using LOVE.NET.Web.ViewModels;
+using LOVE.NET.Web.ViewModels.Countries;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -288,6 +290,21 @@ namespace LOVE.NET.Services.Tests
             mockRepository.Setup(x =>
                 x.WithAllInformation())
                 .Returns(dbContext.Set<ApplicationUser>().AsQueryable());
+
+            return mockRepository.Object;
+        }
+
+        public ICountriesRepository GetICountriesRepository()
+        {
+            var mockRepository = new Mock<ICountriesRepository>();
+
+            mockRepository.Setup(x =>
+                x.AllAsNoTracking())
+                .Returns(dbContext.Set<Country>().AsQueryable());
+
+            mockRepository.Setup(x =>
+               x.WithAllInformation(It.IsAny<Expression<Func<Country, bool>>>()))
+                .Returns(dbContext.Set<Country>().AsQueryable());
 
             return mockRepository.Object;
         }
