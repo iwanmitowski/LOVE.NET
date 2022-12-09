@@ -42,6 +42,12 @@
                 imagesService);
         }
 
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            dbContext.Database.EnsureDeleted();
+        }
+
         [Test]
         public async Task SuccessGenerateJwtToken()
         {

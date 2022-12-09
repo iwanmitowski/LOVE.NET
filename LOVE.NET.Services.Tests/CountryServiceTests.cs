@@ -1,8 +1,5 @@
 ﻿using LOVE.NET.Data.Repositories.Countries;
-using LOVE.NET.Data.Repositories.Users;
 using LOVE.NET.Services.Countries;
-using LOVE.NET.Services.Identity;
-using LOVE.NET.Services.Images;
 
 namespace LOVE.NET.Services.Tests
 {
@@ -19,6 +16,12 @@ namespace LOVE.NET.Services.Tests
             countriesRepository = GetICountriesRepository();
 
             countriesService = new CountriesService(countriesRepository);
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            dbContext.Database.EnsureDeleted();
         }
 
         [Test]
