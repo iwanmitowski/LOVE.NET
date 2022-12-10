@@ -7,7 +7,7 @@
 
     public interface IDashboardService
     {
-        public Task<StatisticsViewModel> GetStatisticsAsync();
+        public StatisticsViewModel GetStatistics();
 
         Task<DashboardUserViewModel> GetUsersAsync(
             DashboardUserRequestViewModel request,

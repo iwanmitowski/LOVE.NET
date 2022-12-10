@@ -38,14 +38,14 @@
             this.userManager = userManager;
         }
 
-        public async Task<StatisticsViewModel> GetStatisticsAsync()
+        public StatisticsViewModel GetStatistics()
         {
-            var usersCount = await this.usersRepository.AllAsNoTracking().CountAsync();
-            var bannedUsersCount = await this.usersRepository
+            var usersCount = this.usersRepository.AllAsNoTracking().Count();
+            var bannedUsersCount = this.usersRepository
                 .WithAllInformation(u => u.LockoutEnd != null)
-                .CountAsync();
-            var matchesCount = await this.usersRepository
-                .AllAsNoTracking().CountAsync(user =>
+                .Count();
+            var matchesCount = this.usersRepository
+                .AllAsNoTracking().Count(user =>
                     user.LikesSent.Any(l =>
                             user.LikesReceived
                                 .Select(lr => lr.UserId)
@@ -53,11 +53,11 @@
                                     user.LikesSent
                                         .Select(ls => ls.LikedUserId))
                                 .Contains(l.LikedUserId)));
-            var likedUsersCount = await this.usersRepository.AllAsNoTracking()
-                .CountAsync(u => u.LikesReceived.Any());
+            var likedUsersCount = this.usersRepository.AllAsNoTracking()
+                .Count(u => u.LikesReceived.Any());
             var notSwipedUsers = usersCount - likedUsersCount;
-            var imagesCount = await this.imagesRepository.AllAsNoTracking().CountAsync();
-            var messagesCount = await this.messagesRepository.AllAsNoTracking().CountAsync();
+            var imagesCount = this.imagesRepository.AllAsNoTracking().Count();
+            var messagesCount = this.messagesRepository.AllAsNoTracking().Count();
 
             var result = new StatisticsViewModel()
             {

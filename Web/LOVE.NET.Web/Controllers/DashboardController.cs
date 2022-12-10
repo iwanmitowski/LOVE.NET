@@ -33,9 +33,9 @@
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StatisticsViewModel))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetStatisticsAsync()
+        public IActionResult GetStatistics()
         {
-            var result = await this.dashboardService.GetStatisticsAsync();
+            var result = this.dashboardService.GetStatistics();
 
             return this.Ok(result);
         }
