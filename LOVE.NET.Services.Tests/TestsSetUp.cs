@@ -98,7 +98,7 @@ namespace LOVE.NET.Services.Tests
                 {
                     Id = "66666",
                     UserName = "Misa Misa",
-                    Bio = "Admin",
+                    Bio = "UwU",
                     Email = "Misa4@abv.bg",
                     EmailConfirmed = true,
                     GenderId = 2,
@@ -271,6 +271,16 @@ namespace LOVE.NET.Services.Tests
                 x.GetRolesAsync(It.IsAny<ApplicationUser>()))
                 .ReturnsAsync(dbContext.Set<ApplicationRole>().Select(x => x.Name).ToList());
 
+            manager.Setup(x =>
+                x.SetLockoutEndDateAsync(It.IsAny<ApplicationUser>(), It.IsAny<DateTimeOffset?>()))
+                .ReturnsAsync(IdentityResult.Success)
+                .Callback<ApplicationUser, DateTimeOffset?>(async (x, y) =>
+                {
+                    x.LockoutEnd = y;
+                    await dbContext.Set<ApplicationUser>().AddAsync(x);
+                    await dbContext.SaveChangesAsync();
+                });
+
             return manager;
         }
 
@@ -288,6 +298,10 @@ namespace LOVE.NET.Services.Tests
 
             mockRepository.Setup(x =>
                 x.WithAllInformation())
+                .Returns(dbContext.Set<ApplicationUser>().AsQueryable());
+
+            mockRepository.Setup(x =>
+                x.All())
                 .Returns(dbContext.Set<ApplicationUser>().AsQueryable());
 
             mockRepository.Setup(x =>

@@ -82,9 +82,9 @@
                     u.Email != AdministratorEmail &&
                     u.Id != loggedUserId);
 
-            if (request.Search != null)
+            if (!string.IsNullOrEmpty(request.Search))
             {
-                var searchTerm = $"%{request.Search.ToLower()}%";
+                var searchTerm = $"%{request.Search.Trim().ToLower()}%";
 
                 users = users.Where(u =>
                     EF.Functions.Like(u.Email.ToLower(), searchTerm) ||
