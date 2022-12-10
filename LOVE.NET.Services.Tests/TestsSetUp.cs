@@ -1,9 +1,8 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-using CloudinaryDotNet;
-
 using LOVE.NET.Data;
+using LOVE.NET.Data.Common.Repositories;
 using LOVE.NET.Data.Models;
 using LOVE.NET.Data.Repositories.Chat;
 using LOVE.NET.Data.Repositories.Countries;
@@ -43,7 +42,7 @@ namespace LOVE.NET.Services.Tests
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase("InMemoryDB").Options;
-            
+
             if (dbContext != null)
             {
                 dbContext.Database.EnsureDeleted();
@@ -260,7 +259,7 @@ namespace LOVE.NET.Services.Tests
                     .ReturnsAsync(IdentityResult.Success)
                     .Callback<ApplicationUser, string>(async (x, y) =>
                     {
-                        await dbContext.Users.AddAsync(x);
+                        await dbContext.Set<ApplicationUser>().AddAsync(x);
                         await dbContext.SaveChangesAsync();
                     });
 
@@ -270,7 +269,7 @@ namespace LOVE.NET.Services.Tests
 
             manager.Setup(x =>
                 x.GetRolesAsync(It.IsAny<ApplicationUser>()))
-                .ReturnsAsync(dbContext.Roles.Select(x => x.Name).ToList());
+                .ReturnsAsync(dbContext.Set<ApplicationRole>().Select(x => x.Name).ToList());
 
             return manager;
         }
@@ -281,10 +280,18 @@ namespace LOVE.NET.Services.Tests
 
             mockRepository.Setup(x =>
                 x.WithAllInformation(It.IsAny<Expression<Func<ApplicationUser, bool>>>()))
-                .Returns(dbContext.Set<ApplicationUser>().AsQueryable());
+                .Returns((Expression<Func<ApplicationUser, bool>> expression) =>
+                    dbContext
+                        .Set<ApplicationUser>()
+                        .Where(expression)
+                        .AsQueryable());
 
             mockRepository.Setup(x =>
                 x.WithAllInformation())
+                .Returns(dbContext.Set<ApplicationUser>().AsQueryable());
+
+            mockRepository.Setup(x =>
+                x.AllAsNoTracking())
                 .Returns(dbContext.Set<ApplicationUser>().AsQueryable());
 
             return mockRepository.Object;
@@ -300,7 +307,11 @@ namespace LOVE.NET.Services.Tests
 
             mockRepository.Setup(x =>
                x.WithAllInformation(It.IsAny<Expression<Func<Country, bool>>>()))
-                .Returns(dbContext.Set<Country>().AsQueryable());
+               .Returns((Expression<Func<Country, bool>> expression) =>
+                    dbContext
+                        .Set<Country>()
+                        .Where(expression)
+                        .AsQueryable());
 
             return mockRepository.Object;
         }
@@ -311,15 +322,30 @@ namespace LOVE.NET.Services.Tests
 
             mockRepository.Setup(x =>
                 x.AllAsNoTracking(It.IsAny<Expression<Func<Message, bool>>>()))
-                .Returns(dbContext.Set<Message>().AsQueryable());
+                .Returns((Expression<Func<Message, bool>> expression) =>
+                    dbContext
+                        .Set<Message>()
+                        .Where(expression)
+                        .AsQueryable());
 
             mockRepository.Setup(x =>
                x.SaveMessageAsync(It.IsAny<Message>()))
                 .Callback(async (Message x) =>
                 {
-                    await dbContext.Messages.AddAsync(x);
+                    await dbContext.Set<Message>().AddAsync(x);
                     await dbContext.SaveChangesAsync();
                 });
+
+            return mockRepository.Object;
+        }
+
+        public IRepository<T> GetIRepository<T>() where T : class
+        {
+            var mockRepository = new Mock<IRepository<T>>();
+
+            mockRepository.Setup(x =>
+                x.AllAsNoTracking())
+                .Returns(dbContext.Set<T>().AsQueryable());
 
             return mockRepository.Object;
         }
