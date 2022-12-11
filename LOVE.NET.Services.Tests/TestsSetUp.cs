@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
+using CloudinaryDotNet.Actions;
+
 using LOVE.NET.Data;
 using LOVE.NET.Data.Common.Repositories;
 using LOVE.NET.Data.Models;
@@ -26,7 +28,9 @@ namespace LOVE.NET.Services.Tests
     {
         protected const string MockUrl1 = "MockUrl1";
         protected const string MockUrl2 = "MockUrl2";
-
+        protected string MockPath = $"{Directory.GetCurrentDirectory().Replace("\\LOVE.NET.Services.Tests", "\\Web\\LOVE.NET.Web")}\\..\\..\\..\\wwwroot";
+        protected const string MockToken = "TW9ja1VybA";
+       
         protected ApplicationDbContext dbContext;
 
         protected List<ApplicationUser> users;
@@ -79,6 +83,7 @@ namespace LOVE.NET.Services.Tests
                     CreatedOn = DateTime.UtcNow,
                     Birthdate = Convert.ToDateTime("2004-10-17T00:00:00"),
                     Images = new List<Image>(images),
+                    LockoutEnabled = false,
                 },
                 new ApplicationUser
                 {
@@ -138,6 +143,21 @@ namespace LOVE.NET.Services.Tests
                     Images = new List<Image>(images),
                     LockoutEnabled = true,
                     LockoutEnd = DateTime.UtcNow.AddDays(666),
+                },
+                new ApplicationUser
+                {
+                    Id = "6666666",
+                    UserName = "notconfirmed",
+                    Bio = "notconfirmed",
+                    Email = "notconfirmed@notconfirmed.notconfirmed",
+                    EmailConfirmed = false,
+                    GenderId = 1,
+                    CountryId = 30,
+                    CityId = 5878,
+                    CreatedOn = DateTime.UtcNow,
+                    Birthdate = Convert.ToDateTime("2004-10-17T00:00:00"),
+                    Images = new List<Image>(images),
+                    LockoutEnabled = true,
                 },
             };
 
@@ -278,6 +298,27 @@ namespace LOVE.NET.Services.Tests
                 {
                     var trackedUser = await dbContext.Set<ApplicationUser>().FindAsync(x.Id);
                     trackedUser.LockoutEnd = y;
+                    await dbContext.SaveChangesAsync();
+                });
+
+            manager.Setup(x =>
+               x.GenerateEmailConfirmationTokenAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(MockToken);
+
+            manager.Setup(x =>
+               x.FindByEmailAsync(It.IsAny<string>()))
+                .ReturnsAsync((string email) =>
+                    dbContext
+                        .Set<ApplicationUser>()
+                        .FirstOrDefault(u => u.Email == email));
+
+            manager.Setup(x =>
+                x.ConfirmEmailAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success)
+                .Callback<ApplicationUser, string>(async (x, y) =>
+                {
+                    var trackedUser = await dbContext.Set<ApplicationUser>().FindAsync(x.Id);
+                    trackedUser.EmailConfirmed = true;
                     await dbContext.SaveChangesAsync();
                 });
 
