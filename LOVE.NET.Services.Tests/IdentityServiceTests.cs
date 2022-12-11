@@ -187,18 +187,8 @@
                 Password = "Wrong password",
             };
 
-            string errorMessage = string.Empty;
-
-            try
-            {
-                var result = await identityService.LoginAsync(request);
-            }
-            catch (ArgumentException ae)
-            {
-                errorMessage = ae.Message;
-            }
-
-            Assert.That(errorMessage, Is.EqualTo(WrongPassword));
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(request));
+            Assert.That(exception.Message, Is.EqualTo(WrongPassword));
         }
 
         [Test]
@@ -210,18 +200,8 @@
                 Password = "Wrong password",
             };
 
-            string errorMessage = string.Empty;
-
-            try
-            {
-                var result = await identityService.LoginAsync(request);
-            }
-            catch (ArgumentException ae)
-            {
-                errorMessage = ae.Message;
-            }
-
-            Assert.That(errorMessage, Is.EqualTo(EmailNotConfirmed));
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(request));
+            Assert.That(exception.Message, Is.EqualTo(EmailNotConfirmed));
         }
 
         [Test]
@@ -233,18 +213,8 @@
                 Password = "Wrong password",
             };
 
-            string errorMessage = string.Empty;
-
-            try
-            {
-                var result = await identityService.LoginAsync(request);
-            }
-            catch (ArgumentException ae)
-            {
-                errorMessage = ae.Message;
-            }
-
-            Assert.That(errorMessage, Is.EqualTo(UserNotFound));
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(request));
+            Assert.That(exception.Message, Is.EqualTo(UserNotFound));
         }
 
         [Test]
@@ -256,18 +226,8 @@
                 Password = "password",
             };
 
-            string errorMessage = string.Empty;
-
-            try
-            {
-                var result = await identityService.LoginAsync(request);
-            }
-            catch (ArgumentException ae)
-            {
-                errorMessage = ae.Message;
-            }
-
-            Assert.That(errorMessage.StartsWith("You are banned"));
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(request));
+            Assert.That(exception.Message.StartsWith("You are banned"));
         }
 
         [Test]
