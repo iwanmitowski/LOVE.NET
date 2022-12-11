@@ -5,8 +5,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using AutoMapper.Configuration.Conventions;
-
     using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Data.Repositories.Users;
@@ -96,6 +94,7 @@
                 u => new[] { userId, likedUserId }.Any(id => id == u.Id));
 
             var likedUser = await users.FirstOrDefaultAsync(u => u.Id == likedUserId);
+
             if (likedUser == null)
             {
                 return UserNotFound;

@@ -30,7 +30,7 @@ namespace LOVE.NET.Services.Tests
         protected const string MockUrl2 = "MockUrl2";
         protected string MockPath = $"{Directory.GetCurrentDirectory().Replace("\\LOVE.NET.Services.Tests", "\\Web\\LOVE.NET.Web")}\\..\\..\\..\\wwwroot";
         protected const string MockToken = "TW9ja1VybA";
-       
+
         protected ApplicationDbContext dbContext;
 
         protected List<ApplicationUser> users;
@@ -68,6 +68,15 @@ namespace LOVE.NET.Services.Tests
                 },
             };
 
+            roles = new List<ApplicationRole>()
+            {
+                new ApplicationRole()
+                {
+                    Id = "1",
+                    Name = AdministratorRoleName,
+                }
+            };
+
             users = new List<ApplicationUser>
             {
                 new ApplicationUser
@@ -84,6 +93,13 @@ namespace LOVE.NET.Services.Tests
                     Birthdate = Convert.ToDateTime("2004-10-17T00:00:00"),
                     Images = new List<Image>(images),
                     LockoutEnabled = false,
+                    Roles = new List<IdentityUserRole<string>>() {
+                        new IdentityUserRole<string>()
+                        {
+                            RoleId = "1",
+                            UserId = "666"
+                        }
+                    },
                 },
                 new ApplicationUser
                 {
@@ -239,15 +255,6 @@ namespace LOVE.NET.Services.Tests
                 });
             }
 
-            roles = new List<ApplicationRole>()
-            {
-                new ApplicationRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = AdministratorRoleName,
-                }
-            };
-
             await dbContext.AddRangeAsync(users);
             await dbContext.AddRangeAsync(roles);
             await dbContext.AddRangeAsync(countries);
@@ -256,7 +263,7 @@ namespace LOVE.NET.Services.Tests
             await dbContext.AddRangeAsync(likes);
             await dbContext.AddRangeAsync(messages);
             await dbContext.SaveChangesAsync();
-
+            var test = dbContext.Users.Include(u => u.Roles).ToList();
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
         }
 
@@ -348,6 +355,10 @@ namespace LOVE.NET.Services.Tests
             mockRepository.Setup(x =>
                 x.AllAsNoTracking())
                 .Returns(dbContext.Set<ApplicationUser>().AsQueryable());
+
+            mockRepository.Setup(x =>
+                x.SaveChangesAsync())
+                .Callback(async () => await dbContext.SaveChangesAsync());
 
             return mockRepository.Object;
         }
