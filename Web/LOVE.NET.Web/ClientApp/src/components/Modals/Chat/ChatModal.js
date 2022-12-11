@@ -55,7 +55,7 @@ export default function ChatModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          <h1 className="text-uppercase">{currentUser?.userName}</h1>
+          <p className="text-uppercase font-weight-bold text-break">{currentUser?.userName}</p>
         </Modal.Title>
       </Modal.Header>
       {currentUser && (
