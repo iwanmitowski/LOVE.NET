@@ -1,4 +1,5 @@
 import InfiniteScroll from "react-infinite-scroll-component";
+import Loader from "../Shared/Loader/Loader";
 import SwipingCard from "./SwipingCard";
 
 export default function SwipingCardContainer(props) {
@@ -17,6 +18,7 @@ export default function SwipingCardContainer(props) {
       hasMore={hasMoreUsersToLoad}
       style={{ display: "flex", flexWrap: "wrap" }}
       scrollableTarget="scrollableDiv"
+      loader={<Loader />}
     >
       {!!users.length ? (
         users.map((u) => (

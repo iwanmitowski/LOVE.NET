@@ -1,17 +1,19 @@
 import { useState, useEffect, Fragment } from "react";
 import { useIdentityContext } from "../hooks/useIdentityContext";
 import SwipingCardContainer from "./SwipingCard/SwipingCardContainer";
-
-import * as datingService from "../services/datingService";
 import { useNavigate } from "react-router-dom";
 import MatchModal from "./Modals/Match/MatchModal";
 import UserPreferences from "./UserPreferences/UserPreferences";
+import Loader from "./Shared/Loader/Loader";
+
+import * as datingService from "../services/datingService";
 
 export default function Home() {
   const navigate = useNavigate();
   const { isLogged, userLogout } = useIdentityContext();
   const [usersToSwipe, setUsersToSwipe] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [matchModel, setMatchModel] = useState({
     isMatch: false,
   });
@@ -44,6 +46,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isLogged) {
+      setIsLoading(() => true);
       datingService
         .getUsersToSwipe()
         .then((res) => {
@@ -61,7 +64,8 @@ export default function Home() {
           ) {
             navigate("/notfound");
           }
-        });
+        })
+        .finally(() => setIsLoading(() => false));
     }
   }, [isLogged]);
 
@@ -69,7 +73,9 @@ export default function Home() {
     return <h1>Don't you want to find your beloved one ?</h1>;
   }
 
-  return (
+  return isLoading ? (
+    <Loader isFullScreen/>
+  ) : (
     <Fragment>
       <UserPreferences filterUsers={setFilteredUsers} users={usersToSwipe} />
       <SwipingCardContainer users={filteredUsers} swipe={swipe} />

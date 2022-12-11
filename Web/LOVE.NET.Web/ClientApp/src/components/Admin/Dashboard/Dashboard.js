@@ -2,20 +2,28 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import * as dashboardService from "../../../services/dashboardService";
+import Loader from "../../Shared/Loader/Loader";
 
 import StatisticCard from "./StatisticCard";
 
 export default function Dashboard() {
   const [statistics, setStatistics] = useState();
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    dashboardService.getStatistics().then((res) => {
-      console.log(res);
-      setStatistics(res);
-    });
+    setIsLoading(() => true);
+    dashboardService
+      .getStatistics()
+      .then((res) => {
+        console.log(res);
+        setStatistics(res);
+      })
+      .finally(() => setIsLoading(() => false));
   }, []);
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     statistics && (
       <div className="container d-flex flex-wrap justify-content-center">
         <StatisticCard

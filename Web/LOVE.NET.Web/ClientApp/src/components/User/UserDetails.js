@@ -9,11 +9,13 @@ import * as identityService from "../../services/identityService";
 import * as countryService from "../../services/countryService";
 import * as genderService from "../../services/genderService";
 import * as date from "../../utils/date";
+import Loader from "../Shared/Loader/Loader";
 
 export default function UserDetails() {
   const params = useParams();
   const navigate = useNavigate();
   const { userLogout, setUserLocation } = useIdentityContext();
+  const [isLoading, setIsLoading] = useState(false);
 
   const userInitialState = {
     email: "",
@@ -38,6 +40,7 @@ export default function UserDetails() {
 
   const userId = params.id;
   useEffect(() => {
+    setIsLoading(() => true);
     const promises = [
       identityService.getAccount(userId),
       genderService.getAll(),
@@ -77,7 +80,8 @@ export default function UserDetails() {
         } else {
           setError(error.message);
         }
-      });
+      })
+      .finally(() => setIsLoading(() => false));
   }, [userId]);
 
   const onInputChange = (e) => {
@@ -180,7 +184,9 @@ export default function UserDetails() {
       });
   };
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <Fragment>
       <UserForm
         user={user}

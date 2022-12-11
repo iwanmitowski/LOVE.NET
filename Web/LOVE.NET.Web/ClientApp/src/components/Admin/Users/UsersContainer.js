@@ -3,6 +3,7 @@ import SwipingCardContainer from "../../SwipingCard/SwipingCardContainer";
 import ModerateModal from "../../Modals/Moderate/ModerateModal";
 
 import * as dashboardService from "../../../services/dashboardService";
+import Loader from "../../Shared/Loader/Loader";
 
 export default function UsersContainer(props) {
   const [users, setUsers] = useState([]);
@@ -12,6 +13,7 @@ export default function UsersContainer(props) {
     search: null,
     page: 1,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const defaultUserBanRequest = {
     user: null,
@@ -34,22 +36,30 @@ export default function UsersContainer(props) {
 
   const fetchUsers = () => {
     if (hasMore) {
+      if (users.length === 0)
+      {
+        setIsLoading(() => true);
+      }
+
       const page = Math.floor(users.length / 10) + 1;
 
-      dashboardService.getUsers({ ...request, page }).then((res) => {
-        setUsers((prevState) => {
-          const currentUsers = [...prevState, ...res.users];
-          const hasMore = currentUsers.length < res.totalUsers;
-          setHasMore(hasMore);
-          setRequest((prevRequest) => {
-            return {
-              ...prevRequest,
-              page,
-            };
+      dashboardService
+        .getUsers({ ...request, page })
+        .then((res) => {
+          setUsers((prevState) => {
+            const currentUsers = [...prevState, ...res.users];
+            const hasMore = currentUsers.length < res.totalUsers;
+            setHasMore(hasMore);
+            setRequest((prevRequest) => {
+              return {
+                ...prevRequest,
+                page,
+              };
+            });
+            return currentUsers;
           });
-          return currentUsers;
-        });
-      });
+        })
+        .finally(() => setIsLoading(() => false));
     }
   };
 
@@ -59,7 +69,9 @@ export default function UsersContainer(props) {
     }
   }, []);
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <Fragment>
       <SwipingCardContainer
         fetchUsers={fetchUsers}

@@ -8,6 +8,7 @@ import * as datingService from "../services/datingService";
 import * as chatService from "../services/chatService";
 
 import { useChat } from "../hooks/useChat";
+import Loader from "./Shared/Loader/Loader";
 
 export default function Matches() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function Matches() {
   const [matches, setMatches] = useState([]);
   const [chatUser, setChatUser] = useState();
   const [chat, setChat] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setChat(() => [...chatState.messages]);
@@ -30,6 +32,10 @@ export default function Matches() {
 
   const fetchUsers = () => {
     if (hasMore) {
+      if (matches.length === 0) {
+        setIsLoading(() => true);
+      }
+      
       const page = Math.floor(matches.length / 10) + 1;
 
       datingService
@@ -59,7 +65,8 @@ export default function Matches() {
           ) {
             navigate("/notfound");
           }
-        });
+        })
+        .finally(() => setIsLoading(() => false));
     }
   };
 
@@ -92,7 +99,9 @@ export default function Matches() {
         });
     }
   };
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <Fragment>
       <ChatModal
         show={!!chatUser}
