@@ -25,6 +25,8 @@
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Services.Messaging;
     using LOVE.NET.Web.ViewModels;
+    using LOVE.NET.Web.ViewModels.Identity;
+
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
@@ -167,7 +169,7 @@
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(typeof(BaseCredentialsModel).GetTypeInfo().Assembly);
 
             if (app.Environment.IsDevelopment())
             {
