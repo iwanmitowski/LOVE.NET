@@ -1,11 +1,11 @@
-﻿using LOVE.NET.Data.Repositories.Users;
-using LOVE.NET.Services.Dating;
-using LOVE.NET.Web.ViewModels.Dating;
-
-using Microsoft.EntityFrameworkCore;
-
-namespace LOVE.NET.Services.Tests
+﻿namespace LOVE.NET.Services.Tests
 {
+    using LOVE.NET.Data.Repositories.Users;
+    using LOVE.NET.Services.Dating;
+    using LOVE.NET.Web.ViewModels.Dating;
+
+    using Microsoft.EntityFrameworkCore;
+
     using static LOVE.NET.Common.GlobalConstants.ControllerResponseMessages;
 
     public class DatingServiceTests : TestsSetUp
@@ -36,10 +36,12 @@ namespace LOVE.NET.Services.Tests
 
             // Excluding itself and the admin and it's like 
             var expectedNotSwiped = users.Count - 3;
-
-            Assert.AreEqual(expectedNotSwiped, notSwipedUsers.Count());
-            Assert.That(notSwipedUsers.Count(u => u.UserName == "admin"), Is.EqualTo(0));
-            Assert.That(notSwipedUsers.Count(u => u.Id == "6666"), Is.EqualTo(0));
+            Assert.Multiple(() =>
+            {
+                Assert.That(notSwipedUsers.Count(), Is.EqualTo(expectedNotSwiped));
+                Assert.That(notSwipedUsers.Count(u => u.UserName == "admin"), Is.EqualTo(0));
+                Assert.That(notSwipedUsers.Count(u => u.Id == "6666"), Is.EqualTo(0));
+            });
         }
 
         [Test]
@@ -53,8 +55,11 @@ namespace LOVE.NET.Services.Tests
 
             var result = datingService.GetMatches(request);
 
-            Assert.That(result.TotalMatches, Is.EqualTo(1));
-            Assert.That(result.Matches.Count(), Is.EqualTo(1));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.TotalMatches, Is.EqualTo(1));
+                Assert.That(result.Matches.Count(), Is.EqualTo(1));
+            });
         }
 
         [Test]
@@ -68,8 +73,11 @@ namespace LOVE.NET.Services.Tests
 
             var result = datingService.GetMatches(request);
 
-            Assert.That(result.TotalMatches, Is.EqualTo(1));
-            Assert.That(result.Matches.Count(), Is.EqualTo(0));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.TotalMatches, Is.EqualTo(1));
+                Assert.That(result.Matches.Count(), Is.EqualTo(0));
+            });
         }
 
         [Test]
@@ -86,11 +94,14 @@ namespace LOVE.NET.Services.Tests
             var users = dbContext.Users.Include(u => u.LikesSent).Where(u => u.Id == "6666" || u.Id == "77777");
             var result = await datingService.LikeAsync("6666", "77777");
 
-            var isUserLiked = users.FirstOrDefault(u => u.Id == "6666")
-                .LikesSent.Any(u => u.LikedUserId == "77777");
+            var isUserLiked = users.FirstOrDefault(u => u.Id == "6666")?.LikesSent
+                .Any(u => u.LikedUserId == "77777");
 
-            Assert.True(result.Failure);
-            Assert.True(isUserLiked);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Failure, Is.True);
+                Assert.That(isUserLiked, Is.True);
+            });
         }
 
         [Test]
@@ -100,20 +111,24 @@ namespace LOVE.NET.Services.Tests
             var firstLike = await datingService.LikeAsync("6666", "77777");
             var matchLike = await datingService.LikeAsync("77777", "6666");
 
-            var isMatch = users.FirstOrDefault(u => u.Id == "77777").LikesSent.Any(ls => ls.LikedUserId == "6666");
-
-            Assert.True(firstLike.Failure);
-            Assert.True(matchLike.Succeeded);
-            Assert.True(isMatch);
+            var isMatch = users?.FirstOrDefault(u => u.Id == "77777")?.LikesSent.Any(ls => ls.LikedUserId == "6666");
+            Assert.Multiple(() =>
+            {
+                Assert.That(firstLike.Failure, Is.True);
+                Assert.That(matchLike.Succeeded, Is.True);
+                Assert.That(isMatch, Is.True);
+            });
         }
 
         [Test]
         public async Task FailLikeUserNotExisting()
         {
             var result = await datingService.LikeAsync("6666", "88888");
-
-            Assert.That(result.Errors.Count(), Is.GreaterThan(0));
-            Assert.True(result.Errors.Contains(UserNotFound));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Errors, Is.Not.Empty);
+                Assert.That(result.Errors, Does.Contain(UserNotFound));
+            });
         }
 
         [Test]
@@ -121,8 +136,8 @@ namespace LOVE.NET.Services.Tests
         {
             var result = await datingService.LikeAsync("6666", "66666");
 
-            Assert.That(result.Errors.Count(), Is.GreaterThan(0));
-            Assert.True(result.Errors.Contains(UserAlreadyLiked));
+            Assert.That(result.Errors, Is.Not.Empty);
+            Assert.That(result.Errors, Does.Contain(UserAlreadyLiked));
         }
 
         [Test]
@@ -130,8 +145,8 @@ namespace LOVE.NET.Services.Tests
         {
             var result = await datingService.LikeAsync("6666", "6666");
 
-            Assert.That(result.Errors.Count(), Is.GreaterThan(0));
-            Assert.True(result.Errors.Contains(YouCantLikeYourself));
+            Assert.That(result.Errors, Is.Not.Empty);
+            Assert.That(result.Errors, Does.Contain(YouCantLikeYourself));
         }
     }
 }

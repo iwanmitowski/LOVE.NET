@@ -1,11 +1,9 @@
-﻿using LOVE.NET.Data.Common.Repositories;
-using LOVE.NET.Data.Models;
-using LOVE.NET.Data.Repositories.Users;
-using LOVE.NET.Services.Dashboard;
-using LOVE.NET.Services.Genders;
-
-namespace LOVE.NET.Services.Tests
+﻿namespace LOVE.NET.Services.Tests
 {
+    using LOVE.NET.Data.Common.Repositories;
+    using LOVE.NET.Data.Models;
+    using LOVE.NET.Services.Genders;
+
     public class GendersServiceTests : TestsSetUp
     {
         private IGendersService gendersService;
@@ -38,7 +36,7 @@ namespace LOVE.NET.Services.Tests
 
             foreach (var gender in genders)
             {
-                Assert.True(result.Select(x => x.Id).Contains(gender.Id));
+                Assert.That(result.Select(x => x?.Id).Contains(gender.Id));
             }
         }
     }

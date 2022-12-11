@@ -1,17 +1,15 @@
-﻿using LOVE.NET.Data.Common.Repositories;
-using LOVE.NET.Data.Models;
-using LOVE.NET.Data.Repositories.Chat;
-using LOVE.NET.Data.Repositories.Users;
-using LOVE.NET.Services.Chats;
-using LOVE.NET.Services.Dashboard;
-using LOVE.NET.Web.ViewModels.Dashboard;
-
-using Microsoft.AspNetCore.Identity;
-
-using Moq;
-
-namespace LOVE.NET.Services.Tests
+﻿namespace LOVE.NET.Services.Tests
 {
+    using LOVE.NET.Data.Common.Repositories;
+    using LOVE.NET.Data.Models;
+    using LOVE.NET.Data.Repositories.Users;
+    using LOVE.NET.Services.Dashboard;
+    using LOVE.NET.Web.ViewModels.Dashboard;
+
+    using Microsoft.AspNetCore.Identity;
+
+    using Moq;
+
     using static LOVE.NET.Common.GlobalConstants;
     using static LOVE.NET.Common.GlobalConstants.ControllerResponseMessages;
 
@@ -38,7 +36,7 @@ namespace LOVE.NET.Services.Tests
                 usersRepository,
                 imagesRepository,
                 messagesRepository,
-                userManagerMock.Object);
+                userManagerMock?.Object);
         }
 
         [OneTimeTearDown]
@@ -48,7 +46,7 @@ namespace LOVE.NET.Services.Tests
         }
 
         [Test]
-        public async Task SuccessGetStatistics()
+        public void SuccessGetStatistics()
         {
             var usersCount = dbContext.Users.Count();
             var bannedUsersCount = 1;
@@ -68,7 +66,7 @@ namespace LOVE.NET.Services.Tests
                 Assert.That(result.LikedUsersCount, Is.EqualTo(likedUsersCount));
                 Assert.That(result.NotSwipedUsersCount, Is.EqualTo(notSwipedUsersCount));
                 Assert.That(result.ImagesCount, Is.EqualTo(imagesCount));
-                Assert.That(result.MessagesCount, Is.EqualTo(messagesCount));
+                Assert.That(result?.MessagesCount, Is.EqualTo(messagesCount));
             });
         }
 
@@ -83,7 +81,7 @@ namespace LOVE.NET.Services.Tests
                 Page = 1,
             };
 
-            var loggedUserId = users.FirstOrDefault(u => u.Id == "6666").Id;
+            var loggedUserId = users.FirstOrDefault(u => u.Id == "6666")?.Id;
 
             var resultUsers = users
                 .Where(u =>
@@ -143,7 +141,7 @@ namespace LOVE.NET.Services.Tests
                 Page = 2,
             };
 
-            var loggedUserId = users.FirstOrDefault(u => u.Id == "6666").Id;
+            var loggedUserId = users.FirstOrDefault(u => u.Id == "6666")?.Id;
 
             var result = await dashboardService.GetUsersAsync(request, loggedUserId);
 
@@ -185,11 +183,11 @@ namespace LOVE.NET.Services.Tests
                 Page = 1,
             };
 
-            var loggedUserId = users.FirstOrDefault(u => u.Id == "6666").Id;
+            var loggedUserId = users?.FirstOrDefault(u => u.Id == "6666").Id;
 
             var result = await dashboardService.GetUsersAsync(request, loggedUserId);
 
-            Assert.True(result.Users.All(u => u.Email.ToLower().Contains(email.Trim().ToLower())));
+            Assert.That(result.Users.All(u => u.Email.ToLower().Contains(email.Trim().ToLower())), Is.True);
         }
 
         [Test]
@@ -211,7 +209,7 @@ namespace LOVE.NET.Services.Tests
 
             var result = await dashboardService.GetUsersAsync(request, loggedUserId);
 
-            Assert.True(result.Users.All(u => u.UserName.ToLower().Contains(userName.Trim().ToLower())));
+            Assert.That(result.Users.All(u => u.UserName.ToLower().Contains(userName.Trim().ToLower())));
         }
 
         [Test]
@@ -233,7 +231,7 @@ namespace LOVE.NET.Services.Tests
 
             var result = await dashboardService.GetUsersAsync(request, loggedUserId);
 
-            Assert.True(result.Users.All(u => u.Bio.ToLower().Contains(bio.Trim().ToLower())));
+            Assert.That(result.Users.All(u => u.Bio.ToLower().Contains(bio.Trim().ToLower())));
         }
 
         [Test]
@@ -255,7 +253,7 @@ namespace LOVE.NET.Services.Tests
 
             var result = await dashboardService.GetUsersAsync(request, loggedUserId);
 
-            Assert.True(result.Users.All(u => u.CityName.ToLower().Contains(cityName.Trim().ToLower())));
+            Assert.That(result.Users.All(u => u.CityName.ToLower().Contains(cityName.Trim().ToLower())));
         }
 
         [Test]
@@ -278,7 +276,7 @@ namespace LOVE.NET.Services.Tests
 
             var result = await dashboardService.GetUsersAsync(request, loggedUserId);
 
-            Assert.True(result.Users.All(u => u.CountryName.ToLower().Contains(countryName.Trim().ToLower())));
+            Assert.That(result.Users.All(u => u.CountryName.ToLower().Contains(countryName.Trim().ToLower())));
         }
 
         [Test]
@@ -305,11 +303,11 @@ namespace LOVE.NET.Services.Tests
                 Page = 1,
             };
 
-            var loggedUserId = users.FirstOrDefault(u => u.Id == "6666").Id;
+            var loggedUserId = users.FirstOrDefault(u => u.Id == "6666")?.Id;
 
             var result = await dashboardService.GetUsersAsync(request, loggedUserId);
 
-            Assert.True(result.Users.All(u => u.GenderName.ToLower().Contains(genderName.Trim().ToLower())));
+            Assert.That(result.Users.All(u => u.GenderName.ToLower().Contains(genderName.Trim().ToLower())));
         }
 
         [Test]
@@ -328,8 +326,8 @@ namespace LOVE.NET.Services.Tests
 
             Assert.Multiple(() =>
             {
-                Assert.True(result.Succeeded);
-                Assert.True(userFromDb.LockoutEnd != null);
+                Assert.That(result.Succeeded);
+                Assert.That(userFromDb?.LockoutEnd, Is.Not.EqualTo(null));
             });
         }
 
@@ -349,8 +347,8 @@ namespace LOVE.NET.Services.Tests
 
             Assert.Multiple(() =>
             {
-                Assert.True(result.Succeeded);
-                Assert.True(userFromDb.LockoutEnd == null);
+                Assert.That(result.Succeeded);
+                Assert.That(userFromDb?.LockoutEnd, Is.EqualTo(null));
             });
         }
 
@@ -365,7 +363,7 @@ namespace LOVE.NET.Services.Tests
 
             var result = await dashboardService.ModerateAsync(request);
 
-            Assert.True(result.Errors.Contains(UserNotFound));
+            Assert.That(result?.Errors, Does.Contain(UserNotFound));
         }
 
         [Test]
@@ -383,7 +381,7 @@ namespace LOVE.NET.Services.Tests
 
             var result = await dashboardService.ModerateAsync(request);
 
-            Assert.True(result.Errors.Contains(UserCouldNotBeBanned));
+            Assert.That(result?.Errors, Does.Contain(UserCouldNotBeBanned));
         }
     }
 }

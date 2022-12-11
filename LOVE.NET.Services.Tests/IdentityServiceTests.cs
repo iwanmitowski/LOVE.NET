@@ -54,7 +54,7 @@
             var user = users[2];
             var token = await identityService.GenerateJwtToken(user);
 
-            Assert.IsNotNull(token);
+            Assert.That(token, Is.Not.Null);
         }
 
         [Test]
@@ -79,7 +79,7 @@
 
             var response = await identityService.RegisterAsync(request);
 
-            Assert.True(response.Errors.Any());
+            Assert.That(response.Errors.Any(), Is.True);
         }
 
 
@@ -103,7 +103,7 @@
 
             var response = await identityService.RegisterAsync(request);
 
-            Assert.True(response.Succeeded);
+            Assert.That(response.Succeeded, Is.True);
         }
 
         [Test]
@@ -129,7 +129,7 @@
             var test2 = users;
             var currentUser = users.FirstOrDefault(u => u.Email == "email@email.email");
 
-            Assert.That(currentUser.Images.First().Url, Is.EqualTo(DefaultProfilePictureUrl));
+            Assert.That(currentUser?.Images.First().Url, Is.EqualTo(DefaultProfilePictureUrl));
         }
 
         [Test]
@@ -156,7 +156,7 @@
             var test2 = users;
             var currentUser = users.FirstOrDefault(u => u.Email == "email@email.email");
 
-            Assert.That(currentUser.Images.First().Url, Is.EqualTo(MockUrl1));
+            Assert.That(currentUser?.Images.First().Url, Is.EqualTo(MockUrl1));
         }
 
         [Test]
@@ -170,12 +170,12 @@
 
             var result = await identityService.LoginAsync(request);
 
-            Assert.NotNull(result);
+            Assert.That(result, Is.Not.Null);
         }
 
 
         [Test]
-        public async Task FailLoginIncorrectPassword()
+        public void FailLoginIncorrectPassword()
         {
             userManagerMock.Setup(x =>
                 x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
@@ -192,7 +192,7 @@
         }
 
         [Test]
-        public async Task FailLoginNotConfirmedEmail()
+        public void FailLoginNotConfirmedEmail()
         {
             var request = new LoginViewModel()
             {
@@ -205,7 +205,7 @@
         }
 
         [Test]
-        public async Task FailLoginNotExistingEmail()
+        public void FailLoginNotExistingEmail()
         {
             var request = new LoginViewModel()
             {
@@ -218,7 +218,7 @@
         }
 
         [Test]
-        public async Task FailLoginBannedUser()
+        public void FailLoginBannedUser()
         {
             var request = new LoginViewModel()
             {
@@ -227,7 +227,7 @@
             };
 
             var exception = Assert.ThrowsAsync<ArgumentException>(async () => await identityService.LoginAsync(request));
-            Assert.That(exception.Message.StartsWith("You are banned"));
+            Assert.That(exception.Message, Does.StartWith("You are banned"));
         }
 
         [Test]
@@ -235,7 +235,7 @@
         {
             var result = identityService.GenerateRefreshToken();
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
         }
 
         [Test]
@@ -247,16 +247,19 @@
             var mappedUser = AutoMapperConfig.MapperInstance.Map<UserDetailsViewModel>(currentUser);
             var result = identityService.GetUserDetails(id);
 
-            Assert.That(mappedUser.Email, Is.EqualTo(mappedUser.Email));
-            Assert.That(mappedUser.UserName, Is.EqualTo(mappedUser.UserName));
-            Assert.That(mappedUser.Bio, Is.EqualTo(mappedUser.Bio));
-            Assert.That(mappedUser.Birthdate, Is.EqualTo(mappedUser.Birthdate));
-            Assert.That(mappedUser.Matches.Count, Is.EqualTo(mappedUser.Matches.Count));
-            Assert.That(mappedUser.Images.Count, Is.EqualTo(mappedUser.Images.Count));
-            Assert.That(mappedUser.GenderId, Is.EqualTo(mappedUser.GenderId));
-            Assert.That(mappedUser.CityId, Is.EqualTo(mappedUser.CityId));
-            Assert.That(mappedUser.Latitude, Is.EqualTo(mappedUser.Latitude));
-            Assert.That(mappedUser.Longitude, Is.EqualTo(mappedUser.Longitude));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Email, Is.EqualTo(mappedUser.Email));
+                Assert.That(result.UserName, Is.EqualTo(mappedUser.UserName));
+                Assert.That(result.Bio, Is.EqualTo(mappedUser.Bio));
+                Assert.That(result.Birthdate, Is.EqualTo(mappedUser.Birthdate));
+                Assert.That(result.Matches, Has.Count.EqualTo(mappedUser.Matches.Count));
+                Assert.That(result.Images, Has.Count.EqualTo(mappedUser.Images.Count));
+                Assert.That(result.GenderId, Is.EqualTo(mappedUser.GenderId));
+                Assert.That(result.CityId, Is.EqualTo(mappedUser.CityId));
+                Assert.That(result.Latitude, Is.EqualTo(mappedUser.Latitude));
+                Assert.That(result.Longitude, Is.EqualTo(mappedUser.Longitude));
+            });
         }
 
         [Test]
@@ -283,10 +286,13 @@
 
             await identityService.EditUserAsync(request);
             var result = identityService.GetUserDetails(request.Id);
-
-            Assert.That(result.UserName, Is.EqualTo(request.UserName));
-            Assert.That(result.Bio, Is.EqualTo(request.Bio));
-            Assert.That(result.Images.Count, Is.Not.EqualTo(request.Images.Count()));
+            
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.UserName, Is.EqualTo(request.UserName));
+                Assert.That(result.Bio, Is.EqualTo(request.Bio));
+                Assert.That(result.Images, Has.Count.Not.EqualTo(request.Images.Count()));
+            });
         }
     }
 }

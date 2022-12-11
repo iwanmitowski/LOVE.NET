@@ -1,12 +1,12 @@
-﻿using LOVE.NET.Data.Models;
-using LOVE.NET.Data.Repositories.Chat;
-using LOVE.NET.Services.Chats;
-using LOVE.NET.Web.ViewModels.Chat;
-
-using Microsoft.EntityFrameworkCore;
-
-namespace LOVE.NET.Services.Tests
+﻿namespace LOVE.NET.Services.Tests
 {
+    using LOVE.NET.Data.Models;
+    using LOVE.NET.Data.Repositories.Chat;
+    using LOVE.NET.Services.Chats;
+    using LOVE.NET.Web.ViewModels.Chat;
+
+    using Microsoft.EntityFrameworkCore;
+
     using static LOVE.NET.Common.GlobalConstants;
 
     public class ChatServiceTests : TestsSetUp
@@ -41,7 +41,7 @@ namespace LOVE.NET.Services.Tests
 
             var result = chatService.GetChat(request);
 
-            Assert.That(DefaultTake, Is.EqualTo(result.Messages.Count()));
+            Assert.That(result.Messages.Count(), Is.EqualTo(DefaultTake));
         }
 
         [Test]
@@ -56,8 +56,11 @@ namespace LOVE.NET.Services.Tests
             var lastMessage = messages.First();
             var result = chatService.GetChat(request);
 
-            Assert.That(1, Is.EqualTo(result.Messages.Count()));
-            Assert.That(lastMessage.Text, Is.EqualTo(result.Messages.First().Text));
+            Assert.Multiple(() =>
+            {
+                Assert.That(1, Is.EqualTo(result.Messages.Count()));
+                Assert.That(lastMessage.Text, Is.EqualTo(result.Messages.First().Text));
+            });
         }
 
         [Test]
@@ -74,7 +77,7 @@ namespace LOVE.NET.Services.Tests
             await chatService.SaveMessageAsync(request);
             var latestMessage = await dbContext.Messages.OrderByDescending(m => m.CreatedOn).FirstOrDefaultAsync();
 
-            Assert.That(latestMessage.Text, Is.EqualTo(request.Text));
+            Assert.That(latestMessage?.Text, Is.EqualTo(request.Text));
         }
     }
 }

@@ -18,7 +18,6 @@
     using static LOVE.NET.Common.GlobalConstants;
     using static LOVE.NET.Common.GlobalConstants.ControllerResponseMessages;
 
-
     public class DashboardService : IDashboardService
     {
         private readonly IUsersRepository usersRepository;

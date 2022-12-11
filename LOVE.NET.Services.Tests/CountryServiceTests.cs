@@ -1,8 +1,8 @@
-﻿using LOVE.NET.Data.Repositories.Countries;
-using LOVE.NET.Services.Countries;
-
-namespace LOVE.NET.Services.Tests
+﻿namespace LOVE.NET.Services.Tests
 {
+    using LOVE.NET.Data.Repositories.Countries;
+    using LOVE.NET.Services.Countries;
+
     public class CountryServiceTests : TestsSetUp
     {
         private ICountriesService countriesService;
@@ -40,9 +40,12 @@ namespace LOVE.NET.Services.Tests
             var country = countries[0];
             var result = countriesService.Get(country.Id);
 
-            Assert.That(country.Id, Is.EqualTo(result.CountryId));
-            Assert.That(country.Name, Is.EqualTo(result.CountryName));
-            Assert.That(country.Cities.Count + 1, Is.EqualTo(result.Cities.Count()));
+            Assert.Multiple(() =>
+            {
+                Assert.That(country.Id, Is.EqualTo(result.CountryId));
+                Assert.That(country.Name, Is.EqualTo(result.CountryName));
+                Assert.That(country.Cities.Count + 1, Is.EqualTo(result.Cities.Count()));
+            });
         }
     }
 }

@@ -1,21 +1,17 @@
-﻿using LOVE.NET.Data.Models;
-using LOVE.NET.Services.Email;
-using LOVE.NET.Services.Genders;
-using LOVE.NET.Services.Messaging;
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-
-using Moq;
-
-using Newtonsoft.Json.Linq;
-
-namespace LOVE.NET.Services.Tests
+﻿namespace LOVE.NET.Services.Tests
 {
+    using LOVE.NET.Data.Models;
+    using LOVE.NET.Services.Email;
+    using LOVE.NET.Services.Messaging;
+
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+
+    using Moq;
+
+
     using static LOVE.NET.Common.GlobalConstants;
-    using static LOVE.NET.Common.GlobalConstants.ControllerRoutesConstants;
     using static LOVE.NET.Common.GlobalConstants.EmailMessagesConstants;
-    using static LOVE.NET.Common.GlobalConstants.EmailSenderConstants;
 
     public class EmailServiceTests : TestsSetUp
     {
@@ -52,7 +48,7 @@ namespace LOVE.NET.Services.Tests
         }
 
         [Test]
-        public async Task SuccessSendEmailConfirmation()
+        public void SuccessSendEmailConfirmation()
         {
             var user = dbContext.Users.FirstOrDefault();
 
@@ -64,13 +60,16 @@ namespace LOVE.NET.Services.Tests
         {
             var user = dbContext.Users.FirstOrDefault(u => u.Id == "6666666");
 
-            var result = await emailService.VerifyEmailAsync(user.Email, MockToken);
+            var result = await emailService.VerifyEmailAsync(user?.Email, MockToken);
 
             var updatedUser = dbContext.Users.FirstOrDefault(u => u.Id == user.Id);
 
-            Assert.True(result.Succeeded);
-            Assert.True(updatedUser.EmailConfirmed);
-            Assert.False(updatedUser.LockoutEnabled);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Succeeded, Is.True);
+                Assert.That(updatedUser?.EmailConfirmed, Is.True);
+                Assert.That(updatedUser?.LockoutEnabled, Is.False);
+            });
         }
 
         [Test]
@@ -78,8 +77,8 @@ namespace LOVE.NET.Services.Tests
         {
             var result = await emailService.VerifyEmailAsync("66666", MockToken);
 
-            Assert.That(result.Errors.Count(), Is.GreaterThan(0));
-            Assert.True(result.Errors.Contains(Unauthorized));
+            Assert.That(result.Errors, Is.Not.Empty);
+            Assert.That(result.Errors, Does.Contain(Unauthorized));
         }
 
         [Test]
@@ -91,10 +90,10 @@ namespace LOVE.NET.Services.Tests
 
             var user = dbContext.Users.FirstOrDefault();
 
-            var result = await emailService.VerifyEmailAsync(user.Email, MockToken);
+            var result = await emailService.VerifyEmailAsync(user?.Email, MockToken);
 
-            Assert.That(result.Errors.Count(), Is.GreaterThan(0));
-            Assert.True(result.Errors.Contains(IncorrectEmail));
+            Assert.That(result.Errors, Is.Not.Empty);
+            Assert.That(result.Errors, Does.Contain(IncorrectEmail));
         }
 
         [Test]
@@ -102,16 +101,16 @@ namespace LOVE.NET.Services.Tests
         {
             var user = dbContext.Users.FirstOrDefault(u => u.Id == "6666666");
 
-            var result = await emailService.ResendEmailConfirmationLinkAsync(user.Email, "origin");
-            Assert.True(result.Succeeded);
+            var result = await emailService.ResendEmailConfirmationLinkAsync(user?.Email, "origin"); 
+            Assert.That(result.Succeeded, Is.True);
         }
 
         [Test]
         public async Task FailResendEmailConfirmationLinkChangedEmailInTheUrl()
         {
             var result = await emailService.ResendEmailConfirmationLinkAsync("changedEmail", "origin");
-            Assert.That(result.Errors.Count(), Is.GreaterThan(0));
-            Assert.True(result.Errors.Contains(EmailDoesntMatch));
+            Assert.That(result.Errors, Is.Not.Empty);
+            Assert.That(result.Errors, Does.Contain(EmailDoesntMatch));
         }
 
         [Test]
@@ -119,9 +118,9 @@ namespace LOVE.NET.Services.Tests
         {
             var user = dbContext.Users.FirstOrDefault(x => !x.LockoutEnabled);
 
-            var result = await emailService.ResendEmailConfirmationLinkAsync(user.Email, "origin");
-            Assert.That(result.Errors.Count(), Is.GreaterThan(0));
-            Assert.True(result.Errors.Contains(EmailAlreadyVerified));
+            var result = await emailService.ResendEmailConfirmationLinkAsync(user?.Email, "origin");
+            Assert.That(result.Errors, Is.Not.Empty);
+            Assert.That(result.Errors, Does.Contain(EmailAlreadyVerified));
         }
     }
 }

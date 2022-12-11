@@ -1,27 +1,25 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-
-using CloudinaryDotNet.Actions;
-
-using LOVE.NET.Data;
-using LOVE.NET.Data.Common.Repositories;
-using LOVE.NET.Data.Models;
-using LOVE.NET.Data.Repositories.Chat;
-using LOVE.NET.Data.Repositories.Countries;
-using LOVE.NET.Data.Repositories.Users;
-using LOVE.NET.Services.Images;
-using LOVE.NET.Services.Mapping;
-using LOVE.NET.Web.ViewModels;
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-
-using Moq;
-
-namespace LOVE.NET.Services.Tests
+﻿namespace LOVE.NET.Services.Tests
 {
+    using System.Linq.Expressions;
+    using System.Reflection;
+
+    using LOVE.NET.Data;
+    using LOVE.NET.Data.Common.Repositories;
+    using LOVE.NET.Data.Models;
+    using LOVE.NET.Data.Repositories.Chat;
+    using LOVE.NET.Data.Repositories.Countries;
+    using LOVE.NET.Data.Repositories.Users;
+    using LOVE.NET.Services.Images;
+    using LOVE.NET.Services.Mapping;
+    using LOVE.NET.Web.ViewModels.Identity;
+
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+
+    using Moq;
+
     using static LOVE.NET.Common.GlobalConstants;
 
     public class TestsSetUp
@@ -264,7 +262,7 @@ namespace LOVE.NET.Services.Tests
             await dbContext.AddRangeAsync(messages);
             await dbContext.SaveChangesAsync();
             var test = dbContext.Users.Include(u => u.Roles).ToList();
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(typeof(BaseCredentialsModel).GetTypeInfo().Assembly);
         }
 
         public static IConfigurationRoot GetIConfiguration()
@@ -416,7 +414,7 @@ namespace LOVE.NET.Services.Tests
             return mockRepository.Object;
         }
 
-        public IImagesService GetIImagesService()
+        public static IImagesService GetIImagesService()
         {
             var mockService = new Mock<IImagesService>();
 

@@ -1,9 +1,6 @@
-﻿using System.Linq;
-
-namespace LOVE.NET.Web.Controllers
+﻿namespace LOVE.NET.Web.Controllers
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
