@@ -276,8 +276,8 @@ namespace LOVE.NET.Services.Tests
                 .ReturnsAsync(IdentityResult.Success)
                 .Callback<ApplicationUser, DateTimeOffset?>(async (x, y) =>
                 {
-                    x.LockoutEnd = y;
-                    await dbContext.Set<ApplicationUser>().AddAsync(x);
+                    var trackedUser = await dbContext.Set<ApplicationUser>().FindAsync(x.Id);
+                    trackedUser.LockoutEnd = y;
                     await dbContext.SaveChangesAsync();
                 });
 
