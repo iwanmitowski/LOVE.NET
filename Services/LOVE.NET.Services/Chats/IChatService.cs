@@ -1,6 +1,5 @@
 ﻿namespace LOVE.NET.Services.Chats
 {
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using LOVE.NET.Data.Models;
@@ -8,8 +7,8 @@
 
     public interface IChatService
     {
-        public ChatViewModel GetChat(ChatRequestViewModel request);
+        ChatViewModel GetChat(ChatRequestViewModel request);
 
-        public Task SaveMessageAsync(MessageDto message);
+        Task SaveMessageAsync(MessageDto message);
     }
 }

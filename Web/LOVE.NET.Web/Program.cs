@@ -5,6 +5,7 @@
     using System.Text;
 
     using CloudinaryDotNet;
+
     using LOVE.NET.Data;
     using LOVE.NET.Data.Common;
     using LOVE.NET.Data.Common.Repositories;
@@ -24,7 +25,6 @@
     using LOVE.NET.Services.Images;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Services.Messaging;
-    using LOVE.NET.Web.ViewModels;
     using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;

@@ -6,8 +6,8 @@
 
     public interface ICountriesService
     {
-        public IEnumerable<CountryViewModel> GetAll();
+        IEnumerable<CountryViewModel> GetAll();
 
-        public CountryCitiesViewModel Get(int id);
+        CountryCitiesViewModel Get(int id);
     }
 }

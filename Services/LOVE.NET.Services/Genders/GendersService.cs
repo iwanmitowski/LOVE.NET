@@ -4,7 +4,6 @@
 
     using LOVE.NET.Data.Common.Repositories;
     using LOVE.NET.Data.Models;
-    using LOVE.NET.Data.Repositories;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.ViewModels.Genders;
 

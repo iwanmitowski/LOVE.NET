@@ -8,8 +8,6 @@
 
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Mapping;
-    using LOVE.NET.Web.ViewModels.Countries;
-    using LOVE.NET.Web.ViewModels.Genders;
     using LOVE.NET.Web.ViewModels.Images;
 
     public class UserDetailsViewModel : IMapFrom<ApplicationUser>, IHaveCustomMappings

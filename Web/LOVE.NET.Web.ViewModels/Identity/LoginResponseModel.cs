@@ -7,9 +7,6 @@
 
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Mapping;
-    using LOVE.NET.Web.ViewModels.Countries;
-
-    // TODO: Load Images, Matches, Likes
     public class LoginResponseModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
     {
         public string Id { get; set; }

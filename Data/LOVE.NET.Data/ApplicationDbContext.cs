@@ -24,8 +24,6 @@
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
-
         public DbSet<Country> Countries { get; set; }
 
         public DbSet<Image> Images { get; set; }

@@ -7,7 +7,6 @@
     using LOVE.NET.Common;
     using LOVE.NET.Services.Dashboard;
     using LOVE.NET.Web.ViewModels.Dashboard;
-    using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;

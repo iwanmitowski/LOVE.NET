@@ -7,8 +7,8 @@
 
     public interface IImagesService
     {
-        public Task<string> UploadImageAsync(IFormFile image);
+        Task<string> UploadImageAsync(IFormFile image);
 
-        public Task<IEnumerable<string>> UploadImagesAsync(IEnumerable<IFormFile> images);
+        Task<IEnumerable<string>> UploadImagesAsync(IEnumerable<IFormFile> images);
     }
 }

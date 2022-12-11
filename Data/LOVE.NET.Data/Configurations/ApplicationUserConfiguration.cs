@@ -1,6 +1,7 @@
 ﻿namespace LOVE.NET.Data.Configurations
 {
     using LOVE.NET.Data.Models;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

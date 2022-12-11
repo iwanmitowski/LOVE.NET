@@ -7,12 +7,12 @@
 
     public interface IDashboardService
     {
-        public StatisticsViewModel GetStatistics();
+        StatisticsViewModel GetStatistics();
 
         Task<DashboardUserViewModel> GetUsersAsync(
             DashboardUserRequestViewModel request,
             string loggedUserId);
 
-        public Task<Result> ModerateAsync(ModerateUserViewModel request);
+        Task<Result> ModerateAsync(ModerateUserViewModel request);
     }
 }

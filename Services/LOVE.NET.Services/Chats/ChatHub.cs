@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using LOVE.NET.Data.Models;
+
     using Microsoft.AspNetCore.SignalR;
 
     public class ChatHub : Hub

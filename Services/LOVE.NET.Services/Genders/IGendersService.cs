@@ -6,6 +6,6 @@
 
     public interface IGendersService
     {
-        public IEnumerable<GenderViewModel> GetAll();
+        IEnumerable<GenderViewModel> GetAll();
     }
 }

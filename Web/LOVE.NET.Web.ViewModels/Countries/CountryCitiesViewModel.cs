@@ -1,9 +1,9 @@
 ﻿namespace LOVE.NET.Web.ViewModels.Countries
 {
     using System.Collections.Generic;
-    using System.Linq;
 
     using AutoMapper;
+
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Mapping;
 

@@ -9,12 +9,12 @@
 
     public interface IDatingService
     {
-        public IEnumerable<UserMatchViewModel> GetNotSwipedUsers(string userId);
+        IEnumerable<UserMatchViewModel> GetNotSwipedUsers(string userId);
 
-        public UserMatchViewModel GetCurrentMatch(string userId);
+        UserMatchViewModel GetCurrentMatch(string userId);
 
-        public MatchesViewModel GetMatches(MatchesRequestViewModel request);
+        MatchesViewModel GetMatches(MatchesRequestViewModel request);
 
-        public Task<Result> LikeAsync(string userId, string likedUserId);
+        Task<Result> LikeAsync(string userId, string likedUserId);
     }
 }
