@@ -99,6 +99,7 @@ export default function SwipingCard(props) {
                 ) : (
                   <Button
                     className="m-2"
+                    variant="danger"
                     onClick={() =>
                       setUserBanRequest((prevState) => {
                         return {

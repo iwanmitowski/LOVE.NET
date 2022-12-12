@@ -37,94 +37,102 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
       <Main>
-        <Routes>
-          <Route path="/" element={homeComponent} />
-          <Route
-            path="/admin/dashboard"
-            element={
-              <AuthGuard>
-                <AdminGuard>
-                  <Dashboard />
-                </AdminGuard>
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/admin/users"
-            element={
-              <AuthGuard>
-                <AdminGuard>
-                  <UsersContainer />
-                </AdminGuard>
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/admin/users/banned"
-            element={
-              <AuthGuard>
-                <AdminGuard>
-                  <UsersContainer showBanned />
-                </AdminGuard>
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/matches"
-            element={
-              <AuthGuard>
-                <Matches />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <NoAuthGuard>
-                <Login />
-              </NoAuthGuard>
-            }
-          />
-          <Route
-            path="/logout"
-            element={
-              <AuthGuard>
-                <Logout />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <NoAuthGuard>
-                <Register />
-              </NoAuthGuard>
-            }
-          />
-          <Route
-            path="/verify"
-            element={
-              <NoAuthGuard>
-                <Verify />
-              </NoAuthGuard>
-            }
-          />
-          <Route
-            path="/user/:id"
-            element={
-              <AuthGuard>
-                <UserDetails />
-              </AuthGuard>
-            }
-          />
-          <Route path="/forbidden" element={<Forbidden />} />
-          <Route path="/notfound" element={<NotFound />} />
-          <Route path="*" element={<Navigate to="/notfound" replace />} />
-        </Routes>
+        <Header />
+        <div style={{ minWidth: "280px" }}></div>
+        <div className="col-md-10">
+          <div>
+            <div className="p-3" style={{minHeight: "100vh"}}>
+              <Routes style={{ overflowX: "hidden", minHeight: "100vh" }}>
+                <Route path="/" element={homeComponent} />
+                <Route
+                  path="/admin/dashboard"
+                  element={
+                    <AuthGuard>
+                      <AdminGuard>
+                        <Dashboard />
+                      </AdminGuard>
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/admin/users"
+                  element={
+                    <AuthGuard>
+                      <AdminGuard>
+                        <UsersContainer />
+                      </AdminGuard>
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/admin/users/banned"
+                  element={
+                    <AuthGuard>
+                      <AdminGuard>
+                        <UsersContainer showBanned />
+                      </AdminGuard>
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/matches"
+                  element={
+                    <AuthGuard>
+                      <Matches />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={
+                    <NoAuthGuard>
+                      <Login />
+                    </NoAuthGuard>
+                  }
+                />
+                <Route
+                  path="/logout"
+                  element={
+                    <AuthGuard>
+                      <Logout />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/register"
+                  element={
+                    <NoAuthGuard>
+                      <Register />
+                    </NoAuthGuard>
+                  }
+                />
+                <Route
+                  path="/verify"
+                  element={
+                    <NoAuthGuard>
+                      <Verify />
+                    </NoAuthGuard>
+                  }
+                />
+                <Route
+                  path="/user/:id"
+                  element={
+                    <AuthGuard>
+                      <UserDetails />
+                    </AuthGuard>
+                  }
+                />
+                <Route path="/forbidden" element={<Forbidden />} />
+                <Route path="/notfound" element={<NotFound />} />
+                <Route path="*" element={<Navigate to="/notfound" replace />} />
+              </Routes>
+            </div>
+          </div>
+
+          <Footer />
+        </div>
       </Main>
-      <Footer />
     </div>
   );
 }

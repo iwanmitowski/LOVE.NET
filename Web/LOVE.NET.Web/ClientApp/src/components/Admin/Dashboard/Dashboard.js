@@ -25,7 +25,7 @@ export default function Dashboard() {
     <Loader />
   ) : (
     statistics && (
-      <div className="container d-flex flex-wrap justify-content-center">
+      <div className="d-flex flex-wrap justify-content-center">
         <StatisticCard
           header={
             <Link className="nav-link" to="/admin/users">

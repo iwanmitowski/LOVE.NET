@@ -11,9 +11,6 @@ export default function ImageCard(props) {
 
   return (
     <div className={`card flex-sm-fill col-md-3 ${styles.card}`}>
-      <h1>
-        <span>{`${imageId} ${isPfp}`}</span>
-      </h1>
       <img className="card-img-top" src={imageUrl} />
       <div className="card-body d-flex  justify-content-center">
         {!isPfp && (
