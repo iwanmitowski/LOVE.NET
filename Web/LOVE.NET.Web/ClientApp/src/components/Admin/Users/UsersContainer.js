@@ -4,6 +4,7 @@ import ModerateModal from "../../Modals/Moderate/ModerateModal";
 
 import * as dashboardService from "../../../services/dashboardService";
 import Loader from "../../Shared/Loader/Loader";
+import Search from "../../Shared/Search/Search";
 
 export default function UsersContainer(props) {
   const [users, setUsers] = useState([]);
@@ -73,6 +74,7 @@ export default function UsersContainer(props) {
     <Loader />
   ) : (
     <Fragment>
+      <Search />
       <SwipingCardContainer
         fetchUsers={fetchUsers}
         hasMoreUsersToLoad={hasMore}
