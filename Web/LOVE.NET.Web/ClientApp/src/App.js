@@ -22,6 +22,7 @@ import "./App.css";
 import Dashboard from "./components/Admin/Dashboard/Dashboard";
 import AdminGuard from "./components/Shared/guards/AdminGuard";
 import UsersContainer from "./components/Admin/Users/UsersContainer";
+import DatingAdvices from "./components/Static/DatingAdvices";
 
 function App() {
   const { isLogged, userLogout, user } = useIdentityContext();
@@ -123,6 +124,7 @@ function App() {
                     </AuthGuard>
                   }
                 />
+                <Route path="/info/advices" element={<DatingAdvices />} />
                 <Route path="/forbidden" element={<Forbidden />} />
                 <Route path="/notfound" element={<NotFound />} />
                 <Route path="*" element={<Navigate to="/notfound" replace />} />
