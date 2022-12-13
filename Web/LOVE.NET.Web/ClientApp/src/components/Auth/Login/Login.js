@@ -81,7 +81,7 @@ export default function Login() {
               })}
             </div>
           )}
-          <Button variant="primary" type="submit">
+          <Button variant="dark" type="submit">
             Login
           </Button>
           <Form.Group>

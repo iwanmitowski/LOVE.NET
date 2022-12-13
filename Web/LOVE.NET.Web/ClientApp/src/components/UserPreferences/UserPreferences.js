@@ -28,7 +28,7 @@ export default function UserPreferences(props) {
   const users = props.users;
 
   useEffect(() => {
-    if (!preferences){
+    if (!preferences) {
       setUserPreferences(defaultPreferences);
     }
   }, []);
@@ -71,7 +71,7 @@ export default function UserPreferences(props) {
 
     let newPreferences = {
       ...preferences,
-    }
+    };
 
     if (currentName === "aroundTheWorld") {
       newPreferences = {
@@ -79,9 +79,10 @@ export default function UserPreferences(props) {
         [currentName]: !preferences.aroundTheWorld,
       };
     } else {
-      newPreferences = {...newPreferences,
-      [currentName]: parseInt(currentValue)
-      }
+      newPreferences = {
+        ...newPreferences,
+        [currentName]: parseInt(currentValue),
+      };
     }
 
     setUserPreferences(newPreferences);
@@ -97,6 +98,7 @@ export default function UserPreferences(props) {
         <RangeSlider
           name="maxAge"
           min={18}
+          variant="dark"
           value={preferences.maxAge}
           onChange={onInputChange}
         />
@@ -116,6 +118,7 @@ export default function UserPreferences(props) {
               step={10}
               max={600}
               name="maxDistance"
+              variant="dark"
               value={preferences.maxDistance}
               onChange={onInputChange}
             />

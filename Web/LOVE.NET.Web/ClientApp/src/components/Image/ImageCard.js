@@ -17,7 +17,7 @@ export default function ImageCard(props) {
           <div>
             <Button
               className={styles.button}
-              variant="primary"
+              variant="dark"
               onClick={() => setNewProfilePicture(imageId)}
             >
               Set new profile picture

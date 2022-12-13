@@ -203,7 +203,7 @@ export default function UserForm(props) {
               })}
             </div>
           )}
-          <Button variant="primary" type="submit">
+          <Button variant="dark" type="submit">
             {isLogged ? "Edit" : "Register"}
           </Button>
         </Form>
