@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import MatchModal from "./Modals/Match/MatchModal";
 import UserPreferences from "./UserPreferences/UserPreferences";
 import Loader from "./Shared/Loader/Loader";
+import NotLoggedHome from "./NotLoggedHome/NotLoggedHome";
 
 import * as datingService from "../services/datingService";
 
@@ -70,11 +71,11 @@ export default function Home() {
   }, [isLogged]);
 
   if (!isLogged) {
-    return <h1>Don't you want to find your beloved one ?</h1>;
+    return <NotLoggedHome />;
   }
 
   return isLoading ? (
-    <Loader isFullScreen/>
+    <Loader isFullScreen />
   ) : (
     <Fragment>
       <UserPreferences filterUsers={setFilteredUsers} users={usersToSwipe} />
