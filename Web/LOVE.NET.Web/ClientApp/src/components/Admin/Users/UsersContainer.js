@@ -1,16 +1,16 @@
 import { useState, useEffect, Fragment } from "react";
 import SwipingCardContainer from "../../SwipingCard/SwipingCardContainer";
 import ModerateModal from "../../Modals/Moderate/ModerateModal";
-
-import * as dashboardService from "../../../services/dashboardService";
 import Loader from "../../Shared/Loader/Loader";
 import Search from "../../Shared/Search/Search";
 
+import * as dashboardService from "../../../services/dashboardService";
+
 export default function UsersContainer(props) {
   const [users, setUsers] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
   const [request, setRequest] = useState({
     showBanned: !!props.showBanned,
+    hasMore: true,
     search: null,
     page: 1,
   });
@@ -35,25 +35,34 @@ export default function UsersContainer(props) {
     }
   };
 
-  const fetchUsers = () => {
-    if (hasMore) {
-      if (users.length === 0)
-      {
+  const fetchUsers = (pageReset) => {
+    if (request.hasMore) {
+      if (users.length === 0) {
         setIsLoading(() => true);
       }
 
       const page = Math.floor(users.length / 10) + 1;
 
+      if (!!pageReset) {
+        setUsers([]);
+      }
+
       dashboardService
-        .getUsers({ ...request, page })
+        .getUsers({ ...request, page: pageReset || page })
         .then((res) => {
           setUsers((prevState) => {
-            const currentUsers = [...prevState, ...res.users];
+            let currentUsers = [...prevState, ...res.users];
+            currentUsers = [
+              ...new Map(
+                currentUsers.map((item) => [item["id"], item])
+              ).values(),
+            ];
+
             const hasMore = currentUsers.length < res.totalUsers;
-            setHasMore(hasMore);
             setRequest((prevRequest) => {
               return {
                 ...prevRequest,
+                hasMore,
                 page,
               };
             });
@@ -74,10 +83,14 @@ export default function UsersContainer(props) {
     <Loader />
   ) : (
     <Fragment>
-      <Search />
+      <Search
+        search={() => fetchUsers(1)}
+        setRequest={setRequest}
+        request={request}
+      />
       <SwipingCardContainer
         fetchUsers={fetchUsers}
-        hasMoreUsersToLoad={hasMore}
+        hasMoreUsersToLoad={request.hasMore}
         users={users}
         setUserBanRequest={setUserBanRequest}
       />
