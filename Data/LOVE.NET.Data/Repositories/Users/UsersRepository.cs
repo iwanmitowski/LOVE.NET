@@ -20,6 +20,9 @@
             return this.Context.Users
                 .Include(u => u.City)
                 .Include(u => u.Country)
+                .Include(u => u.Images
+                    .Where(i => !i.IsDeleted)
+                    .OrderByDescending(i => i.IsProfilePicture))
                 .Include(u => u.LikesReceived)
                 .Include(u => u.LikesSent)
                 .Include(u => u.RefreshTokens);

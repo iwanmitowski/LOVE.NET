@@ -1,6 +1,3 @@
-import Navbar from "react-bootstrap/NavBar";
-import Nav from "react-bootstrap/Nav";
-import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import { Fragment } from "react";
 
@@ -78,7 +75,7 @@ export default function Header() {
             isLogged && (
               <div className="d-inline-flex text-wrap">
                 <img
-                  src="https://github.com/mdo.png"
+                  src={user.profilePicture}
                   alt=""
                   width="25"
                   height="25"
