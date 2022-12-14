@@ -9,12 +9,17 @@ import * as chatService from "../services/chatService";
 
 import { useChat } from "../hooks/useChat";
 import Loader from "./Shared/Loader/Loader";
+import Search from "./Shared/Search/Search";
 
 export default function Matches() {
   const navigate = useNavigate();
   const { user, isLogged, userLogout } = useIdentityContext();
   const chatState = useChat();
-  const [hasMore, setHasMore] = useState(true);
+  const [request, setRequest] = useState({
+    hasMore: true,
+    search: null,
+    page: 1,
+  });
   const [matches, setMatches] = useState([]);
   const [chatUser, setChatUser] = useState();
   const [chat, setChat] = useState([]);
@@ -30,21 +35,37 @@ export default function Matches() {
     }
   }, [chatUser]);
 
-  const fetchUsers = () => {
-    if (hasMore) {
+  const fetchUsers = (pageReset) => {
+    if (request.hasMore) {
       if (matches.length === 0) {
         setIsLoading(() => true);
       }
-      
+
       const page = Math.floor(matches.length / 10) + 1;
 
+      if (!!pageReset) {
+        setMatches([]);
+      }
+
       datingService
-        .getMatches({ userId: user.id, page })
+        .getMatches({ ...request, userId: user.id, page: pageReset || page })
         .then((res) => {
           setMatches((prevState) => {
-            const currentMatches = [...prevState, ...res.matches];
+            let currentMatches = [...prevState, ...res.matches];
+            currentMatches = [
+              ...new Map(
+                currentMatches.map((item) => [item["id"], item])
+              ).values(),
+            ];
+
             const hasMore = currentMatches.length < res.totalMatches;
-            setHasMore(hasMore);
+            setRequest((prevRequest) => {
+              return {
+                ...prevRequest,
+                hasMore,
+                page,
+              };
+            });
             return currentMatches;
           });
         })
@@ -111,9 +132,14 @@ export default function Matches() {
         sendMessage={chatState.sendMessage}
         fetchMessages={fetchMessages}
       />
+      <Search
+        search={() => fetchUsers(1)}
+        setRequest={setRequest}
+        request={request}
+      />
       <SwipingCardContainer
         fetchUsers={fetchUsers}
-        hasMoreUsersToLoad={hasMore}
+        hasMoreUsersToLoad={request.hasMore}
         users={matches}
         startChat={setChatUser}
       />

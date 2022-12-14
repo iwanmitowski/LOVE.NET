@@ -42,7 +42,7 @@
         {
             var user = this.usersRepository.WithAllInformation(u => u.Id == request.UserId).FirstOrDefault();
 
-            var matches = user.LikesSent
+            var matchesIds = user.LikesSent
                         .Where(l =>
                             user.LikesReceived
                                 .Select(lr => lr.UserId)
@@ -51,16 +51,34 @@
                                         .Select(ls => ls.LikedUserId))
                                 .Contains(l.LikedUserId))
                         .OrderByDescending(ls => ls.CreatedOn)
-                        .Select(x => AutoMapperConfig.MapperInstance.Map<UserMatchViewModel>(x.LikedUser));
+                        .Select(x => x.LikedUserId)
+                        .ToList();
 
-            var totalMatches = matches.Count();
+            var matches = this.usersRepository
+                .WithAllInformation()
+                .To<UserMatchViewModel>();
 
-            matches = matches
-                .Skip((request.Page - 1) * DefaultTake)
-                .Take(DefaultTake)
-                .ToList();
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                var searchTerm = $"%{request.Search.Trim().ToLower()}%";
 
-            foreach (var match in matches)
+                matches = matches.Where(u =>
+                    EF.Functions.Like(u.UserName.ToLower(), searchTerm) ||
+                    EF.Functions.Like(u.Bio.ToLower(), searchTerm) ||
+                    EF.Functions.Like(u.CityName.ToLower(), searchTerm) ||
+                    EF.Functions.Like(u.CountryName.ToLower(), searchTerm) ||
+                    EF.Functions.Like(u.GenderName.ToLower(), searchTerm));
+            }
+
+            var matchesResult = matches
+               .Where(m => matchesIds.Contains(m.Id))
+               .Skip((request.Page - 1) * DefaultTake)
+               .Take(DefaultTake)
+               .ToList();
+
+            var totalMatches = matchesResult.Count();
+
+            foreach (var match in matchesResult)
             {
                 var roomId = string.Join(string.Empty, new[] { match.Id, request.UserId }.OrderBy(id => id));
                 match.RoomId = roomId;
@@ -68,7 +86,7 @@
 
             var result = new MatchesViewModel()
             {
-                Matches = matches,
+                Matches = matchesResult,
                 TotalMatches = totalMatches,
             };
 

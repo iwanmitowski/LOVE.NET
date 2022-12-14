@@ -23,9 +23,22 @@
                 .Include(u => u.Images
                     .Where(i => !i.IsDeleted)
                     .OrderByDescending(i => i.IsProfilePicture))
-                .Include(u => u.LikesReceived)
                 .Include(u => u.LikesSent)
-                .Include(u => u.RefreshTokens);
+                    .ThenInclude(u => u.LikedUser)
+                        .ThenInclude(lu => lu.City)
+                        .ThenInclude(lu => lu.Country)
+                .Include(u => u.LikesSent)
+                    .ThenInclude(u => u.LikedUser)
+                    .ThenInclude(lu => lu.Gender)
+                .Include(u => u.LikesSent)
+                    .ThenInclude(u => u.LikedUser)
+                    .ThenInclude(lu => lu.Images)
+                .Include(u => u.LikesSent)
+                    .Where(u => !u.IsDeleted)
+                .Include(u => u.RefreshTokens)
+                .Include(u => u.LikesReceived)
+                .Include(lu => lu.Gender)
+                .Include(u => u.Roles);
         }
 
         public IQueryable<ApplicationUser> WithAllInformation(
