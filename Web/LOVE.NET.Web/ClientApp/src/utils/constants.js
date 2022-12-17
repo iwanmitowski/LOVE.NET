@@ -1,6 +1,8 @@
 export const globalConstants = {
-  BASE_URL: "https://localhost:44319",
-  API_URL: "https://localhost:44319/api/",
+  // BASE_URL: "https://localhost:44319",
+  // API_URL: "https://localhost:44319/api/",
+  BASE_URL: "https://lovenet.azurewebsites.net",
+  API_URL: "https://lovenet.azurewebsites.net/api/",
 };
 
 export const identityConstants = {

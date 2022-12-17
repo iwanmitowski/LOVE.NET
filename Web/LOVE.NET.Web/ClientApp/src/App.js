@@ -45,6 +45,7 @@ function App() {
           <div>
             <div className="p-3" style={{minHeight: "100vh"}}>
               <Routes style={{ overflowX: "hidden", minHeight: "100vh" }}>
+                <Route path="/LOVE.NET" element={homeComponent} />
                 <Route path="/" element={homeComponent} />
                 <Route
                   path="/admin/dashboard"

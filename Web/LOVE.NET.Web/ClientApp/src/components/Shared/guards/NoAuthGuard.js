@@ -5,7 +5,7 @@ export default function NoAuthGuard({ children }) {
   const { isLogged } = useIdentityContext();
 
   if (isLogged) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/LOVE.NET" replace />;
   }
 
   return children ? children : <Outlet />;

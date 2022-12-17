@@ -23,7 +23,7 @@ export default function Header() {
       className="d-flex flex-column flex-shrink-0 p-3 bg-light fixed-top"
       style={{ width: "280px", minHeight: "100vh", textAlign: "left" }}
     >
-      <Link className="nav-link" to="/">
+      <Link className="nav-link" to="/LOVE.NET">
         LOVE.NET
       </Link>
       <hr />
@@ -31,7 +31,7 @@ export default function Header() {
         {isLogged && !user.isAdmin && (
           <Fragment>
             <li className="nav-item">
-              <Link className="nav-link" to="/">
+              <Link className="nav-link" to="/LOVE.NET">
                 <FontAwesomeIcon icon={faWind} /> Swipe
               </Link>
             </li>
