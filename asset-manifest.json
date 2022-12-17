@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/LOVE.NET/static/css/main.bd75ef46.css",
+    "main.js": "/LOVE.NET/static/js/main.de45691c.js",
+    "static/js/787.befaed7e.chunk.js": "/LOVE.NET/static/js/787.befaed7e.chunk.js",
+    "index.html": "/LOVE.NET/index.html",
+    "main.bd75ef46.css.map": "/LOVE.NET/static/css/main.bd75ef46.css.map",
+    "main.de45691c.js.map": "/LOVE.NET/static/js/main.de45691c.js.map",
+    "787.befaed7e.chunk.js.map": "/LOVE.NET/static/js/787.befaed7e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bd75ef46.css",
+    "static/js/main.de45691c.js"
+  ]
+}
