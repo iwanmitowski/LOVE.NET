@@ -47,7 +47,7 @@
             var builder = WebApplication.CreateBuilder(args);
             ConfigureServices(builder.Services, builder.Configuration);
             var app = builder.Build();
-            Configure(app);
+            Configure(app, builder.Configuration);
             app.Run();
         }
 
@@ -157,30 +157,31 @@
             services.AddScoped<IChatService, ChatService>();
         }
 
-        private static void Configure(WebApplication app)
+        private static void Configure(WebApplication app, IConfiguration configuration)
         {
-            // Seed data on application startup
-            using (var serviceScope = app.Services.CreateScope())
-            {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                //dbContext.Database.EnsureDeleted();
-                dbContext.Database.Migrate();
-                new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
-            }
-
             AutoMapperConfig.RegisterMappings(typeof(BaseCredentialsModel).GetTypeInfo().Assembly);
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.RoutePrefix = string.Empty;
+            });
 
             if (app.Environment.IsDevelopment())
             {
+                // Seed data on application startup
+                using (var serviceScope = app.Services.CreateScope())
+                {
+                    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                    //dbContext.Database.EnsureDeleted();
+                    dbContext.Database.Migrate();
+                    new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+                }
+
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
-                app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                    options.RoutePrefix = string.Empty;
-                });
             }
             else
             {
@@ -189,7 +190,7 @@
             }
 
             app.UseCors(x => x
-               .WithOrigins("http://localhost:3000")
+               .WithOrigins(configuration[UrlBase])
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials());

@@ -5,7 +5,9 @@
     <UserSecretsId>aspnet-LOVE.NET-BBB373B5-EF3F-4DBB-B8AA-7152CEC275BF</UserSecretsId>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-
+	<PropertyGroup>
+		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+	</PropertyGroup>
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -23,6 +25,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.5" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />

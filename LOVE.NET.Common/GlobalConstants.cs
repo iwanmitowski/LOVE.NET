@@ -18,6 +18,8 @@
 
         public const string AuthSettingsAudience = "AuthSettings:Audience";
 
+        public const string UrlBase = "Url:Base";
+
         public const string SendGridApiKey = "SendGrid:ApiKey";
 
         public const string CloudinaryCloudName = "Cloudinary:CloudName";
