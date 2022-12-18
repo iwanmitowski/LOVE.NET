@@ -85,13 +85,13 @@
         {
             var images = new List<IFormFile>();
 
+            if (model.Image != null)
+            {
+                images.Add(model.Image);
+            }
+
             if (model?.NewImages?.Any() == true)
             {
-                if (model.Image != null)
-                {
-                    images.Add(model.Image);
-                }
-
                 images.AddRange(model.NewImages);
             }
 
@@ -221,9 +221,12 @@
 
             var updatedImages = new List<Image>();
 
-            foreach (var item in model.Images)
+            if (model.Images?.Any() == true)
             {
-                updatedImages.Add(JsonConvert.DeserializeObject<Image>(item));
+                foreach (var item in model.Images)
+                {
+                    updatedImages.Add(JsonConvert.DeserializeObject<Image>(item));
+                }
             }
 
             foreach (var image in user.Images)
