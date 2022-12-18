@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 export default function NotLoggedHome() {
   return (
     <div style={{ textAlign: "left" }}>
-            <h1>{process.env.NODE_ENV}</h1>
       <div className="p-5 mb-4 bg-light rounded-3 border border-danger">
         <div className="container-fluid py-5">
           <h1 className="display-5 fw-bold">Love.net</h1>
