@@ -28,7 +28,7 @@ export default function UsersContainer(props) {
     if (!!updatedUser) {
       setUsers((prevState) => {
         const updatedUsers = prevState.map((u) =>
-          u.id === updatedUser.id ? { ...u, isBanned: updatedUser.isBan } : u
+          u.id === updatedUser.id ? { ...u, isBanned: updatedUser.isBanned } : u
         );
         return updatedUsers;
       });

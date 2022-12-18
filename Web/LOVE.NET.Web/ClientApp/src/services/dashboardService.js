@@ -25,7 +25,7 @@ export async function getUsers(request) {
 
 export async function moderateUser(request) {
   try {
-    if (new Date(request.bannedUntil) < new Date()) {
+    if (request.bannedUntil && new Date(request.bannedUntil) < new Date()) {
       throw new Error("Can't ban user in the past");
     }
     await instance.post(`${baseUrl}/moderate`, request);

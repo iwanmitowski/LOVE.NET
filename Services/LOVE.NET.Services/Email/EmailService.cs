@@ -83,7 +83,7 @@
                 return IncorrectEmail;
             }
 
-            user.LockoutEnabled = false;
+            user.LockoutEnabled = true;
             await this.userManager.UpdateAsync(user);
 
             return true;
@@ -98,7 +98,7 @@
                 return EmailDoesntMatch;
             }
 
-            if (!user.LockoutEnabled)
+            if (user.LockoutEnabled)
             {
                 return EmailAlreadyVerified;
             }
