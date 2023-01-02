@@ -35,6 +35,11 @@
                     u.LikesReceived.Any(lr => lr.UserId == userId) == false)
                 .To<UserMatchViewModel>();
 
+            foreach (var user in notSwipedUsers)
+            {
+                user.Images = user.Images.OrderByDescending(i => i.IsProfilePicture).ToList();
+            }
+
             return notSwipedUsers;
         }
 
@@ -82,6 +87,7 @@
             {
                 var roomId = string.Join(string.Empty, new[] { match.Id, request.UserId }.OrderBy(id => id));
                 match.RoomId = roomId;
+                match.Images = match.Images.OrderByDescending(i => i.IsProfilePicture).ToList();
             }
 
             var result = new MatchesViewModel()
