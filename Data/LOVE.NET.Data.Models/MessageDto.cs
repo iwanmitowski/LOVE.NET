@@ -2,7 +2,9 @@
 {
     using System;
 
-    public class MessageDto
+    using LOVE.NET.Services.Mapping;
+
+    public class MessageDto : IMapFrom<Message>, IMapTo<Message>
     {
         public string RoomId { get; set; }
 

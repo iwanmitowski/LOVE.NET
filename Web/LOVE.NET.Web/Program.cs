@@ -159,7 +159,9 @@
 
         private static void Configure(WebApplication app, IConfiguration configuration)
         {
-            AutoMapperConfig.RegisterMappings(typeof(BaseCredentialsModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(
+                typeof(BaseCredentialsModel).GetTypeInfo().Assembly,
+                typeof(MessageDto).GetTypeInfo().Assembly);
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>
