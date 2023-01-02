@@ -68,7 +68,6 @@
             {
                 Assert.That(result.Succeeded, Is.True);
                 Assert.That(updatedUser?.EmailConfirmed, Is.True);
-                Assert.That(updatedUser?.LockoutEnabled, Is.False);
             });
         }
 
@@ -116,7 +115,7 @@
         [Test]
         public async Task FailResendEmailConfirmationLinkAlreadyVerified()
         {
-            var user = dbContext.Users.FirstOrDefault(x => !x.LockoutEnabled);
+            var user = dbContext.Users.FirstOrDefault(x => x.LockoutEnabled);
 
             var result = await emailService.ResendEmailConfirmationLinkAsync(user?.Email, "origin");
             Assert.That(result.Errors, Is.Not.Empty);

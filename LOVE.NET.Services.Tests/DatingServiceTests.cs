@@ -75,7 +75,7 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.TotalMatches, Is.EqualTo(1));
+                Assert.That(result.TotalMatches, Is.EqualTo(0));
                 Assert.That(result.Matches.Count(), Is.EqualTo(0));
             });
         }

@@ -171,7 +171,7 @@
                     CreatedOn = DateTime.UtcNow,
                     Birthdate = Convert.ToDateTime("2004-10-17T00:00:00"),
                     Images = new List<Image>(images),
-                    LockoutEnabled = true,
+                    LockoutEnabled = false,
                 },
             };
 
@@ -262,7 +262,9 @@
             await dbContext.AddRangeAsync(messages);
             await dbContext.SaveChangesAsync();
             var test = dbContext.Users.Include(u => u.Roles).ToList();
-            AutoMapperConfig.RegisterMappings(typeof(BaseCredentialsModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(
+                typeof(BaseCredentialsModel).GetTypeInfo().Assembly,
+                typeof(MessageDto).GetTypeInfo().Assembly);
         }
 
         public static IConfigurationRoot GetIConfiguration()
@@ -324,6 +326,7 @@
                 {
                     var trackedUser = await dbContext.Set<ApplicationUser>().FindAsync(x.Id);
                     trackedUser.EmailConfirmed = true;
+
                     await dbContext.SaveChangesAsync();
                 });
 
