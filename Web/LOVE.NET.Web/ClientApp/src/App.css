@@ -51,10 +51,6 @@
   --bs-nav-pills-link-active-bg: #650202;
 }
 
-.dropup .dropdown-toggle::after {
-  margin: 5px;
-}
-
 #actions-dropdown{
   text-align: left !important;
 }

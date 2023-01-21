@@ -74,13 +74,6 @@ export default function Header() {
           title={
             isLogged && (
               <div className="d-inline-flex text-wrap">
-                <img
-                  src={user.profilePicture}
-                  alt=""
-                  width="25"
-                  height="25"
-                  className="rounded-circle me-2"
-                ></img>
                 <strong>Actions</strong>
               </div>
             )
