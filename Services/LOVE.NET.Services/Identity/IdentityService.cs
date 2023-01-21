@@ -191,7 +191,9 @@
             var user = this.usersRepository.WithAllInformation(u => u.Id == id).FirstOrDefault();
 
             var result = AutoMapperConfig.MapperInstance.Map<UserDetailsViewModel>(user);
-            result.Images = result.Images.OrderByDescending(i => i.IsProfilePicture).ToList();
+            result.Images = result.Images
+                .Where(x => !x.IsDeleted)
+                .OrderByDescending(i => i.IsProfilePicture).ToList();
 
             return result;
         }
@@ -208,16 +210,6 @@
             }
 
             var imageUrls = new List<string>(await this.imagesService.UploadImagesAsync(images));
-
-            for (int i = 0; i < imageUrls.Count; i++)
-            {
-                user.Images.Add(new Image()
-                {
-                    CreatedOn = DateTime.UtcNow,
-                    Url = imageUrls[i],
-                    IsProfilePicture = false,
-                });
-            }
 
             var updatedImages = new List<Image>();
 
@@ -241,6 +233,16 @@
                 {
                     image.IsProfilePicture = updatedImage.IsProfilePicture;
                 }
+            }
+
+            for (int i = 0; i < imageUrls.Count; i++)
+            {
+                user.Images.Add(new Image()
+                {
+                    CreatedOn = DateTime.UtcNow,
+                    Url = imageUrls[i],
+                    IsProfilePicture = false,
+                });
             }
 
             user.UserName = model.UserName;
