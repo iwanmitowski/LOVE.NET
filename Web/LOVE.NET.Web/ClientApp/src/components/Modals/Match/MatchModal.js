@@ -1,4 +1,5 @@
 import { Button, Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import SwipingCardCarousel from "../../SwipingCard/SwipingCardCarousel";
 
 import styles from "../../SwipingCard/SwipingCard.module.css";
@@ -44,7 +45,10 @@ export default function MatchModal(props) {
       )}
 
       <Modal.Footer>
-        <Button onClick={onHide}>Close</Button>
+        <Button onClick={onHide} className="btn btn-danger">Close</Button>
+        <Link className="btn btn-priamry" role="button" to="/matches">
+          <Button>To matches</Button>
+        </Link>
       </Modal.Footer>
     </Modal>
   );
