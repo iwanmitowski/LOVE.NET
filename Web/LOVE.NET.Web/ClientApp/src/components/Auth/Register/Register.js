@@ -2,6 +2,7 @@
 import { useState, Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserForm from "../../User/UserForm";
+import TaCModal from "../../Modals/TaCModal/TaCModal";
 
 import * as genderService from "../../../services/genderService";
 import * as countryService from "../../../services/countryService";
@@ -24,6 +25,8 @@ export default function Register() {
     genderId: 1,
     image: null,
     newImages: [],
+    isReading: false,
+    isAgreed: false,
   });
 
   const [genders, setGenders] = useState([]);
@@ -44,6 +47,12 @@ export default function Register() {
     genderService.getAll().then((res) => setGenders(res));
   }, []);
 
+  const setIsReading = (isReading) => {
+    setUser((prevState) => {
+      return { ...prevState, isReading };
+    });
+  };
+
   const onInputChange = (e) => {
     setUser((prevState) => {
       let currentName = e.target.name;
@@ -56,10 +65,17 @@ export default function Register() {
         };
       }
 
-      if (currentName === 'newImages') {
+      if (currentName === "newImages") {
         return {
           ...prevState,
           [currentName]: e.target.files,
+        };
+      }
+
+      if (currentName === "isAgreed") {
+        return {
+          ...prevState,
+          isAgreed: !user.isAgreed,
         };
       }
 
@@ -75,14 +91,16 @@ export default function Register() {
   const onFormSubmit = (e) => {
     e.preventDefault();
 
-    identityService
-      .register(user)
-      .then(() => {
-        navigate(`/verify?email=${user.email}`);
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+    if (user.isAgreed) {
+      identityService
+        .register(user)
+        .then(() => {
+          navigate(`/verify?email=${user.email}`);
+        })
+        .catch((error) => {
+          setError(error.message);
+        });
+    }
   };
 
   return (
@@ -93,6 +111,7 @@ export default function Register() {
         countries={countries}
         onFormSubmit={onFormSubmit}
         onInputChange={onInputChange}
+        setIsReading={setIsReading}
         errorState={errorState}
       />
       <div className="mt-3">
@@ -103,6 +122,10 @@ export default function Register() {
           </Link>
         </p>
       </div>
+      <TaCModal
+        show={user.isReading}
+        onHide={() => setIsReading(false)}
+      ></TaCModal>
     </Fragment>
   );
 }

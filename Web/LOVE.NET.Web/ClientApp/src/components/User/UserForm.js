@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useState, useEffect } from "react";
@@ -6,6 +7,7 @@ import { useIdentityContext } from "../../hooks/useIdentityContext";
 import * as countryService from "../../services/countryService";
 
 import styles from "../Shared/Forms.module.css";
+import { Fragment } from "react";
 
 export default function UserForm(props) {
   const user = props.user;
@@ -13,6 +15,7 @@ export default function UserForm(props) {
   const countriesProp = props.countries;
   const onFormSubmit = props.onFormSubmit;
   const onInputChange = props.onInputChange;
+  const setIsReading = props.setIsReading;
   const [error] = props.errorState;
 
   const { isLogged } = useIdentityContext();
@@ -169,7 +172,7 @@ export default function UserForm(props) {
               type="file"
               name="newImages"
               multiple
-              value={user?.newImages?.length ? null : '' }
+              value={user?.newImages?.length ? null : ""}
               onChange={onInputChange}
               accept=".jpg,.jpeg,.png"
             />
@@ -196,6 +199,29 @@ export default function UserForm(props) {
               required
             />
           </Form.Group>
+          <Form.Group>
+            {!isLogged && (
+              <Fragment>
+                <Form.Check
+                  name="isAgreed"
+                  checked={user.isAgreed}
+                  onChange={onInputChange}
+                  required
+                  className="d-inline me-2"
+                />
+                <a
+                  href="#"
+                  className="d-inline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsReading(true);
+                  }}
+                >
+                  Read our terms and conditions...
+                </a>
+              </Fragment>
+            )}
+          </Form.Group>
           {error && (
             <div className="text-danger mb-3">
               {error.split("\n").map((message, key) => {
@@ -203,7 +229,11 @@ export default function UserForm(props) {
               })}
             </div>
           )}
-          <Button variant="dark" type="submit">
+          <Button
+            variant="dark"
+            type="submit"
+            disabled={isLogged ? null : user.isAgreed ? null : true}
+          >
             {isLogged ? "Edit" : "Register"}
           </Button>
         </Form>
