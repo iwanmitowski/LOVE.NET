@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
 
     using LOVE.NET.Services.Email;
+    using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -23,10 +24,42 @@
 
         [HttpGet]
         [AllowAnonymous]
+        [Route(SendResetPasswordLinkLinkRoute)]
+        public async Task<IActionResult> SendResetPasswordLinkAsync(string email)
+        {
+            var origin = this.Request.Headers[HeaderOrigin];
+
+            var result = await this.emailService.SendResetPasswordLinkAsync(email, origin);
+
+            if (result.Failure)
+            {
+                return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route(ResetPasswordRoute)]
+        public async Task<IActionResult> ResetPasswordAsync(ResetPasswordViewModel model)
+        {
+            var result = await this.emailService.ResetPasswordAsync(model);
+
+            if (result.Failure)
+            {
+                return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok(PasswordResetSuccessful);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         [Route(VerifyEmailRoute)]
         public async Task<IActionResult> VerifyEmail(
-            [FromQuery]string email,
-            [FromQuery]string token)
+            [FromQuery] string email,
+            [FromQuery] string token)
         {
             var result = await this.emailService.VerifyEmailAsync(email, token);
 

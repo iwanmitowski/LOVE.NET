@@ -83,6 +83,8 @@
             public const string AccountRoute = "account/{id:guid}";
 
             public const string EmailControllerName = Api + "email";
+            public const string SendResetPasswordLinkLinkRoute = "sendResetPasswordLink";
+            public const string ResetPasswordRoute = "resetPassword";
             public const string VerifyEmailRoute = "verify";
             public const string ResendEmailConfirmationLinkRoute = "resendEmailConfirmationLink";
 
@@ -133,6 +135,7 @@
         {
             public const string IncorrectEmail = "Your email is incorrect";
             public const string EmailConfirmed = "Email confirmed - you can now login";
+            public const string PasswordResetSuccessful = "Password reset is successful - you can now login";
             public const string EmailDoesntMatch = "This is not the email you registered with";
             public const string EmailNotConfirmed = "Please, check your email and verify your account";
             public const string EmailAlreadyVerified = "Your email is already verified";
@@ -142,11 +145,13 @@
         {
             public const string FromEmail = "parentassistantapi@abv.bg";
             public const string FromName = "ParentAssistantApi";
-            public const string EmailSubject = "Verify Email";
+            public const string VerifyEmailSubject = "Verify Email";
+            public const string PasswordResetEmailSubject = "Reset Password";
             public const string VerifyUrl = "{0}/{1}?token={2}&email={3}";
             public const string Templates = "templates";
             public const string Email = "email";
             public const string VerifyHtml = "verify.html";
+            public const string ResetPasswordHtml = "resetPassword.html";
         }
 
         public class GenderConstants

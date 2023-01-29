@@ -7,6 +7,7 @@
     using LOVE.NET.Common;
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Messaging;
+    using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -38,28 +39,34 @@
             var token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            var verifyUrl = string.Format(
-                VerifyUrl,
-                origin,
-                VerifyEmailRoute,
-                token,
-                user.Email);
-
-            var path = Path.Combine(
-                this.environment.WebRootPath,
-                Templates,
-                Email,
-                VerifyHtml);
-
+            string emailUrl = this.BuildEmailUrl(origin, user.Email, VerifyEmailRoute, token);
+            string path = this.GetEmailTemplatePath(VerifyHtml);
             var subject = File.ReadAllText(path);
-
-            var content = string.Format(subject, verifyUrl);
+            var content = string.Format(subject, emailUrl);
 
             await this.emailSender.SendEmailAsync(
                 FromEmail,
                 FromName,
                 user.Email,
-                EmailSubject,
+                VerifyEmailSubject,
+                content);
+        }
+
+        public async Task SendResetPasswordEmailAsync(string origin, ApplicationUser user)
+        {
+            var token = await this.userManager.GeneratePasswordResetTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            string emailUrl = this.BuildEmailUrl(origin, user.Email, ResetPasswordRoute, token);
+            string path = this.GetEmailTemplatePath(ResetPasswordHtml);
+            var subject = File.ReadAllText(path);
+            var content = string.Format(subject, emailUrl);
+
+            await this.emailSender.SendEmailAsync(
+                FromEmail,
+                FromName,
+                user.Email,
+                PasswordResetEmailSubject,
                 content);
         }
 
@@ -89,6 +96,43 @@
             return true;
         }
 
+        public async Task<Result> ResetPasswordAsync(ResetPasswordViewModel model)
+        {
+            var user = await this.userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                return Unauthorized;
+            }
+
+            var decodedTokenBytes = WebEncoders.Base64UrlDecode(model.Token);
+
+            var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+
+            var result = await this.userManager.ResetPasswordAsync(user, decodedToken, model.Password);
+
+            if (!result.Succeeded)
+            {
+                return IncorrectEmail;
+            }
+
+            return true;
+        }
+
+        public async Task<Result> SendResetPasswordLinkAsync(string email, string origin)
+        {
+            var user = await this.userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return EmailDoesntMatch;
+            }
+
+            await this.SendResetPasswordEmailAsync(origin, user);
+
+            return true;
+        }
+
         public async Task<Result> ResendEmailConfirmationLinkAsync(string email, string origin)
         {
             var user = await this.userManager.FindByEmailAsync(email);
@@ -106,6 +150,29 @@
             await this.SendEmailConfirmationAsync(origin, user);
 
             return true;
+        }
+
+        private string GetEmailTemplatePath(string templateFileName)
+        {
+            return Path.Combine(
+                this.environment.WebRootPath,
+                Templates,
+                Email,
+                templateFileName);
+        }
+
+        private string BuildEmailUrl(
+            string origin,
+            string email,
+            string route,
+            string token)
+        {
+            return string.Format(
+                VerifyUrl,
+                origin,
+                route,
+                token,
+                email);
         }
     }
 }

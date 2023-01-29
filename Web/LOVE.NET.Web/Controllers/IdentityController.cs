@@ -215,13 +215,6 @@
             return this.Ok(user);
         }
 
-        [Authorize]
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
-            return this.Ok("test");
-        }
-
         private async Task SetRefreshToken(
             ApplicationUser user,
             RefreshToken oldRefreshToken = null)
