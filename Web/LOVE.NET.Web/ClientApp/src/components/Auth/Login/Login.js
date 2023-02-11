@@ -81,6 +81,13 @@ export default function Login() {
               })}
             </div>
           )}
+          <Form.Group>
+            <p>
+              <Link className="nav-link" to="/resetPassword">
+                Forgot your password ?
+              </Link>
+            </p>
+          </Form.Group>
           <Button variant="dark" type="submit">
             Login
           </Button>

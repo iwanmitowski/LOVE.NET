@@ -36,11 +36,10 @@
                 return this.BadRequest(result.Errors);
             }
 
-            return this.Ok();
+            return this.Ok(CheckYourEmail);
         }
 
         [HttpPost]
-        [Authorize]
         [Route(ResetPasswordRoute)]
         public async Task<IActionResult> ResetPasswordAsync(ResetPasswordViewModel model)
         {
@@ -85,7 +84,7 @@
                 return this.BadRequest(result.Errors);
             }
 
-            return this.Ok();
+            return this.Ok(CheckYourEmail);
         }
     }
 }

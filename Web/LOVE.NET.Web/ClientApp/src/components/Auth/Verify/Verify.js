@@ -10,6 +10,7 @@ export default function Verify() {
   const [searchParams] = useSearchParams();
 
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const token = searchParams.get("token");
   const email = searchParams.get("email");
@@ -25,10 +26,13 @@ export default function Verify() {
 
   const resendEmail = async (e) => {
     e.preventDefault();
-    emailService.resend(email).catch((error) => {
-      const [message] = error.response.data;
-      setMessage(() => message);
-    });
+    emailService
+      .resendVerifyEmail(email)
+      .then((res) => setMessage(res))
+      .catch((error) => {
+        const [message] = error.response.data;
+        setError(() => message);
+      });
   };
 
   const formWrapperStyles = `${styles["form-wrapper"]} d-flex justify-content-center align-items-center`;
@@ -55,6 +59,13 @@ export default function Verify() {
     <div className={formWrapperStyles}>
       <div className={styles["input-fields-length"]}>
         <h2>{content}</h2>
+        {error && (
+          <div className="text-danger mb-3">
+            {error.split("\n").map((message, key) => {
+              return <div key={key}>{message}</div>;
+            })}
+          </div>
+        )}
         {button}
       </div>
     </div>

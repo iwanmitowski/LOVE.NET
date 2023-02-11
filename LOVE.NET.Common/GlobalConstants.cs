@@ -135,6 +135,7 @@
         {
             public const string IncorrectEmail = "Your email is incorrect";
             public const string EmailConfirmed = "Email confirmed - you can now login";
+            public const string CheckYourEmail = "Check your email";
             public const string PasswordResetSuccessful = "Password reset is successful - you can now login";
             public const string EmailDoesntMatch = "This is not the email you registered with";
             public const string EmailNotConfirmed = "Please, check your email and verify your account";

@@ -1,6 +1,7 @@
 ﻿namespace LOVE.NET.Services.Email
 {
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -113,7 +114,7 @@
 
             if (!result.Succeeded)
             {
-                return IncorrectEmail;
+                return string.Join("\n", result.Errors.Select(x => x.Description));
             }
 
             return true;

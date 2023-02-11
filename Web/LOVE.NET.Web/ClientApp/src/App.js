@@ -23,6 +23,7 @@ import Dashboard from "./components/Admin/Dashboard/Dashboard";
 import AdminGuard from "./components/Shared/guards/AdminGuard";
 import UsersContainer from "./components/Admin/Users/UsersContainer";
 import DatingAdvices from "./components/Static/DatingAdvices";
+import Reset from "./components/Auth/Reset/Reset";
 
 function App() {
   const { isLogged, userLogout, user } = useIdentityContext();
@@ -43,7 +44,7 @@ function App() {
         <div style={{ minWidth: "280px" }}></div>
         <div className="col-md-10">
           <div>
-            <div className="p-3" style={{minHeight: "100vh"}}>
+            <div className="p-3" style={{ minHeight: "100vh" }}>
               <Routes style={{ overflowX: "hidden", minHeight: "100vh" }}>
                 <Route path="/LOVE.NET" element={homeComponent} />
                 <Route path="/" element={homeComponent} />
@@ -117,6 +118,7 @@ function App() {
                     </NoAuthGuard>
                   }
                 />
+                <Route path="/resetPassword" element={<Reset />} />
                 <Route
                   path="/user/:id"
                   element={
