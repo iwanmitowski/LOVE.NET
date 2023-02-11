@@ -37,7 +37,7 @@ export default function Matches() {
 
   const fetchUsers = (pageReset) => {
     if (request.hasMore) {
-      if (matches.length === 0) {
+      if (matches.length === 0 && request.hasMore) {
         setIsLoading(() => true);
       }
 

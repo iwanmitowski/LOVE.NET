@@ -28,7 +28,10 @@ export default function Verify() {
     e.preventDefault();
     emailService
       .resendVerifyEmail(email)
-      .then((res) => setMessage(res))
+      .then((res) => {
+        setError("");
+        setMessage(res);
+      })
       .catch((error) => {
         const [message] = error.response.data;
         setError(() => message);

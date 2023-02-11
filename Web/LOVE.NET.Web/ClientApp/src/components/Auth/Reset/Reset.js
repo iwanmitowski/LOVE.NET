@@ -13,7 +13,7 @@ export default function Reset() {
 
   const token = searchParams.get("token");
   const userEmail = searchParams.get("email");
-  
+
   const [data, setData] = useState({
     token: token,
     email: userEmail || "",
@@ -41,6 +41,7 @@ export default function Reset() {
     emailService
       .resetPassword(data)
       .then((res) => {
+        setError("");
         setMessage(() => res);
       })
       .catch((error) => {
@@ -52,7 +53,10 @@ export default function Reset() {
     e.preventDefault();
     emailService
       .resendResetPasswordEmail(data.email)
-      .then((res) => setMessage(res))
+      .then((res) => {
+        setError("");
+        setMessage(res);
+      })
       .catch((error) => {
         setError(error.message);
       });
