@@ -44,6 +44,9 @@ Resend email verification if no email is received
 ```
 Verification - required step in order to use the app
 ```
+```
+Reset password if forgotten
+```
 
 
 ### User profile
