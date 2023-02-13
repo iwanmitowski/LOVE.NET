@@ -1,5 +1,6 @@
 import { instance } from "../services/api";
 import { globalConstants, identityConstants } from "../utils/constants";
+import { getErrorMessage } from "../utils/errors"
 import * as date from "../utils/date";
 
 const baseUrl = globalConstants.API_URL + "identity";
@@ -203,23 +204,4 @@ export async function editAccount(user) {
 
 export async function refreshToken() {
   await instance.post(`${baseUrl}/refreshToken`);
-}
-
-function getErrorMessage(error) {
-  // Client side validation error
-  const validationError = error?.response?.data?.Error;
-  // Serverside validation error
-  const validationErrors =
-    (error?.response?.data?.errors &&
-      Object.values(error?.response?.data?.errors)) ||
-    [];
-
-  let errors = [...validationErrors, validationError].filter((e) => !!e);
-  if (!errors.length) {
-    errors = [...errors, error.message];
-  }
-
-  const errorMessage = errors.join("\n");
-
-  return errorMessage;
 }
