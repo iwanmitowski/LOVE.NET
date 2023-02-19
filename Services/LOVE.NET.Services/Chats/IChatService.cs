@@ -2,7 +2,6 @@
 {
     using System.Threading.Tasks;
 
-    using LOVE.NET.Data.Models;
     using LOVE.NET.Web.ViewModels.Chat;
 
     public interface IChatService
