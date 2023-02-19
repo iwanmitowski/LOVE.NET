@@ -83,7 +83,7 @@ All matches you have got
 ```
  
 ```
-Easy chat
+Easy chat with option to send images
 ```
 ```
 Infinite scrolling
