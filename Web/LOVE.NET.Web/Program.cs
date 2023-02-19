@@ -25,6 +25,7 @@
     using LOVE.NET.Services.Images;
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Services.Messaging;
+    using LOVE.NET.Web.ViewModels.Chat;
     using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;

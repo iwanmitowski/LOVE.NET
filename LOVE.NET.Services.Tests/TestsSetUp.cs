@@ -11,6 +11,7 @@
     using LOVE.NET.Data.Repositories.Users;
     using LOVE.NET.Services.Images;
     using LOVE.NET.Services.Mapping;
+    using LOVE.NET.Web.ViewModels.Chat;
     using LOVE.NET.Web.ViewModels.Identity;
 
     using Microsoft.AspNetCore.Http;
