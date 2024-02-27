@@ -6,6 +6,7 @@
     using System.Reflection;
 
     using AutoMapper;
+    using AutoMapper.Internal;
 
     public static class AutoMapperConfig
     {
@@ -25,6 +26,7 @@
             var types = assemblies.SelectMany(a => a.GetExportedTypes()).ToList();
 
             var config = new MapperConfigurationExpression();
+            config.Internal().MethodMappingEnabled = false;
             config.CreateProfile(
                 "ReflectionProfile",
                 configuration =>
