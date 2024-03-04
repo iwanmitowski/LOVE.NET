@@ -26,14 +26,12 @@
             }
 
             var filePath = Path.Combine(
-                    OneDirectoryUp,
-                    OneDirectoryUp,
-                    OneDirectoryUp,
-                    SystemName,
-                    Data,
-                    SystemNameData,
-                    Files,
-                    UsersFileName);
+                OneDirectoryUp,
+                Src,
+                Data,
+                SystemNameData,
+                Files,
+                UsersFileName);
 
             var jsonString = File.ReadAllText(filePath);
             var users = JsonConvert.DeserializeObject<ApplicationUser[]>(jsonString);

@@ -32,14 +32,12 @@
         private async Task SeedCountriesAsync(ApplicationDbContext dbContext)
         {
             var filePath = Path.Combine(
-                    OneDirectoryUp,
-                    OneDirectoryUp,
-                    OneDirectoryUp,
-                    SystemName,
-                    Data,
-                    SystemNameData,
-                    Files,
-                    CountriesFileName);
+                OneDirectoryUp,
+                Src,
+                Data,
+                SystemNameData,
+                Files,
+                CountriesFileName);
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -60,14 +58,12 @@
         private async Task SeedCitiesAsync(ApplicationDbContext dbContext)
         {
             var filePath = Path.Combine(
-                    OneDirectoryUp,
-                    OneDirectoryUp,
-                    OneDirectoryUp,
-                    SystemName,
-                    Data,
-                    SystemNameData,
-                    Files,
-                    CitiesWithCountriesFileName);
+                OneDirectoryUp,
+                Src,
+                Data,
+                SystemNameData,
+                Files,
+                CitiesWithCountriesFileName);
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {

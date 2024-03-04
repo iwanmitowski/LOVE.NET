@@ -59,6 +59,8 @@
         {
             public const string OneDirectoryUp = "..";
 
+            public const string Src = "src";
+
             public const string SystemNameData = $"{SystemName}.{Data}";
 
             public const string Files = "Files";
