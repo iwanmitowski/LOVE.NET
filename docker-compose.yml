@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  mssql:
+    container_name: mssql-db
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD: 'Admin@123'
+    ports: 
+      - 1433:1433
+    networks:
+      - net
+
+  love.net.web:
+    image: ${DOCKER_REGISTRY-}lovenetweb
+    build:
+      context: .
+      dockerfile: Web/LOVE.NET.Web/Dockerfile
+    ports: 
+      - 8080:8081
+    depends_on:
+      - mssql
+    networks:
+      - net
+    
+
+networks:
+  net:

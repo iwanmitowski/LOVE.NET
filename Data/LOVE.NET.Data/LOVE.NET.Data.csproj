@@ -46,4 +46,16 @@
     <ProjectReference Include="..\LOVE.NET.Data.Models\LOVE.NET.Data.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Files\CitiesWithCountries.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\Countries.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\Users.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
