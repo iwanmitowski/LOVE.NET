@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   mssql:
-    container_name: mssql-db
+    container_name: mssql
     image: mcr.microsoft.com/mssql/server:2017-latest
     environment:
       ACCEPT_EULA: 'Y'
@@ -18,12 +18,25 @@ services:
       context: .
       dockerfile: Web/LOVE.NET.Web/Dockerfile
     ports: 
-      - 8080:8081
+      - 8080:8080
     depends_on:
       - mssql
     networks:
       - net
-    
+
+  love.net.web-fe:
+    build:
+      context: ./Web-FrontEnd
+      dockerfile: Dockerfile
+    container_name: LOVE.NET.Web-Fe
+    ports:
+      - 3000:3000
+    stdin_open: true
+    tty: true
+    depends_on:
+      - love.net.web
+    networks:
+      - net
 
 networks:
   net:
