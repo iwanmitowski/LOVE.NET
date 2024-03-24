@@ -156,6 +156,14 @@
             services.AddTransient<IDatingService, DatingService>();
             services.AddTransient<IDashboardService, DashboardService>();
             services.AddScoped<IChatService, ChatService>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("DockerOrigin",
+                    builder => builder.WithOrigins(configuration[UrlBase])
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials());
+            });
         }
 
         private static void Configure(WebApplication app, IConfiguration configuration)
@@ -178,7 +186,7 @@
                 {
                     var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                    //dbContext.Database.EnsureDeleted();
+                    // dbContext.Database.EnsureDeleted();
                     dbContext.Database.Migrate();
                     new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
                 }
@@ -190,15 +198,12 @@
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
+                app.UseHttpsRedirection();
             }
 
-            app.UseCors(x => x
-               .WithOrigins(configuration[UrlBase])
-               .AllowAnyMethod()
-               .AllowAnyHeader()
-               .AllowCredentials());
+            app.UseCors("DockerOrigin");
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection(); // Do not redirect to https when in dev docker
             app.UseStaticFiles();
 
             app.UseRouting();
