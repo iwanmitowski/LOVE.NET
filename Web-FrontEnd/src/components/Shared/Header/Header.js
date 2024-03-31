@@ -10,6 +10,7 @@ import {
   faUser,
   faFilePen,
   faWind,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
@@ -38,6 +39,11 @@ export default function Header() {
             <li className="nav-item">
               <Link className="nav-link" to="/matches">
                 <FontAwesomeIcon icon={faUsers} /> Matches
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/chatrooms">
+                <FontAwesomeIcon icon={faComment} /> Chatrooms
               </Link>
             </li>
           </Fragment>

@@ -70,6 +70,8 @@
             public const string CountriesFileName = "Countries.csv";
 
             public const string UsersFileName = "Users.json";
+
+            public const string ChatroomsFileName = "Chatrooms.json";
         }
 
         public class ControllerRoutesConstants
