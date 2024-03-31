@@ -24,12 +24,13 @@
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(typeof(ApplicationDbContextSeeder));
 
             var seeders = new List<ISeeder>
-                          {
-                              new RolesSeeder(),
-                              new CountriesSeeder(),
-                              new GendersSeeder(),
-                              new UsersSeeder(),
-                          };
+            {
+                new RolesSeeder(),
+                new CountriesSeeder(),
+                new GendersSeeder(),
+                new UsersSeeder(),
+                new ChatroomsSeeder(),
+            };
 
             foreach (var seeder in seeders)
             {
