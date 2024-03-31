@@ -20,7 +20,7 @@
     "Email": "admin@admin.admin",
     "NormalizedEmail": "ADMIN@ADMIN.ADMIN",
     "EmailConfirmed": true,
-    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "PasswordHash": "AQAAAAIAAYagAAAAEHH4eW47mQFUovaCwpS+eA/WqY1TX8Tmt4j8zbHrKQ2TnBjGB9PJiyINiBXp/X9Dpg==",
     "LockoutEnabled": false
   },
   {
@@ -44,7 +44,7 @@
     "Email": "Pet3r@abv.bg",
     "NormalizedEmail": "PET3R@ABV.BG",
     "EmailConfirmed": true,
-    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "PasswordHash": "AQAAAAIAAYagAAAAEHH4eW47mQFUovaCwpS+eA/WqY1TX8Tmt4j8zbHrKQ2TnBjGB9PJiyINiBXp/X9Dpg==",
     "LockoutEnabled": false
   },
   {
@@ -68,7 +68,7 @@
     "Email": "Misa4@abv.bg",
     "NormalizedEmail": "MISA4@ABV.BG",
     "EmailConfirmed": true,
-    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "PasswordHash": "AQAAAAIAAYagAAAAEHH4eW47mQFUovaCwpS+eA/WqY1TX8Tmt4j8zbHrKQ2TnBjGB9PJiyINiBXp/X9Dpg==",
     "LockoutEnabled": false
   },
   {
@@ -92,7 +92,7 @@
     "Email": "Go6o@abv.bg",
     "NormalizedEmail": "GO6O@ABV.BG",
     "EmailConfirmed": true,
-    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "PasswordHash": "AQAAAAIAAYagAAAAEHH4eW47mQFUovaCwpS+eA/WqY1TX8Tmt4j8zbHrKQ2TnBjGB9PJiyINiBXp/X9Dpg==",
     "LockoutEnabled": false
   },
   {
@@ -116,7 +116,7 @@
     "Email": "4ing4ong@abv.bg",
     "NormalizedEmail": "4ING4ONG@ABV.BG",
     "EmailConfirmed": true,
-    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "PasswordHash": "AQAAAAIAAYagAAAAEHH4eW47mQFUovaCwpS+eA/WqY1TX8Tmt4j8zbHrKQ2TnBjGB9PJiyINiBXp/X9Dpg==",
     "LockoutEnabled": false
   },
   {
@@ -140,7 +140,7 @@
     "Email": "MariikaBezIvan4o@abv.bg",
     "NormalizedEmail": "MARIIKABEZIVAN4O@ABV.BG",
     "EmailConfirmed": true,
-    "PasswordHash": "AQAAAAEAACcQAAAAEARsQRy/a47EE8QGlGGI+VGW0e8BeqWj3x/fD0OQMzEIjVkCsGuYCjojtKDcrvSunA==",
+    "PasswordHash": "AQAAAAIAAYagAAAAEHH4eW47mQFUovaCwpS+eA/WqY1TX8Tmt4j8zbHrKQ2TnBjGB9PJiyINiBXp/X9Dpg==",
     "LockoutEnabled": false
   }
 ]
