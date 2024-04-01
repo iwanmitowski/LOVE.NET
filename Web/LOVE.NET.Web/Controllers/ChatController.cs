@@ -1,5 +1,6 @@
 ﻿namespace LOVE.NET.Web.Controllers
 {
+    using System.Collections.Generic;
     using System.Security.Claims;
 
     using LOVE.NET.Services.Chats;
@@ -39,6 +40,17 @@
             var chat = this.chatService.GetChat(request);
 
             return this.Ok(chat);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route(ChatRooms)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChatroomViewModel>))]
+        public IActionResult GetChatRooms()
+        {
+            var chatrooms = this.chatService.GetChatrooms();
+
+            return this.Ok(chatrooms);
         }
     }
 }

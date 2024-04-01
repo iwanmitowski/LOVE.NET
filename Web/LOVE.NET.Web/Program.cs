@@ -143,6 +143,7 @@
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<ICountriesRepository, CountriesRepository>();
             services.AddScoped<IChatRepository, ChatRepository>();
+            services.AddScoped<IChatroomRepository, ChatroomRepository>();
 
             // Application services
             services.AddSignalR();

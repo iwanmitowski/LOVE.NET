@@ -5,8 +5,6 @@
     using LOVE.NET.Data.Models;
     using LOVE.NET.Services.Mapping;
 
-    using Microsoft.AspNetCore.Http;
-
     public class MessageDto : IMapFrom<Message>, IMapTo<Message>
     {
         public string RoomId { get; set; }

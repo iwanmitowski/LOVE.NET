@@ -1,5 +1,6 @@
 ﻿namespace LOVE.NET.Services.Chats
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -13,10 +14,14 @@
     public class ChatService : IChatService
     {
         private readonly IChatRepository chatRepository;
+        private readonly IChatroomRepository chatroomRepository;
 
-        public ChatService(IChatRepository chatRepository)
+        public ChatService(
+            IChatRepository chatRepository,
+            IChatroomRepository chatroomRepository)
         {
             this.chatRepository = chatRepository;
+            this.chatroomRepository = chatroomRepository;
         }
 
         public ChatViewModel GetChat(ChatRequestViewModel request)
@@ -45,6 +50,15 @@
             var data = AutoMapperConfig.MapperInstance.Map<Message>(message);
 
             await this.chatRepository.SaveMessageAsync(data);
+        }
+
+        public IEnumerable<ChatroomViewModel> GetChatrooms()
+        {
+            var result = this.chatroomRepository
+                .AllAsNoTracking()
+                .To<ChatroomViewModel>();
+
+            return result;
         }
     }
 }
