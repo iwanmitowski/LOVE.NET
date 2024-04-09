@@ -9,6 +9,8 @@
     using LOVE.NET.Services.Mapping;
     using LOVE.NET.Web.ViewModels.Chat;
 
+    using Microsoft.EntityFrameworkCore;
+
     using static LOVE.NET.Common.GlobalConstants;
 
     public class ChatService : IChatService
@@ -29,6 +31,7 @@
             // Add skip and take
             var messagesQuery = this.chatRepository
                 .AllAsNoTracking(m => m.RoomId == request.RoomId)
+                .Include(x => x.User)
                 .OrderByDescending(x => x.CreatedOn);
 
             var messages = messagesQuery

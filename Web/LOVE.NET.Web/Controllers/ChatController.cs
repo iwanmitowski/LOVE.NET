@@ -1,6 +1,7 @@
 ﻿namespace LOVE.NET.Web.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Security.Claims;
 
     using LOVE.NET.Services.Chats;
@@ -32,7 +33,10 @@
         {
             var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            if (request?.RoomId.Contains(loggedUserId) == false)
+            var chatRooms = this.chatService.GetChatrooms();
+
+            if (request?.RoomId.Contains(loggedUserId) == false &&
+                chatRooms.Any(x => x.Id == request.RoomId) == false)
             {
                 return this.Forbid();
             }
