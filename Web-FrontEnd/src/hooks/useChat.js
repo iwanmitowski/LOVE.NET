@@ -68,6 +68,7 @@ export const useChat = () => {
     messages,
     hasMoreMessagesToLoad,
     setHasMoreMessagesToLoad,
+    userConnection,
     setUserConnection,
     stopConnection,
     sendMessage,

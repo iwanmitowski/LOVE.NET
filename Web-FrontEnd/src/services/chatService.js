@@ -14,3 +14,12 @@ export async function getChat(roomId, page = 1) {
     console.log(error);
   }
 }
+
+export async function getChatrooms() {
+  try {
+    const response = await instance.get(`${baseUrl}/chatrooms`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
