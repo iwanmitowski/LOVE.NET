@@ -12,11 +12,15 @@
     using Microsoft.EntityFrameworkCore;
 
     using static LOVE.NET.Common.GlobalConstants;
+    using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
     public class ChatService : IChatService
     {
         private readonly IChatRepository chatRepository;
         private readonly IChatroomRepository chatroomRepository;
+
+        // Use Redis Cache for this
+        private readonly Dictionary<string, HashSet<UserInRoomModel>> usersInRooms = new();
 
         public ChatService(
             IChatRepository chatRepository,
@@ -60,8 +64,57 @@
             var result = this.chatroomRepository
                 .AllAsNoTracking()
                 .To<ChatroomViewModel>();
-
             return result;
+        }
+
+        public void AddUserToRoom(MessageDto message)
+        {
+            if (!this.usersInRooms.ContainsKey(message.RoomId))
+            {
+                this.usersInRooms[message.RoomId] = new HashSet<UserInRoomModel>();
+            }
+
+            this.usersInRooms[message.RoomId].Add(new UserInRoomModel()
+            {
+                Id = message.UserId,
+                ProfilePictureUrl = message.ProfilePicture,
+            });
+        }
+
+        public void AddUserToRoom(UserConnection connection)
+        {
+            if (!this.usersInRooms.ContainsKey(connection.RoomId))
+            {
+                this.usersInRooms[connection.RoomId] = new HashSet<UserInRoomModel>();
+            }
+
+            this.usersInRooms[connection.RoomId].Add(new UserInRoomModel()
+            {
+                Id = connection.UserId,
+                ProfilePictureUrl = connection.ProfilePictureUrl,
+            });
+        }
+
+        public void RemoveUserFromRoom(UserConnection connection)
+        {
+            if (this.usersInRooms.ContainsKey(connection.RoomId))
+            {
+                this.usersInRooms[connection.RoomId].RemoveWhere(x => x.Id == connection.UserId);
+                if (this.usersInRooms[connection.RoomId].Any() == false)
+                {
+                    this.usersInRooms.Remove(connection.RoomId);
+                }
+            }
+        }
+
+        public IEnumerable<UserInRoomModel> GetUsersInRoom(string roomId)
+        {
+            if (this.usersInRooms.ContainsKey(roomId) == false)
+            {
+                return Enumerable.Empty<UserInRoomModel>();
+            }
+
+            return this.usersInRooms[roomId];
         }
     }
 }

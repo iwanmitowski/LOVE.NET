@@ -28,6 +28,22 @@
         {
             await this.Groups
                 .AddToGroupAsync(this.Context.ConnectionId, userConnection.RoomId);
+            this.chatService.AddUserToRoom(userConnection);
+            await this.Clients
+                .Group(userConnection.RoomId)
+                .SendAsync("RefreshUsersList", this.chatService.GetUsersInRoom(userConnection.RoomId));
+        }
+
+        /// <summary>
+        /// Leave room on chat component unmount.
+        /// </summary>
+        /// <param name="userConnection">User connection input.</param>
+        public async Task LeaveRoom(UserConnection userConnection)
+        {
+            this.chatService.RemoveUserFromRoom(userConnection);
+            await this.Clients
+                .Group(userConnection.RoomId)
+                .SendAsync("RefreshUsersList", this.chatService.GetUsersInRoom(userConnection.RoomId));
         }
 
         public async Task SendMessage(MessageDto message)
