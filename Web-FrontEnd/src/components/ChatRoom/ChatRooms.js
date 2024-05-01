@@ -64,7 +64,7 @@ export default function ChatRooms() {
           title={r.title}
           imgSrc={r.url}
           join={() => {
-            chatState.setUserConnection({ userId: user.id, roomId: r.id });
+            chatState.setUserConnection({ userId: user.id, roomId: r.id, profilePictureUrl: user.profilePicture });
           }}
         />
       ))}

@@ -25,7 +25,7 @@ export default function ChatRoomCard(props) {
         >
           Join
         </Button>
-        <Card.Text>{`People Count: ${count}`}</Card.Text>
+        {/* <Card.Text>{`People Count: ${count}`}</Card.Text> */}
       </Card.Body>
     </Card>
   );

@@ -46,7 +46,7 @@ export default function ChatRoom(props) {
     if (!currentMessage.text && !currentMessage.image) {
       return;
     }
-    console.log(user.profilePicture);
+
     sendMessage({
       roomId,
       userId: user.id,
