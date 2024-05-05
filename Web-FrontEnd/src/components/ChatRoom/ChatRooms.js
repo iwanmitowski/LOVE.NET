@@ -49,6 +49,7 @@ export default function ChatRooms() {
       <ChatRoom
         roomId={chatState.userConnection.roomId}
         chat={chat}
+        usersInRoom={chatState.usersInRoom || []}
         sendMessage={chatState.sendMessage}
         fetchMessages={fetchMessages}
         onHide={() => onCloseChat()}
@@ -64,7 +65,7 @@ export default function ChatRooms() {
           title={r.title}
           imgSrc={r.url}
           join={() => {
-            chatState.setUserConnection({ userId: user.id, roomId: r.id, profilePictureUrl: user.profilePicture });
+            chatState.setUserConnection({ userId: user.id, roomId: r.id, profilePictureUrl: user.profilePicture, userName: user.userName });
           }}
         />
       ))}

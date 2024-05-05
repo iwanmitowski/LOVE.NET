@@ -26,12 +26,12 @@ import styles from "../Modals/Chat/ChatModal.module.css";
 
 export default function ChatRoom(props) {
   const { user } = useIdentityContext();
-  const { hasMoreMessagesToLoad } = useChat();
+  const chatState = useChat();
+
   const defaultMessage = {
     text: "",
     image: null,
   };
-
   const [pastedImageUrl, setPastedImageUrl] = useState("");
   const [currentMessage, setCurrentMessage] = useState(defaultMessage);
 
@@ -39,6 +39,7 @@ export default function ChatRoom(props) {
   const chat = props.chat;
   const fetchMessages = props.fetchMessages;
   const roomId = props.roomId;
+  const usersInRoom = props.usersInRoom;
 
   const onSendingMessage = (e) => {
     e.preventDefault();
@@ -121,7 +122,10 @@ export default function ChatRoom(props) {
       <Row className="vh-100">
         <Col>
           <div className="d-flex align-items-center">
-            <FontAwesomeIcon icon={faChevronLeft} style={{marginRight: "4px"}} />
+            <FontAwesomeIcon
+              icon={faChevronLeft}
+              style={{ marginRight: "4px" }}
+            />
             <span>Rooms</span>
           </div>
         </Col>
@@ -136,7 +140,7 @@ export default function ChatRoom(props) {
               next={fetchMessages}
               style={{ display: "flex", flexDirection: "column-reverse" }} //To put endMessage and loader to the top.
               inverse={true}
-              hasMore={hasMoreMessagesToLoad}
+              hasMore={chatState.hasMoreMessagesToLoad}
               scrollableTarget="scrollableDiv"
             >
               {chat.map((message, index) => (
@@ -208,13 +212,22 @@ export default function ChatRoom(props) {
             </div>
           </Form>
         </Col>
-        {/* User List */}
         <Col xs={2}>
           <ListGroup variant="flush">
-            <ListGroup.Item key={1} className="d-flex align-items-center">
-              <Image src={1} roundedCircle width="24" height="24" />
-              <span className="ms-2">User name</span>
-            </ListGroup.Item>
+            {usersInRoom.map((user) => (
+              <ListGroup.Item
+                key={user.id}
+                className="d-flex align-items-center"
+              >
+                <Image
+                  src={user.profilePictureUrl}
+                  roundedCircle
+                  width="24"
+                  height="24"
+                />
+                <span className="ms-2">{user.userName}</span>
+              </ListGroup.Item>
+            ))}
           </ListGroup>
         </Col>
       </Row>

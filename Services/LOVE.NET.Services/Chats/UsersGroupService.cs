@@ -13,20 +13,6 @@
         private readonly Dictionary<string, HashSet<UserInRoomModel>> usersInRooms =
             new();
 
-        public void AddUserToRoom(MessageDto message)
-        {
-            if (!this.usersInRooms.ContainsKey(message.RoomId))
-            {
-                this.usersInRooms[message.RoomId] = new HashSet<UserInRoomModel>();
-            }
-
-            this.usersInRooms[message.RoomId].Add(new UserInRoomModel()
-            {
-                Id = message.UserId,
-                ProfilePictureUrl = message.ProfilePicture,
-            });
-        }
-
         public void AddUserToRoom(UserConnection connection)
         {
             if (!this.usersInRooms.ContainsKey(connection.RoomId))
@@ -41,6 +27,7 @@
                 {
                     Id = connection.UserId,
                     ProfilePictureUrl = connection.ProfilePictureUrl,
+                    UserName = connection.UserName,
                 });
             }
         }

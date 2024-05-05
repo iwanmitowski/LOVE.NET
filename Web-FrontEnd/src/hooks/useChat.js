@@ -7,6 +7,7 @@ import * as chatService from "../services/chatService";
 export const useChat = () => {
   const [connection, setConnection] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [usersInRoom, setUsersInRoom] = useState([]);
   const [hasMoreMessagesToLoad, setHasMoreMessagesToLoad] = useState(true);
   const [userConnection, setUserConnection] = useState(null);
   const latestMessages = useRef(null);
@@ -42,6 +43,10 @@ export const useChat = () => {
 
             setMessages(updatedMessages);
           });
+
+          connection.on("RefreshUsersList", (users) => {
+            setUsersInRoom(users);
+          });
         })
         .catch((error) => console.log("Connection failed: ", error));
     }
@@ -66,6 +71,7 @@ export const useChat = () => {
 
   return {
     messages,
+    usersInRoom,
     hasMoreMessagesToLoad,
     setHasMoreMessagesToLoad,
     userConnection,
