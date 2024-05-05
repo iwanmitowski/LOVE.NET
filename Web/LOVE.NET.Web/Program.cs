@@ -157,6 +157,7 @@
             services.AddTransient<IDatingService, DatingService>();
             services.AddTransient<IDashboardService, DashboardService>();
             services.AddScoped<IChatService, ChatService>();
+            services.AddSingleton<IUsersGroupService, UsersGroupService>();
             services.AddCors(options =>
             {
                 options.AddPolicy("DockerOrigin",

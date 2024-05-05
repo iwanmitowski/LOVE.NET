@@ -13,11 +13,5 @@
         Task SaveMessageAsync(MessageDto message);
 
         IEnumerable<ChatroomViewModel> GetChatrooms();
-
-        void AddUserToRoom(UserConnection connection);
-
-        void RemoveUserFromRoom(UserConnection connection);
-
-        IEnumerable<UserInRoomModel> GetUsersInRoom(string roomId);
     }
 }
