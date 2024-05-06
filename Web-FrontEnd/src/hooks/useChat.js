@@ -22,19 +22,49 @@ export const useChat = () => {
         .withAutomaticReconnect()
         .build();
 
-      newConnection.start()
+      newConnection
+        .start()
         .then(() => {
           newConnection.invoke("JoinRoom", userConnection);
           newConnection.on("ReceiveMessage", (message) => {
-            setMessages(prevState => [message, ...prevState]);
+            setMessages((prevState) => [message, ...prevState]);
           });
-          newConnection.on("RefreshUsersList", setUsersInRoom);
+          newConnection.on("RefreshUsersList", (response) => {
+            let changedUser;
+
+            setUsersInRoom((prevState) => {
+              changedUser = findChangedUser(
+                prevState,
+                response.users,
+                response.hasLeft
+              );
+              return response.users;
+            });
+
+            setMessages((prevState) => {
+              const text = response.hasLeft
+                ? `User ${changedUser?.userName} has left the chat.`
+                : `${
+                    changedUser?.id === userConnection.userId
+                      ? "You"
+                      : `User ${changedUser?.userName}`
+                  } joined the chat. Say Hi!`;
+
+              return [
+                {
+                  text,
+                  isSystemMessage: true,
+                },
+                ...prevState,
+              ];
+            });
+          });
         })
-        .catch(error => console.error("Connection failed: ", error));
+        .catch((error) => console.error("Connection failed: ", error));
 
       connectionRef.current = newConnection;
 
-      chatService.getChat(userConnection.roomId).then(res => {
+      chatService.getChat(userConnection.roomId).then((res) => {
         setMessages(res.messages);
         setHasMoreMessagesToLoad(res.messages.length < res.totalMessages);
       });
@@ -68,6 +98,23 @@ export const useChat = () => {
         console.log(e);
       }
     }
+  };
+
+  function findChangedUser(currentUsers, newUsers, hasLeft) {
+    const sourceArray = hasLeft ? currentUsers : newUsers;
+    const targetArray = new Set(
+      hasLeft
+        ? newUsers.map((user) => user.id)
+        : currentUsers.map((user) => user.id)
+    );
+    debugger;
+    for (let user of sourceArray) {
+      if (!targetArray.has(user.id)) {
+        return user;
+      }
+    }
+
+    return null;
   }
 
   return {

@@ -133,7 +133,7 @@ export default function ChatModal(props) {
                     hasMore={hasMoreMessagesToLoad}
                     scrollableTarget="scrollableDiv"
                   >
-                    {chat.map((message, index) => (
+                    {chat.filter(m => !m.isSystemMessage).map((message, index) => (
                       <Fragment>
                         {message.imageUrl && (
                           <img

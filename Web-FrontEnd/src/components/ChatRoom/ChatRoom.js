@@ -1,6 +1,4 @@
 import {
-  Button,
-  Card,
   Col,
   Container,
   Form,
@@ -159,7 +157,9 @@ export default function ChatRoom(props) {
                     />
                   )}
                   {message.text &&
-                    (message.userId === user.id ? (
+                    (
+                      message.isSystemMessage ? <p>{message.text}</p> :
+                      message.userId === user.id ? (
                       <HomeMessage key={index + 1} message={message} />
                     ) : (
                       <AwayMessage

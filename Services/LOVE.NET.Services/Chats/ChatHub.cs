@@ -34,7 +34,11 @@
             this.usersGroupService.AddUserToRoom(userConnection);
             await this.Clients
                 .Group(userConnection.RoomId)
-                .SendAsync("RefreshUsersList", this.usersGroupService.GetUsersInRoom(userConnection.RoomId));
+                .SendAsync("RefreshUsersList", new
+                {
+                    Users = this.usersGroupService.GetUsersInRoom(userConnection.RoomId),
+                    HasLeft = false,
+                });
         }
 
         /// <summary>
@@ -46,7 +50,11 @@
             this.usersGroupService.RemoveUserFromRoom(userConnection);
             await this.Clients
                 .Group(userConnection.RoomId)
-                .SendAsync("RefreshUsersList", this.usersGroupService.GetUsersInRoom(userConnection.RoomId));
+                .SendAsync("RefreshUsersList", new
+                {
+                    Users = this.usersGroupService.GetUsersInRoom(userConnection.RoomId),
+                    HasLeft = true,
+                });
         }
 
         public async Task SendMessage(MessageDto message)
