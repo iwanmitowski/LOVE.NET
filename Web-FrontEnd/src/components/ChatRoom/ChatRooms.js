@@ -51,12 +51,13 @@ export default function ChatRooms() {
         chat={chat}
         usersInRoom={chatState.usersInRoom || []}
         sendMessage={chatState.sendMessage}
+        stopConnection={chatState.stopConnection}
         fetchMessages={fetchMessages}
         onHide={() => onCloseChat()}
       />
     );
   }
-
+  
   return (
     <div className="d-flex flex-wrap justify-content-center">
       {rooms.map((r) => (

@@ -5,7 +5,7 @@ import { globalConstants } from "../utils/constants";
 import * as chatService from "../services/chatService";
 
 export const useChat = () => {
-  const [connection, setConnection] = useState(null);
+  const connectionRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [usersInRoom, setUsersInRoom] = useState([]);
   const [hasMoreMessagesToLoad, setHasMoreMessagesToLoad] = useState(true);
@@ -22,40 +22,29 @@ export const useChat = () => {
         .withAutomaticReconnect()
         .build();
 
-      setConnection(newConnection);
-      setUserConnection(userConnection);
-      chatService.getChat(userConnection.roomId).then((res) => {
-        setMessages((prevState) => [...prevState, ...res.messages]);
-        setHasMoreMessagesToLoad(messages.length < res.totalMessages);
+      newConnection.start()
+        .then(() => {
+          newConnection.invoke("JoinRoom", userConnection);
+          newConnection.on("ReceiveMessage", (message) => {
+            setMessages(prevState => [message, ...prevState]);
+          });
+          newConnection.on("RefreshUsersList", setUsersInRoom);
+        })
+        .catch(error => console.error("Connection failed: ", error));
+
+      connectionRef.current = newConnection;
+
+      chatService.getChat(userConnection.roomId).then(res => {
+        setMessages(res.messages);
+        setHasMoreMessagesToLoad(res.messages.length < res.totalMessages);
       });
     }
   }, [userConnection]);
 
-  useEffect(() => {
-    if (connection) {
-      connection
-        .start()
-        .then(() => {
-          connection.invoke("JoinRoom", userConnection);
-
-          connection.on("ReceiveMessage", (message) => {
-            const updatedMessages = [message, ...latestMessages.current];
-
-            setMessages(updatedMessages);
-          });
-
-          connection.on("RefreshUsersList", (users) => {
-            setUsersInRoom(users);
-          });
-        })
-        .catch((error) => console.log("Connection failed: ", error));
-    }
-  }, [connection, userConnection]);
-
   const sendMessage = async (message) => {
-    if (connection) {
+    if (connectionRef.current) {
       try {
-        await connection.invoke("SendMessage", message);
+        await connectionRef.current.invoke("SendMessage", message);
       } catch (e) {
         console.log(e);
       }
@@ -63,11 +52,23 @@ export const useChat = () => {
   };
 
   const stopConnection = async () => {
-    await connection.stop().then(() => {
+    await leaveRoom();
+    if (connectionRef.current) {
+      await connectionRef.current.stop();
       setMessages([]);
-      setConnection(null);
-    });
+      connectionRef.current = null;
+    }
   };
+
+  const leaveRoom = async () => {
+    if (connectionRef.current && userConnection) {
+      try {
+        await connectionRef.current.invoke("LeaveRoom", userConnection);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
 
   return {
     messages,
@@ -75,6 +76,7 @@ export const useChat = () => {
     hasMoreMessagesToLoad,
     setHasMoreMessagesToLoad,
     userConnection,
+    leaveRoom,
     setUserConnection,
     stopConnection,
     sendMessage,

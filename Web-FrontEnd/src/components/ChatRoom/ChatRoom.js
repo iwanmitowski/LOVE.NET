@@ -12,10 +12,9 @@ import AwayMessage from "../Modals/Chat/Messages/AwayMessage";
 import HomeMessage from "../Modals/Chat/Messages/HomeMessage";
 import { useIdentityContext } from "../../hooks/useIdentityContext";
 import { useChat } from "../../hooks/useChat";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faChevronCircleLeft,
   faChevronLeft,
   faPaperPlane,
   faTimes,
@@ -40,6 +39,12 @@ export default function ChatRoom(props) {
   const fetchMessages = props.fetchMessages;
   const roomId = props.roomId;
   const usersInRoom = props.usersInRoom;
+  const stopConnection = props.stopConnection;
+  useEffect(() => {
+    return () => {
+      stopConnection();
+    };
+  }, []);
 
   const onSendingMessage = (e) => {
     e.preventDefault();
