@@ -38,9 +38,14 @@ export default function ChatRoom(props) {
   const roomId = props.roomId;
   const usersInRoom = props.usersInRoom;
   const stopConnection = props.stopConnection;
+  
   useEffect(() => {
+    window.addEventListener('beforeunload', () => {
+      stopConnection();
+    });
     return () => {
       stopConnection();
+      window.removeEventListener('beforeunload', stopConnection);
     };
   }, []);
 
