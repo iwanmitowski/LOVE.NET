@@ -41,23 +41,30 @@ export const useChat = () => {
               return response.users;
             });
 
-            setMessages((prevState) => {
-              const text = response.hasLeft
-                ? `User ${changedUser?.userName} has left the chat.`
-                : `${
-                    changedUser?.id === userConnection.userId
-                      ? "You"
-                      : `User ${changedUser?.userName}`
-                  } joined the chat. Say Hi!`;
+            setTimeout(() => {
+              setMessages((prevState) => {
+                if (!changedUser) {
+                  return prevState;
+                }
 
-              return [
-                {
-                  text,
-                  isSystemMessage: true,
-                },
-                ...prevState,
-              ];
-            });
+                const text = response.hasLeft
+                  ? `User ${changedUser.userName} has left the chat.`
+                  : `${
+                      changedUser.id === userConnection.userId
+                        ? "You"
+                        : `User ${changedUser?.userName}`
+                    } joined the chat. Say Hi!`;
+
+                return [
+                  {
+                    text,
+                    isSystemMessage: true,
+                  },
+                  ...prevState,
+                ];
+              });
+            }, 0)
+            
           });
         })
         .catch((error) => console.error("Connection failed: ", error));
@@ -101,13 +108,17 @@ export const useChat = () => {
   };
 
   function findChangedUser(currentUsers, newUsers, hasLeft) {
+    if (currentUsers.length === 0) {
+      return null;
+    }
+
     const sourceArray = hasLeft ? currentUsers : newUsers;
     const targetArray = new Set(
       hasLeft
         ? newUsers.map((user) => user.id)
         : currentUsers.map((user) => user.id)
     );
-    debugger;
+
     for (let user of sourceArray) {
       if (!targetArray.has(user.id)) {
         return user;
