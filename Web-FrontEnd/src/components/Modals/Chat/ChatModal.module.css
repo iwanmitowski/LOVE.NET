@@ -18,6 +18,7 @@
     overflow-y: scroll;
     display: flex;
     flex-direction: column-reverse;
+    padding: 30px 100px;
   }
 
   .media { 

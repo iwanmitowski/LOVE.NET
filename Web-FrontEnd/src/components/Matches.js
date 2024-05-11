@@ -31,7 +31,7 @@ export default function Matches() {
 
   useEffect(() => {
     if (chatUser) {
-      chatState.setUserConnection({ userId: user.id, roomId: chatUser.roomId });
+      chatState.setUserConnection({ userId: user.id, roomId: chatUser.roomId, profilePictureUrl: user.profilePicture, userName: user.userName });
     }
   }, [chatUser]);
 
@@ -120,6 +120,7 @@ export default function Matches() {
         });
     }
   };
+  
   return isLoading ? (
     <Loader />
   ) : (

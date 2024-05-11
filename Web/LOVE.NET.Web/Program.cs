@@ -143,6 +143,7 @@
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<ICountriesRepository, CountriesRepository>();
             services.AddScoped<IChatRepository, ChatRepository>();
+            services.AddScoped<IChatroomRepository, ChatroomRepository>();
 
             // Application services
             services.AddSignalR();
@@ -156,6 +157,7 @@
             services.AddTransient<IDatingService, DatingService>();
             services.AddTransient<IDashboardService, DashboardService>();
             services.AddScoped<IChatService, ChatService>();
+            services.AddSingleton<IUsersGroupService, UsersGroupService>();
             services.AddCors(options =>
             {
                 options.AddPolicy("DockerOrigin",

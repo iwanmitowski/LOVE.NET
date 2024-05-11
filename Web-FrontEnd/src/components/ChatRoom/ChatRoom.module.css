@@ -1,0 +1,4 @@
+.chatroom-img {
+  max-height: 255px;
+  object-fit: cover;
+}

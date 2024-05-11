@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Fragment, useCallback } from "react";
+import { Fragment } from "react";
 import { Button } from "react-bootstrap";
 import TinderCard from "react-tinder-card";
 import SwipingCardCarousel from "./SwipingCardCarousel";

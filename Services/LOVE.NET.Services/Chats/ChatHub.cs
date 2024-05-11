@@ -15,19 +15,46 @@
     {
         private readonly IChatService chatService;
         private readonly IImagesService imagesService;
+        private readonly IUsersGroupService usersGroupService;
 
         public ChatHub(
             IChatService chatService,
-            IImagesService imagesService)
+            IImagesService imagesService,
+            IUsersGroupService usersGroupService)
         {
             this.chatService = chatService;
             this.imagesService = imagesService;
+            this.usersGroupService = usersGroupService;
         }
 
         public async Task JoinRoom(UserConnection userConnection)
         {
             await this.Groups
                 .AddToGroupAsync(this.Context.ConnectionId, userConnection.RoomId);
+            this.usersGroupService.AddUserToRoom(userConnection);
+            await this.Clients
+                .Group(userConnection.RoomId)
+                .SendAsync("RefreshUsersList", new
+                {
+                    Users = this.usersGroupService.GetUsersInRoom(userConnection.RoomId),
+                    HasLeft = false,
+                });
+        }
+
+        /// <summary>
+        /// Leave room on chat component unmount.
+        /// </summary>
+        /// <param name="userConnection">User connection input.</param>
+        public async Task LeaveRoom(UserConnection userConnection)
+        {
+            this.usersGroupService.RemoveUserFromRoom(userConnection);
+            await this.Clients
+                .Group(userConnection.RoomId)
+                .SendAsync("RefreshUsersList", new
+                {
+                    Users = this.usersGroupService.GetUsersInRoom(userConnection.RoomId),
+                    HasLeft = true,
+                });
         }
 
         public async Task SendMessage(MessageDto message)

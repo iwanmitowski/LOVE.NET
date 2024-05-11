@@ -70,6 +70,8 @@
             public const string CountriesFileName = "Countries.csv";
 
             public const string UsersFileName = "Users.json";
+
+            public const string ChatroomsFileName = "Chatrooms.json";
         }
 
         public class ControllerRoutesConstants
@@ -101,6 +103,7 @@
 
             public const string ChatControllerName = Api + "chat";
             public const string ByRoomId = "room/{id}";
+            public const string ChatRooms = "chatrooms";
 
             public const string DashboardControllerName = Api + "admin/dashboard";
             public const string UsersRoute = "users";

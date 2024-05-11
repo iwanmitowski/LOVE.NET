@@ -24,6 +24,8 @@ import AdminGuard from "./components/Shared/guards/AdminGuard";
 import UsersContainer from "./components/Admin/Users/UsersContainer";
 import DatingAdvices from "./components/Static/DatingAdvices";
 import Reset from "./components/Auth/Reset/Reset";
+import ChatRooms from "./components/ChatRoom/ChatRooms";
+import ChatRoom from "./components/ChatRoom/ChatRoom";
 
 function App() {
   const { isLogged, userLogout, user } = useIdentityContext();
@@ -83,6 +85,22 @@ function App() {
                   element={
                     <AuthGuard>
                       <Matches />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/chatrooms"
+                  element={
+                    <AuthGuard>
+                      <ChatRooms />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="/chatroom/:id"
+                  element={
+                    <AuthGuard>
+                      <ChatRoom />
                     </AuthGuard>
                   }
                 />
