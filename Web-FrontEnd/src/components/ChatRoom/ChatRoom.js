@@ -37,7 +37,7 @@ export default function ChatRoom(props) {
   const fetchMessages = props.fetchMessages;
   const roomId = props.roomId;
   const usersInRoom = props.usersInRoom;
-  const stopConnection = props.stopConnection;
+  const stopConnection = props.onHide;
   
   useEffect(() => {
     window.addEventListener('beforeunload', () => {
@@ -129,7 +129,7 @@ export default function ChatRoom(props) {
     <Container className="py-3">
       <Row className="vh-100">
         <Col>
-          <div className="d-flex align-items-center">
+          <div className="d-flex align-items-center" style={{cursor: 'pointer'}} onClick={stopConnection}>
             <FontAwesomeIcon
               icon={faChevronLeft}
               style={{ marginRight: "4px" }}
