@@ -7,7 +7,7 @@ export default function ImagesContainer(props) {
   const setNewProfilePicture = props.setNewProfilePicture;
 
   return (
-    <div className="col d-flex flex-wrap justify-content-center">
+    <div className="col d-flex flex-wrap justify-content-between">
       {images.map((img) => (
         <ImageCard
           key={img.id}

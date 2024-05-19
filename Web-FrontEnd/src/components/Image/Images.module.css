@@ -1,8 +1,24 @@
 .card {
     flex: 0 1 auto !important; 
-    margin: 30px;
+    margin: 10px;
 }
 
 .button {
     margin: 0 15px;
+}
+
+.icon-action-button {
+    background-color: rgba(0, 0, 0, 0.5);;
+    padding: 4px;
+    color: white;
+    height: 16px;
+    width: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.card-image-size {
+    height: 120px;
+    widows: 120px;
+    object-fit: cover;
 }
