@@ -92,7 +92,7 @@ export default function Login() {
               Login
             </Button>
             <Form.Group>
-              <p className="pt-2">
+              <p className="d-flex justify-content-center gap-1 m-0 mt-2">
                 <span>You don't have account?</span>
                 <Link className="nav-link" to="/register">
                   <u>Register</u>

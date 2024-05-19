@@ -224,7 +224,7 @@ export default function UserDetails() {
               <div className="lead ms-2">
                 <div className="d-flex fs-5 fw-normal mt-2 text-black-50 align-items-center justify-content-between">
                   <Col className="d-flex" sm={3}>
-                    Email:&nbsp;
+                    Email:
                   </Col>
                   <Col className="d-flex">
                     <span className="text-black">{user.email}</span>
@@ -232,7 +232,7 @@ export default function UserDetails() {
                 </div>
                 <div className="d-flex fs-5 fw-normal mt-2 text-black-50 align-items-center justify-content-between">
                   <Col className="d-flex" sm={3}>
-                    Username:&nbsp;
+                    Username:
                   </Col>
                   <Col className="d-flex">
                     <Form.Control
@@ -247,7 +247,7 @@ export default function UserDetails() {
                 </div>
                 <div className="d-flex fw-normal mt-2 text-black-50 justify-content-between">
                   <Col className="d-flex" sm={3}>
-                    Birthday:&nbsp;
+                    Birthday:
                   </Col>
                   <Col>
                     <span className="text-black">
@@ -269,7 +269,7 @@ export default function UserDetails() {
                 </div>
                 <div className="d-flex fs-5 fw-normal mt-2 text-black-50 align-items-center justify-content-between">
                   <Col className="d-flex" sm={3}>
-                    Gender:&nbsp;
+                    Gender:
                   </Col>
                   <Col className="d-flex">
                     <span className="text-black">
@@ -294,7 +294,7 @@ export default function UserDetails() {
                 </div>
                 <div className="d-flex fs-5 fw-normal mt-2 text-black-50 align-items-center justify-content-between">
                   <Col className="d-flex" sm={3}>
-                    Country:&nbsp;
+                    Country:
                   </Col>
                   <Col className="d-flex">
                     <span className="text-black">
@@ -317,7 +317,7 @@ export default function UserDetails() {
                 {!!parseInt(user.countryId) && (
                   <div className="d-flex fs-5 fw-normal mt-2 text-black-50 align-items-center justify-content-between">
                     <Col className="d-flex" sm={3}>
-                      City:&nbsp;
+                      City:
                     </Col>
                     <Col className="d-flex">
                       <Form.Select
@@ -339,7 +339,7 @@ export default function UserDetails() {
                 )}
                 <div className="d-flex fs-5 fw-normal mt-2 text-black-50 align-items-center justify-content-between">
                   <Col className="d-flex" sm={3}>
-                    Photos:&nbsp;
+                    Photos:
                   </Col>
                   <Col className="d-flex">
                     <Form.Control
@@ -354,7 +354,7 @@ export default function UserDetails() {
                 </div>
                 <div className="d-flex fs-5 fw-normal mt-2 text-black-50 align-items-center justify-content-between">
                   <Col className="d-flex" sm={3}>
-                    Password:&nbsp;
+                    Password:
                   </Col>
                   <Col className="d-flex">
                     <Form.Control
@@ -369,7 +369,7 @@ export default function UserDetails() {
                 </div>
                 <div className="d-flex fs-5 fw-normal mt-2 text-black-50 align-items-center justify-content-between">
                   <Col className="d-flex" sm={3}>
-                    Confirm:&nbsp;
+                    Confirm:
                   </Col>
                   <Col className="d-flex">
                     <Form.Control

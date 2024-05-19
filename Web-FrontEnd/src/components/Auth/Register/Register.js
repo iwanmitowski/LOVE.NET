@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, Fragment } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import UserForm from "../../User/UserForm";
+import { useNavigate } from "react-router-dom";
 import TaCModal from "../../Modals/TaCModal/TaCModal";
 
 import * as genderService from "../../../services/genderService";
@@ -9,6 +8,13 @@ import * as countryService from "../../../services/countryService";
 import * as identityService from "../../../services/identityService";
 import * as date from "../../../utils/date.js";
 import { useEffect } from "react";
+import { Form } from "react-bootstrap";
+
+import styles from "../../Shared/Forms.module.css";
+import Step1 from "./Step1.js";
+import Step2 from "./Step2.js";
+import Step3 from "./Step3.js";
+import Step4 from "./Step4.js";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -31,8 +37,8 @@ export default function Register() {
 
   const [genders, setGenders] = useState([]);
   const [countries, setCountries] = useState([]);
-  const errorState = useState("");
-  const [, setError] = errorState;
+  const [error, setError] = useState("");
+  const [step, setStep] = useState(1);
 
   useEffect(() => {
     countryService
@@ -46,6 +52,9 @@ export default function Register() {
 
     genderService.getAll().then((res) => setGenders(res));
   }, []);
+
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
 
   const setIsReading = (isReading) => {
     setUser((prevState) => {
@@ -102,30 +111,79 @@ export default function Register() {
         });
     }
   };
-
+  const formWrapperStyles = `${styles["form-wrapper"]} d-flex flex-column justify-content-center align-items-center`;
   return (
-    <Fragment>
-      <UserForm
-        user={user}
-        genders={genders}
-        countries={countries}
-        onFormSubmit={onFormSubmit}
-        onInputChange={onInputChange}
-        setIsReading={setIsReading}
-        errorState={errorState}
-      />
-      <div className="mt-3">
-        <p>
-          Already have account ?
-          <Link className="nav-link" to="/login">
-            Login
-          </Link>
-        </p>
+    <div className={formWrapperStyles}>
+      <div className="bg-light rounded shadow p-3">
+        <h1 className="pb-2">Register</h1>
+        <div className={styles["input-fields-length"]}>
+          <Form onSubmit={onFormSubmit}>
+            {error && (
+              <div className="text-danger mb-3">
+                {error.split("\n").map((message, key) => {
+                  return <div key={key}>{message}</div>;
+                })}
+              </div>
+            )}
+            {(() => {
+              switch (step) {
+                case 1:
+                  return (
+                    <Step1
+                      user={user}
+                      onInputChange={onInputChange}
+                      nextStep={nextStep}
+                    />
+                  );
+                case 2:
+                  return (
+                    <Step2
+                      user={user}
+                      genders={genders}
+                      countries={countries}
+                      onInputChange={onInputChange}
+                      nextStep={nextStep}
+                      prevStep={prevStep}
+                    />
+                  );
+                case 3:
+                  return (
+                    <Step3
+                      user={user}
+                      setUser={setUser}
+                      onInputChange={onInputChange}
+                      nextStep={nextStep}
+                      prevStep={prevStep}
+                    />
+                  );
+                case 4:
+                  return (
+                    <Step4
+                      user={user}
+                      onInputChange={onInputChange}
+                      setIsReading={setIsReading}
+                      prevStep={prevStep}
+                    />
+                  );
+                default:
+                  return (
+                    <>
+                      <Step1
+                        user={user}
+                        onInputChange={onInputChange}
+                        nextStep={nextStep}
+                      />
+                      <TaCModal
+                        show={user.isReading}
+                        onHide={() => setIsReading(false)}
+                      ></TaCModal>
+                    </>
+                  );
+              }
+            })()}
+          </Form>
+        </div>
       </div>
-      <TaCModal
-        show={user.isReading}
-        onHide={() => setIsReading(false)}
-      ></TaCModal>
-    </Fragment>
+    </div>
   );
 }
