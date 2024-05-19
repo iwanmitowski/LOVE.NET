@@ -1,3 +1,7 @@
+* {
+  font-family: "Monaco" monospace
+}
+
 .App {
   text-align: center;
 }
@@ -53,4 +57,28 @@
 
 #actions-dropdown{
   text-align: left !important;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="number"],
+input[type="checkbox"],
+input[type="tel"],
+input[type="time"],
+input[type="date"],
+input[type="file"],
+.form-select,
+textarea {
+  align-items: center;
+  border: 1px solid rgb(201, 196, 196);
+  border-radius: 10px;
+}
+
+.btn {
+  border-radius: 12px;
+}
+
+.rounded {
+  border-radius: 12px !important;
 }
