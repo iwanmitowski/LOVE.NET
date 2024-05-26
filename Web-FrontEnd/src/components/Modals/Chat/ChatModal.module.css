@@ -21,9 +21,18 @@
     padding: 30px 100px;
   }
 
-  .media { 
+  .media-home,
+  .media-away { 
     display: flex;
     align-items: flex-start;
+  }
+
+  .media-home {
+    justify-content: flex-end;
+  }
+
+  .media-away {
+    justify-content: flex-start;
   }
   
   .rounded-lg {

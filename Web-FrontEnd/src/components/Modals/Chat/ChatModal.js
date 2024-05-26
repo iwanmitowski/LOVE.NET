@@ -118,7 +118,7 @@ export default function ChatModal(props) {
       </Modal.Header>
       {currentUser && (
         <Modal.Body>
-          <div className="container py-5 px-4">
+          <div className="container">
             <div className="row rounded-lg">
               <div className="col-12 px-0">
                 <div
@@ -133,28 +133,30 @@ export default function ChatModal(props) {
                     hasMore={hasMoreMessagesToLoad}
                     scrollableTarget="scrollableDiv"
                   >
-                    {chat.filter(m => !m.isSystemMessage).map((message, index) => (
-                      <Fragment>
-                        {message.imageUrl && (
-                          <img
-                            key={index + 1}
-                            src={message.imageUrl}
-                            alt="pastedImage"
-                            className="form-control rounded-0 border-0 bg-light"
-                          />
-                        )}
-                        {message.text &&
-                          (message.userId === user.id ? (
-                            <HomeMessage key={index + 1} message={message} />
-                          ) : (
-                            <AwayMessage
+                    {chat
+                      .filter((m) => !m.isSystemMessage)
+                      .map((message, index) => (
+                        <Fragment>
+                          {message.imageUrl && (
+                            <img
                               key={index + 1}
-                              message={message}
-                              profilePicture={profilePicture}
+                              src={message.imageUrl}
+                              alt="pastedImage"
+                              className="form-control rounded-0 border-0 bg-light"
                             />
-                          ))}
-                      </Fragment>
-                    ))}
+                          )}
+                          {message.text &&
+                            (message.userId === user.id ? (
+                              <HomeMessage key={index + 1} message={message} />
+                            ) : (
+                              <AwayMessage
+                                key={index + 1}
+                                message={message}
+                                profilePicture={profilePicture}
+                              />
+                            ))}
+                        </Fragment>
+                      ))}
                   </InfiniteScroll>
                 </div>
                 <form className="bg-light" onSubmit={onSendingMessage}>
@@ -177,7 +179,7 @@ export default function ChatModal(props) {
                             className="btn btn-link"
                           >
                             {" "}
-                            <FontAwesomeIcon icon={faTimes} className="p-2" />
+                            <FontAwesomeIcon icon={faTimes} />
                           </button>
                         </div>
                       </Fragment>

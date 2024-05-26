@@ -7,7 +7,7 @@ export default function AwayMessage(props) {
   const profilePicture = props.profilePicture;
 
   return (
-    <div className={`${styles.media} w-75 mb-3`}>
+    <div className={`${styles["media-away"]} w-75 mb-3`}>
       <img
         src={profilePicture} // message.profilePicture
         alt="user"

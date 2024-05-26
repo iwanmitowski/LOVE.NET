@@ -127,7 +127,7 @@ export default function ChatRoom(props) {
 
   return (
     <Container className="py-3">
-      <Row className="vh-100">
+      <Row>
         <Col>
           <div className="d-flex align-items-center" style={{cursor: 'pointer'}} onClick={stopConnection}>
             <FontAwesomeIcon
