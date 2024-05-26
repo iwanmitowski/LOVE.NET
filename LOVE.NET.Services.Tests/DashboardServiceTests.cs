@@ -288,10 +288,10 @@
         [TestCase("FEMALE ")]
         [TestCase("female ")]
         [TestCase("female ")]
-        [TestCase("Trans")]
-        [TestCase("Trans  ")]
+        [TestCase("Other")]
+        [TestCase("Other  ")]
         [TestCase("trans  ")]
-        [TestCase("TRANS  ")]
+        [TestCase("OTHER  ")]
         public async Task SuccessGetUsersSearchGender(string genderName)
         {
             var users = dbContext.Users;

@@ -28,7 +28,7 @@
                    },
                    new Gender()
                    {
-                       Name = Trans,
+                       Name = Other,
                    },
                 };
 
