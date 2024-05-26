@@ -6,7 +6,6 @@ const Step4 = ({
   user,
   onInputChange,
   setIsReading,
-  onFormSubmit,
   prevStep,
 }) => {
   return (
@@ -41,7 +40,7 @@ const Step4 = ({
         </Col>
       </Form.Group>
       <Form.Group
-        className="form-group mb-3 d-flex fs-5 fw-normal mt-2 text-black-50 align-items-center justify-content-between"
+        className="form-group mb-3 d-flex fs-5 fw-normal mt-2 text-black-50 align-items-center"
         controlId="birthdate"
       >
         <Form.Check

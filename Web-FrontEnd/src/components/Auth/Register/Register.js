@@ -112,6 +112,7 @@ export default function Register() {
     }
   };
   const formWrapperStyles = `${styles["form-wrapper"]} d-flex flex-column justify-content-center align-items-center`;
+
   return (
     <div className={formWrapperStyles}>
       <div className="bg-light rounded shadow p-3">
@@ -158,26 +159,26 @@ export default function Register() {
                   );
                 case 4:
                   return (
-                    <Step4
-                      user={user}
-                      onInputChange={onInputChange}
-                      setIsReading={setIsReading}
-                      prevStep={prevStep}
-                    />
-                  );
-                default:
-                  return (
                     <>
-                      <Step1
+                      <Step4
                         user={user}
                         onInputChange={onInputChange}
-                        nextStep={nextStep}
+                        setIsReading={setIsReading}
+                        prevStep={prevStep}
                       />
                       <TaCModal
                         show={user.isReading}
                         onHide={() => setIsReading(false)}
                       ></TaCModal>
                     </>
+                  );
+                default:
+                  return (
+                    <Step1
+                      user={user}
+                      onInputChange={onInputChange}
+                      nextStep={nextStep}
+                    />
                   );
               }
             })()}
