@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/Home";
 import Main from "./components/Shared/Main/Main";
@@ -26,8 +26,12 @@ import DatingAdvices from "./components/Static/DatingAdvices";
 import Reset from "./components/Auth/Reset/Reset";
 import ChatRooms from "./components/ChatRoom/ChatRooms";
 import ChatRoom from "./components/ChatRoom/ChatRoom";
+import UserPreferences from "./components/UserPreferences/UserPreferences";
 
 function App() {
+  const [showPreferences, setShowPreferences] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [usersToSwipe, setUsersToSwipe] = useState([]);
   const { isLogged, userLogout, user } = useIdentityContext();
 
   // Logout if session is expired
@@ -37,7 +41,17 @@ function App() {
     }
   }, []);
 
-  const homeComponent = isLogged && user.isAdmin ? <Dashboard /> : <Home />;
+  const homeComponent =
+    isLogged && user.isAdmin ? (
+      <Dashboard />
+    ) : (
+      <Home
+        setShowPreferences={setShowPreferences}
+        filteredUsers={filteredUsers}
+        setFilteredUsers={setFilteredUsers}
+        setUsersToSwipe={setUsersToSwipe}
+      />
+    );
 
   return (
     <div className="App">
@@ -46,7 +60,7 @@ function App() {
         <div style={{ minWidth: "280px" }}></div>
         <div className="col-md-10">
           <div>
-            <div className="p-3" style={{ minHeight: "100vh" }}>
+            <div className="p-3" style={{ minHeight: "93vh" }}>
               <Routes style={{ overflowX: "hidden", minHeight: "100vh" }}>
                 <Route path="/LOVE.NET" element={homeComponent} />
                 <Route path="/" element={homeComponent} />
@@ -153,8 +167,15 @@ function App() {
             </div>
           </div>
 
-          <Footer />
+          <Footer showPreferences={showPreferences}/>
         </div>
+        <div style={{ minWidth: "280px" }}></div>
+        {isLogged && showPreferences && (
+          <UserPreferences
+            setFilteredUsers={setFilteredUsers}
+            users={usersToSwipe}
+          />
+        )}
       </Main>
     </div>
   );

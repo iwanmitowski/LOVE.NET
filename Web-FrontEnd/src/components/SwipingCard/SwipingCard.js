@@ -44,7 +44,7 @@ export default function SwipingCard(props) {
   const cardContent = (
     <div
       className={`${styles["card"]} ${styles["no-selecting"]} rounded shadow overflow-hidden`}
-      style={{ width: "30rem", margin: "auto" }}
+      style={{ width: "30rem", margin: "auto", marginTop: "4%" }}
     >
       <SwipingCardCarousel images={currentUser.images} />
       <div className={`m-3 ${styles["card-body"]}`}>

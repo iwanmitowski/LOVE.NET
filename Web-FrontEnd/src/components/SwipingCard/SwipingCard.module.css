@@ -17,8 +17,9 @@
 
 .swipe {
   position: absolute; 
-  left: 15%; 
+  left: 0; 
   right: 0; 
+  top: 8%;
   margin-left: auto; 
   margin-right: auto; 
   width: 480px;

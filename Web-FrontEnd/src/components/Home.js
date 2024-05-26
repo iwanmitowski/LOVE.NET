@@ -3,21 +3,23 @@ import { useIdentityContext } from "../hooks/useIdentityContext";
 import SwipingCardContainer from "./SwipingCard/SwipingCardContainer";
 import { useNavigate } from "react-router-dom";
 import MatchModal from "./Modals/Match/MatchModal";
-import UserPreferences from "./UserPreferences/UserPreferences";
 import Loader from "./Shared/Loader/Loader";
 import NotLoggedHome from "./NotLoggedHome/NotLoggedHome";
 
 import * as datingService from "../services/datingService";
 
-export default function Home() {
+export default function Home(props) {
   const navigate = useNavigate();
   const { isLogged, userLogout } = useIdentityContext();
-  const [usersToSwipe, setUsersToSwipe] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [matchModel, setMatchModel] = useState({
     isMatch: false,
   });
+
+  const filteredUsers = props.filteredUsers;
+  const setFilteredUsers = props.setFilteredUsers;
+  const setUsersToSwipe = props.setUsersToSwipe;
+  const setShowPreferences = props.setShowPreferences;
 
   const swipe = (dir, swipedUserId) => {
     setUsersToSwipe((prevState) => {
@@ -48,6 +50,7 @@ export default function Home() {
   useEffect(() => {
     if (isLogged) {
       setIsLoading(() => true);
+      setShowPreferences(true);
       datingService
         .getUsersToSwipe()
         .then((res) => {
@@ -68,6 +71,9 @@ export default function Home() {
         })
         .finally(() => setIsLoading(() => false));
     }
+    return () => {
+      setShowPreferences(false);
+    };
   }, [isLogged]);
 
   if (!isLogged) {
@@ -78,8 +84,11 @@ export default function Home() {
     <Loader isFullScreen />
   ) : (
     <Fragment>
-      <UserPreferences filterUsers={setFilteredUsers} users={usersToSwipe} />
-      <SwipingCardContainer users={filteredUsers} swipe={swipe} />
+      <SwipingCardContainer
+        users={filteredUsers}
+        showPreferences={true}
+        swipe={swipe}
+      />
       <MatchModal
         show={matchModel.isMatch}
         user={matchModel.user}

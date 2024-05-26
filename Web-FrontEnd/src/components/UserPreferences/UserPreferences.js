@@ -1,6 +1,4 @@
-import { Fragment } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import RangeSlider from "react-bootstrap-range-slider";
 import { useIdentityContext } from "../../hooks/useIdentityContext";
@@ -24,9 +22,10 @@ export default function UserPreferences(props) {
     },
   ]);
 
-  const filterUsers = props.filterUsers;
+  const setFilteredUsers = props.setFilteredUsers;
   const users = props.users;
-
+  const areShown = props.areShown;
+  
   useEffect(() => {
     if (!preferences) {
       setUserPreferences(defaultPreferences);
@@ -54,7 +53,7 @@ export default function UserPreferences(props) {
       );
     }
 
-    filterUsers(currentFilteredUsers);
+    setFilteredUsers(currentFilteredUsers);
   }, [preferences, users]);
 
   useEffect(() => {
@@ -90,11 +89,22 @@ export default function UserPreferences(props) {
 
   return (
     <div
-      className="container d-flex justify-content-md-center"
-      style={{ minHeight: "159px" }}
+      className="d-flex flex-column flex-shrink-0 p-3 bg-light fixed-bottom"
+      style={{
+        width: "280px",
+        minHeight: "100vh",
+        textAlign: "left",
+        left: "auto",
+      }}
     >
+      <div className="nav-link text-uppercase" to="/LOVE.NET">
+        Filters
+      </div>
+      <hr />
       <Form.Group className="m-3">
-        <h6>Max age</h6>
+        <h6>
+          <strong>Age</strong>
+        </h6>
         <RangeSlider
           name="maxAge"
           min={18}
@@ -104,16 +114,22 @@ export default function UserPreferences(props) {
         />
       </Form.Group>
       <Form.Group className="m-3">
-        <h6>All over the world</h6>
-        <Form.Check
-          type="checkbox"
-          id="all-over-the-world"
-          name="aroundTheWorld"
-          onChange={onInputChange}
-        />
+        <h6>
+          <strong>Distance</strong>
+        </h6>
+        <div className="d-flex align-items-center">
+          <h6 className="m-0">All over the world</h6>
+          <Form.Check
+            className="mx-2"
+            type="checkbox"
+            id="all-over-the-world"
+            name="aroundTheWorld"
+            onChange={onInputChange}
+          />
+        </div>
         {!preferences.aroundTheWorld && (
-          <Fragment>
-            <h6>Max range in km</h6>
+          <div className="mt-2">
+            <h6>Total distance</h6>
             <RangeSlider
               step={10}
               max={600}
@@ -122,25 +138,30 @@ export default function UserPreferences(props) {
               value={preferences.maxDistance}
               onChange={onInputChange}
             />
-          </Fragment>
+          </div>
         )}
       </Form.Group>
       <Form.Group className="m-3">
-        {genders.map((g) => {
-          return (
-            <Form.Check
-              inline
-              label={g.name}
-              name="gender"
-              type="radio"
-              key={`${g.id}-${g.name}`}
-              id={`${g.id}-${g.name}`}
-              defaultChecked={g.id === -1}
-              value={g.id}
-              onChange={onInputChange}
-            />
-          );
-        })}
+        <>
+          <h6>
+            <strong>Genders</strong>
+          </h6>
+          {genders.map((g) => {
+            return (
+              <Form.Check
+                inline
+                label={g.name}
+                name="gender"
+                type="radio"
+                key={`${g.id}-${g.name}`}
+                id={`${g.id}-${g.name}`}
+                defaultChecked={g.id === -1}
+                value={g.id}
+                onChange={onInputChange}
+              />
+            );
+          })}
+        </>
       </Form.Group>
     </div>
   );
