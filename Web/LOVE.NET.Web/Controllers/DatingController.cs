@@ -107,5 +107,25 @@
 
             return this.Ok(result);
         }
+
+        [HttpPost]
+        [Authorize]
+        [Route(UnlikeRoute)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Result))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> UnlikeAsync(string id)
+        {
+            var loggedUserId = this.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var serviceResult = await this.datingService.UnlikeAsync(loggedUserId, id);
+
+            if (serviceResult.Errors != null)
+            {
+                return this.BadRequest((Result)string.Join('\n', serviceResult.Errors));
+            }
+
+            return this.Ok();
+        }
     }
 }

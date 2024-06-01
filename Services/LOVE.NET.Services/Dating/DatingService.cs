@@ -32,7 +32,7 @@
                 .WithAllInformation(u =>
                     u.Id != userId &&
                     u.Roles.Any() == false && // Excluding admins
-                    u.LikesReceived.Any(lr => lr.UserId == userId) == false)
+                    u.LikesReceived.Any(lr => lr.UserId == userId && lr.IsDeleted == false) == false)
                 .To<UserMatchViewModel>();
 
             foreach (var user in notSwipedUsers)
@@ -49,6 +49,7 @@
 
             var matchesIds = user.LikesSent
                         .Where(l =>
+                            l.IsDeleted == false &&
                             user.LikesReceived
                                 .Select(lr => lr.UserId)
                                 .Intersect(
@@ -131,7 +132,7 @@
 
             var user = await users.FirstOrDefaultAsync(u => u.Id == userId);
 
-            if (user.LikesSent.Any(ls => ls.LikedUserId == likedUserId))
+            if (user.LikesSent.Any(ls => !ls.IsDeleted && ls.LikedUserId == likedUserId))
             {
                 return UserAlreadyLiked;
             }
@@ -144,9 +145,56 @@
 
             await this.usersRepository.SaveChangesAsync();
 
-            var isMatch = likedUser.LikesSent.Any(ls => ls.LikedUserId == userId);
+            var isMatch = likedUser.LikesSent.Any(ls => !ls.IsDeleted && ls.LikedUserId == userId);
 
             return isMatch;
+        }
+
+        // Refactor this with Like repository
+        public async Task<Result> UnlikeAsync(string userId, string unlikedUserId)
+        {
+            var users = this.usersRepository.WithAllInformation(
+                u => new[] { userId, unlikedUserId }.Any(id => id == u.Id));
+
+            var unlikedUserFound = await users.AnyAsync(u => u.Id == unlikedUserId);
+
+            if (!unlikedUserFound)
+            {
+                return UserNotFound;
+            }
+
+            if (users.Count() == 1)
+            {
+                return YouCantLikeYourself;
+            }
+
+            var user = await users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            var previouslyUnliked = user.LikesSent.Any(ls => ls.LikedUserId == unlikedUserId && ls.IsDeleted);
+            var noLikesAfterUnlike = user.LikesSent.All(ls => ls.LikedUserId != unlikedUserId || ls.CreatedOn <= ls.DeletedOn);
+
+            if (previouslyUnliked && noLikesAfterUnlike)
+            {
+                return UserAlreadyUnliked;
+            }
+
+            var date = DateTime.UtcNow;
+            var activeLike = user.LikesSent
+                .OrderByDescending(ls => ls.CreatedOn)
+                .FirstOrDefault(ls => ls.LikedUserId == unlikedUserId && !ls.IsDeleted);
+            
+            if (activeLike == null)
+            {
+                return UserAlreadyUnliked;
+            }
+
+            activeLike.IsDeleted = true;
+            activeLike.DeletedOn = date;
+            activeLike.ModifiedOn = date;
+
+            await this.usersRepository.SaveChangesAsync();
+
+            return true;
         }
     }
 }

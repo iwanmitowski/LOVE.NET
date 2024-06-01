@@ -100,6 +100,7 @@
             public const string DatingControllerName = Api + "dating";
             public const string MatchesRoute = "matches";
             public const string LikeRoute = "like/{id:guid}";
+            public const string UnlikeRoute = "unlike/{id:guid}";
 
             public const string ChatControllerName = Api + "chat";
             public const string ByRoomId = "room/{id}";
@@ -124,6 +125,7 @@
             public const string CantBanYourself = "You can't ban yourself";
             public const string YouCantLikeYourself = "You can't like yourself";
             public const string UserAlreadyLiked = "User is already liked";
+            public const string UserAlreadyUnliked = "User is already unliked";
             public const string WrongPassword = "Wrong password";
             public const string BannedUnitl = "You are banned until {0}";
             public const string WrongOldPassword = "Old password is invalid";

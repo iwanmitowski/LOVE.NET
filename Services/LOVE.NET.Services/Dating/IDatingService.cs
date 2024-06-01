@@ -16,5 +16,7 @@
         MatchesViewModel GetMatches(MatchesRequestViewModel request);
 
         Task<Result> LikeAsync(string userId, string likedUserId);
+
+        Task<Result> UnlikeAsync(string userId, string unlikedUserId);
     }
 }
