@@ -4,7 +4,11 @@ import { Button } from "react-bootstrap";
 import TinderCard from "react-tinder-card";
 import SwipingCardCarousel from "./SwipingCardCarousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCommentAlt,
+  faHeart,
+  faClose,
+} from "@fortawesome/free-solid-svg-icons";
 
 import * as distance from "../../utils/distance";
 
@@ -39,8 +43,8 @@ export default function SwipingCard(props) {
 
   const cardContent = (
     <div
-      className={`${styles["card"]} ${styles["no-selecting"]}`}
-      style={{ width: "30rem", margin: "30px auto" }}
+      className={`${styles["card"]} ${styles["no-selecting"]} rounded shadow overflow-hidden`}
+      style={{ width: "30rem", margin: "auto", marginTop: "4%" }}
     >
       <SwipingCardCarousel images={currentUser.images} />
       <div className={`m-3 ${styles["card-body"]}`}>
@@ -58,20 +62,44 @@ export default function SwipingCard(props) {
         {!!swipe && (
           <Fragment>
             <Button
-              className="m-3"
+              className="m-3 rounded shadow"
+              style={{
+                border: "1px solid lightgray",
+              }}
               variant="light"
               type="submit"
               onClick={() => swipe("left", currentUser.id)}
             >
-              ❌
+              <FontAwesomeIcon
+                icon={faClose}
+                style={{
+                  width: "26px",
+                  height: "28px",
+                  display: "flex",
+                  margin: "5px 0",
+                  color: "#650202",
+                }}
+              />
             </Button>
             <Button
-              className="m-3"
+              className="m-3 rounded shadow"
+              style={{
+                border: "1px solid lightgray",
+              }}
               variant="light"
               type="submit"
               onClick={() => swipe("right", currentUser.id)}
             >
-              💚
+              <FontAwesomeIcon
+                icon={faHeart}
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  display: "flex",
+                  margin: "7px 1px",
+                  color: "#74B72E",
+                }}
+              />
             </Button>
           </Fragment>
         )}

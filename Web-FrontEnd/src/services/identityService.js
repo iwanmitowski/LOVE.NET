@@ -26,7 +26,13 @@ export async function register(user) {
   }
 
   for (var i = 0; i < user?.newImages?.length; i++) {
-    formData.append("NewImages", user.newImages[i]);
+    const image = user.newImages[i];
+    
+    if (image.name === user.image?.name) {
+      formData.append("Image", image);
+    } else {
+      formData.append("NewImages", user.newImages[i]);
+    }
   }
 
   try {

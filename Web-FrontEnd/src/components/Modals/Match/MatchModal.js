@@ -1,10 +1,11 @@
 import { Button, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SwipingCardCarousel from "../../SwipingCard/SwipingCardCarousel";
 
 import styles from "../../SwipingCard/SwipingCard.module.css";
 
 export default function MatchModal(props) {
+  const navigate = useNavigate();
   const onHide = props.onHide;
   const user = props.user;
 
@@ -17,11 +18,11 @@ export default function MatchModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          <h1 className="text-success text-uppercase">It's a match !!!</h1>
+          <h4 className="text-uppercase m-0">Match</h4>
         </Modal.Title>
       </Modal.Header>
       {user && (
-        <Modal.Body>
+        <Modal.Body className="p-0">
           <div
             className={`card text-center ${styles["no-selecting"]}`}
             style={{ margin: "0px auto" }}
@@ -44,11 +45,9 @@ export default function MatchModal(props) {
         </Modal.Body>
       )}
 
-      <Modal.Footer>
+      <Modal.Footer className="d-flex align-items-center justify-content-between">
         <Button onClick={onHide} className="btn btn-danger">Close</Button>
-        <Link className="btn btn-priamry" role="button" to="/matches">
-          <Button>To matches</Button>
-        </Link>
+        <Button onClick={() => navigate("/matches")} className="btn btn-dark">To matches</Button>
       </Modal.Footer>
     </Modal>
   );

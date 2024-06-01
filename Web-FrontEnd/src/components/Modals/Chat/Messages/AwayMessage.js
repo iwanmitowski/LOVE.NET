@@ -7,7 +7,7 @@ export default function AwayMessage(props) {
   const profilePicture = props.profilePicture;
 
   return (
-    <div className={`${styles.media} w-75 mb-3`}>
+    <div className={`${styles["media-away"]} w-75 mb-3`}>
       <img
         src={profilePicture} // message.profilePicture
         alt="user"
@@ -17,7 +17,7 @@ export default function AwayMessage(props) {
       />
       <div className="media-body ms-3">
         <div className="bg-light rounded py-2 px-3 mb-2">
-          <p className="mb-0 text-muted">{message.text}</p>
+          <p className="mb-0 text-muted d-flex">{message.text}</p>
         </div>
         <p className="small text-muted">
           <Moment local format="D MMMM YYYY HH:mm">

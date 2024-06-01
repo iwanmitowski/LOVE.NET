@@ -127,7 +127,7 @@ export default function ChatRoom(props) {
 
   return (
     <Container className="py-3">
-      <Row className="vh-100">
+      <Row>
         <Col>
           <div className="d-flex align-items-center" style={{cursor: 'pointer'}} onClick={stopConnection}>
             <FontAwesomeIcon
@@ -158,7 +158,12 @@ export default function ChatRoom(props) {
                       key={index + 1}
                       src={message.imageUrl}
                       alt="pastedImage"
-                      className="form-control rounded-0 border-0 bg-light"
+                      style={{
+                        height: "200px",
+                        padding: "0",
+                        objectFit: "contain"
+                      }}
+                      className="form-control my-4 rounded-0 border-0 bg-light"
                     />
                   )}
                   {message.text &&
@@ -187,8 +192,9 @@ export default function ChatRoom(props) {
                     id="preview"
                     className="form-control rounded-0 border-0 bg-light"
                     style={{
-                      height: "180px",
+                      height: "200px",
                       padding: "0",
+                      objectFit: "contain"
                     }}
                   />
                   <div className="input-group-append">
@@ -216,7 +222,7 @@ export default function ChatRoom(props) {
               <div className="input-group-append">
                 <button id="send" type="submit" className="btn btn-link">
                   {" "}
-                  <FontAwesomeIcon icon={faPaperPlane} className="me-2" />
+                  <FontAwesomeIcon icon={faPaperPlane} />
                 </button>
               </div>
             </div>

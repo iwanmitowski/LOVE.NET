@@ -46,60 +46,61 @@ export default function Login() {
       });
   };
 
-  const formWrapperStyles = `${styles["form-wrapper"]} d-flex justify-content-center align-items-center`;
+  const formWrapperStyles = `${styles["form-wrapper"]} d-flex flex-column justify-content-center align-items-center`;
 
   return (
     <div className={formWrapperStyles}>
-      <div className={styles["input-fields-length"]}>
-        <Form onSubmit={onFormSubmit}>
-          <Form.Group className="form-group mb-3" controlId="email">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              defaultValue={user.email}
-              placeholder="Enter address"
-              onChange={onInputChange}
-              required
-            />
-          </Form.Group>
-          <Form.Group className="form-group mb-3" controlId="password">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              name="password"
-              defaultValue={user.password}
-              placeholder="Enter password"
-              onChange={onInputChange}
-              required
-            />
-          </Form.Group>
-          {error && (
-            <div className="text-danger mb-3">
-              {error.split("\n").map((message, key) => {
-                return <div key={key}>{message}</div>;
-              })}
-            </div>
-          )}
-          <Form.Group>
-            <p>
-              <Link className="nav-link" to="/resetPassword">
-                Forgot your password ?
-              </Link>
-            </p>
-          </Form.Group>
-          <Button variant="dark" type="submit">
-            Login
-          </Button>
-          <Form.Group>
-            <p>
-              You don't have account ?
-              <Link className="nav-link" to="/register">
-                Register
-              </Link>
-            </p>
-          </Form.Group>
-        </Form>
+      <div className="bg-light rounded shadow p-3">
+        <h1 className="pb-2">Login</h1>
+        <div className={styles["input-fields-length"]}>
+          <Form onSubmit={onFormSubmit}>
+            <Form.Group className="form-group mb-3" controlId="email">
+              <Form.Control
+                type="email"
+                name="email"
+                defaultValue={user.email}
+                placeholder="Email"
+                onChange={onInputChange}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="form-group mb-3" controlId="password">
+              <Form.Control
+                type="password"
+                name="password"
+                defaultValue={user.password}
+                placeholder="Password"
+                onChange={onInputChange}
+                required
+              />
+            </Form.Group>
+            {error && (
+              <div className="text-danger mb-3">
+                {error.split("\n").map((message, key) => {
+                  return <div key={key}>{message}</div>;
+                })}
+              </div>
+            )}
+            <Form.Group>
+              <p>
+                <Link className="nav-link" to="/resetPassword">
+                  <u>Forgot your password?</u>
+                </Link>
+              </p>
+            </Form.Group>
+            <Button variant="dark" type="submit">
+              Login
+            </Button>
+            <Form.Group>
+              <p className="d-flex justify-content-center gap-1 m-0 mt-2">
+                <span>You don't have account?</span>
+                <Link className="nav-link" to="/register">
+                  <u>Register</u>
+                </Link>
+              </p>
+            </Form.Group>
+          </Form>
+        </div>
       </div>
     </div>
   );

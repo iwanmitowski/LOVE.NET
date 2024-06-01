@@ -17,8 +17,9 @@
 
 .swipe {
   position: absolute; 
-  left: 15%; 
+  left: 0; 
   right: 0; 
+  top: 8%;
   margin-left: auto; 
   margin-right: auto; 
   width: 480px;
@@ -29,7 +30,6 @@
   height: 100%;
   min-height: 320px;
   max-height: 320px;
-  border-radius: 30px 30px 0px 0px;
 }
 
 .no-selecting {

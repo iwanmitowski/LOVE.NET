@@ -10,6 +10,7 @@ export default function SwipingCardContainer(props) {
   const fetchUsers = props.fetchUsers;
   const hasMoreUsersToLoad = props.hasMoreUsersToLoad;
   const setUserBanRequest = props.setUserBanRequest;
+  const showPreferences = props.showPreferences;
 
   return (
     <InfiniteScroll
@@ -31,7 +32,18 @@ export default function SwipingCardContainer(props) {
           />
         ))
       ) : (
-        <div className="container">
+        <div
+          className="container"
+          style={{
+            position: "absolute",
+            left: showPreferences ? "0" : "12%",
+            top: "40%",
+            right: "0",
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "480px",
+          }}
+        >
           <h1 className="text-center">Come back later</h1>
         </div>
       )}

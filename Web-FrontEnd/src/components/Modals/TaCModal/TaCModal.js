@@ -1,4 +1,3 @@
-import { useRef, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 
 export default function TaCModal(props) {
@@ -14,17 +13,13 @@ export default function TaCModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          <h3>Terms and conditions</h3>
+          <h4 className="m-0">Terms and conditions</h4>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div>
           <div style={{ overflow: "scroll", height: "30vh" }}>
-            <h2>
-              <strong>Terms and Conditions</strong>
-            </h2>
-
-            <p>Welcome to love.net!</p>
+            <p>Welcome to LOVE.NET!</p>
 
             <p>
               These terms and conditions outline the rules and regulations for
@@ -355,7 +350,7 @@ export default function TaCModal(props) {
           </div>
         </div>
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className="d-flex justify-content-start">
         <Button onClick={onHide} className="btn btn-danger">
           Cancel
         </Button>
