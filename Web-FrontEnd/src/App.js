@@ -167,7 +167,7 @@ function App() {
             </div>
           </div>
 
-          <Footer showPreferences={showPreferences}/>
+          <Footer showPreferences={showPreferences} />
         </div>
         <div style={{ minWidth: "280px" }}></div>
         {isLogged && showPreferences && (

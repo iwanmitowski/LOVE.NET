@@ -1,4 +1,3 @@
-import { useRef, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 
 export default function TaCModal(props) {

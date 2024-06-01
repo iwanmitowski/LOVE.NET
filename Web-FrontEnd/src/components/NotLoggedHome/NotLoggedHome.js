@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function NotLoggedHome() {
   return (
     <div style={{ textAlign: "left" }}>
-      <div className="p-5 mb-4 bg-light rounded-3 border border-danger">
+      <div className="p-5 mb-4 bg-light rounded-3 shadow border border-danger">
         <div className="container-fluid py-5">
           <h1 className="display-5 fw-bold">Love.net</h1>
           <h3>
@@ -24,7 +24,7 @@ export default function NotLoggedHome() {
       </div>
       <div className="row align-items-md-stretch">
         <div className="col-md-8">
-          <div className="h-100 p-5 text-white bg-dark rounded-3">
+          <div className="h-100 p-5 text-white bg-dark shadow rounded-3">
             <h2>Dating advices</h2>
             <p className="fs-5">
               Recommendations offered to individuals who are looking to develop
@@ -42,7 +42,7 @@ export default function NotLoggedHome() {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="h-100 bg-light border border-danger rounded-3">
+          <div className="h-100 bg-light border shadow border-danger rounded-3">
             <img
               alt="homeimage"
               className="img-fluid rounded-3"

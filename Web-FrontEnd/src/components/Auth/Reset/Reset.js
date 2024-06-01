@@ -1,7 +1,6 @@
-import { useEffect } from "react";
-import { Fragment, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
 
 import * as emailService from "../../../services/emailService";
@@ -76,45 +75,49 @@ export default function Reset() {
     setMessage("");
   };
 
-  const formWrapperStyles = `${styles["form-wrapper"]} d-flex justify-content-center align-items-center`;
+  const formWrapperStyles = `${styles["form-wrapper"]} d-flex flex-column justify-content-center align-items-center`;
 
   return (
     <div className={formWrapperStyles}>
-      <div className={styles["input-fields-length"]}>
+      <div
+        className={`bg-light rounded shadow p-3 ${styles["input-fields-length"]}`}
+      >
         {!isLogged && !data.token ? (
-          <Form onSubmit={resendEmail}>
-            <Form.Group className="form-group mb-3" controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                defaultValue={data.email}
-                placeholder="Enter address"
-                onChange={onInputChange}
-                required
-              />
-            </Form.Group>
-            {error && (
-              <div className="text-danger mb-3">
-                {error.split("\n").map((message, key) => {
-                  return <div key={key}>{message}</div>;
-                })}
-              </div>
-            )}
-            <Button variant="dark" type="submit">
-              Send
-            </Button>
-          </Form>
+          <div>
+            <h4 className="pb-2">Send reset password email</h4>
+            <Form onSubmit={resendEmail}>
+              <Form.Group className="form-group mb-3" controlId="email">
+                <Form.Control
+                  type="email"
+                  name="email"
+                  defaultValue={user?.email}
+                  placeholder="Email"
+                  onChange={onInputChange}
+                  required
+                />
+              </Form.Group>
+              {error && (
+                <div className="text-danger mb-3">
+                  {error.split("\n").map((message, key) => {
+                    return <div key={key}>{message}</div>;
+                  })}
+                </div>
+              )}
+              <Button variant="dark" type="submit">
+                Send
+              </Button>
+            </Form>
+          </div>
         ) : (
-          <Fragment>
+          <div>
+            <h4>Reset password</h4>
             <Form onSubmit={reset}>
               <Form.Group className="form-group mb-3" controlId="password">
-                <Form.Label>New Password</Form.Label>
                 <Form.Control
                   type="password"
                   name="password"
-                  value={data.password || ""}
-                  placeholder="Enter password"
+                  defaultValue={user?.password}
+                  placeholder="Password"
                   onChange={onInputChange}
                   required
                 />
@@ -123,7 +126,6 @@ export default function Reset() {
                 className="form-group mb-3"
                 controlId="confirmPassword"
               >
-                <Form.Label>Confirm Password</Form.Label>
                 <Form.Control
                   type="password"
                   name="confirmPassword"
@@ -144,7 +146,7 @@ export default function Reset() {
                 Reset
               </Button>
             </Form>
-          </Fragment>
+          </div>
         )}
         {message && message}
       </div>

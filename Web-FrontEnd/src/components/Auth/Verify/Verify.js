@@ -1,5 +1,4 @@
-import { Fragment, useState } from "react";
-import { useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
 
@@ -45,31 +44,42 @@ export default function Verify() {
       ? message
       : "We have sent you an verifiaction email. Check your email";
 
-  const button = isVerifying ? (
-    <Link className="nav-link" to="/login">
-      here
-    </Link>
-  ) : (
+  const button = (
     <Fragment>
-      <div>Haven't received our email ?</div>
-      <Button variant="primary" type="submit" onClick={resendEmail}>
-        Resend
-      </Button>
+      <h4>
+        {isVerifying
+          ? "Click below to verify your account"
+          : "Haven't received our email?"}
+      </h4>
+      {isVerifying ? (
+        <Link className="nav-link" to="/login">
+          <Button variant="dark" type="submit" onClick={resendEmail}>
+            Verify
+          </Button>
+        </Link>
+      ) : (
+        <>
+          <Button variant="dark" type="submit" onClick={resendEmail}>
+            Resend
+          </Button>
+        </>
+      )}
     </Fragment>
   );
-
   return (
     <div className={formWrapperStyles}>
-      <div className={styles["input-fields-length"]}>
-        <h2>{content}</h2>
-        {error && (
-          <div className="text-danger mb-3">
-            {error.split("\n").map((message, key) => {
-              return <div key={key}>{message}</div>;
-            })}
-          </div>
-        )}
-        {button}
+      <div className="bg-light rounded shadow p-3">
+        <div className={styles["input-fields-length"]}>
+          <h3>{content}</h3>
+          {error && (
+            <div className="text-danger mb-3">
+              {error.split("\n").map((message, key) => {
+                return <div key={key}>{message}</div>;
+              })}
+            </div>
+          )}
+          {button}
+        </div>
       </div>
     </div>
   );

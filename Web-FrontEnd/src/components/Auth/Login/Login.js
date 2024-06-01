@@ -84,7 +84,7 @@ export default function Login() {
             <Form.Group>
               <p>
                 <Link className="nav-link" to="/resetPassword">
-                  Forgot your password ?
+                  <u>Forgot your password?</u>
                 </Link>
               </p>
             </Form.Group>
