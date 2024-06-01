@@ -147,7 +147,7 @@ export default function ChatModal(props) {
                                 padding: "0",
                                 objectFit: "contain"
                               }}
-                              className="form-control mt-2 rounded-0 border-0 bg-light"
+                              className="form-control my-4 rounded-0 border-0 bg-light"
                             />
                           )}
                           {message.text &&

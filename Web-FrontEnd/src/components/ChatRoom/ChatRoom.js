@@ -163,7 +163,7 @@ export default function ChatRoom(props) {
                         padding: "0",
                         objectFit: "contain"
                       }}
-                      className="form-control mt-2 rounded-0 border-0 bg-light"
+                      className="form-control my-4 rounded-0 border-0 bg-light"
                     />
                   )}
                   {message.text &&
@@ -190,7 +190,7 @@ export default function ChatRoom(props) {
                     src={pastedImageUrl}
                     alt="pastedImage"
                     id="preview"
-                    className="form-control mt-2 rounded-0 border-0 bg-light"
+                    className="form-control rounded-0 border-0 bg-light"
                     style={{
                       height: "200px",
                       padding: "0",
