@@ -31,7 +31,12 @@ export default function Matches() {
 
   useEffect(() => {
     if (chatUser) {
-      chatState.setUserConnection({ userId: user.id, roomId: chatUser.roomId, profilePictureUrl: user.profilePicture, userName: user.userName });
+      chatState.setUserConnection({
+        userId: user.id,
+        roomId: chatUser.roomId,
+        profilePictureUrl: user.profilePicture,
+        userName: user.userName,
+      });
     }
   }, [chatUser]);
 
@@ -120,7 +125,23 @@ export default function Matches() {
         });
     }
   };
-  
+
+  const unmatch = (unmatchedUserId) => {
+    setMatches((prevState) => {
+      return [...prevState.filter((m) => m.id !== unmatchedUserId)];
+    });
+    datingService.unmatchUser(unmatchedUserId).catch((error) => {
+      if (
+        error?.response?.status === 401 ||
+        error?.message?.includes("status code 401")
+      ) {
+        userLogout();
+      } else {
+        console.log(error);
+      }
+    });
+  };
+
   return isLoading ? (
     <Loader />
   ) : (
@@ -143,6 +164,7 @@ export default function Matches() {
         hasMoreUsersToLoad={request.hasMore}
         users={matches}
         startChat={setChatUser}
+        unmatch={unmatch}
       />
     </Fragment>
   );

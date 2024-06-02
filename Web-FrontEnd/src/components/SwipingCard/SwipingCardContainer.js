@@ -11,6 +11,7 @@ export default function SwipingCardContainer(props) {
   const hasMoreUsersToLoad = props.hasMoreUsersToLoad;
   const setUserBanRequest = props.setUserBanRequest;
   const showPreferences = props.showPreferences;
+  const unmatch = props.unmatch;
 
   return (
     <InfiniteScroll
@@ -29,6 +30,7 @@ export default function SwipingCardContainer(props) {
             swipe={swipe}
             startChat={startChat}
             setUserBanRequest={setUserBanRequest}
+            unmatch={unmatch}
           />
         ))
       ) : (

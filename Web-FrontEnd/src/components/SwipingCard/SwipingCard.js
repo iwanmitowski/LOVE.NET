@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Button } from "react-bootstrap";
 import TinderCard from "react-tinder-card";
 import SwipingCardCarousel from "./SwipingCardCarousel";
@@ -8,12 +8,14 @@ import {
   faCommentAlt,
   faHeart,
   faClose,
+  faUserXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 import * as distance from "../../utils/distance";
 
 import styles from "./SwipingCard.module.css";
 import { useIdentityContext } from "../../hooks/useIdentityContext";
+import ConfirmationModal from "../Modals/Confirmation/ConfirmationModal";
 
 // Debouncer for safety for delaying requests to the server
 function debounce(func, timeout = 3000) {
@@ -29,10 +31,13 @@ function debounce(func, timeout = 3000) {
 export default function SwipingCard(props) {
   const { user, location } = useIdentityContext();
 
+  const [showUnmatchConfirmModal, setShowUnmatchConfirmModal] = useState(false);
+
   const currentUser = props.user;
   const swipe = props.swipe;
   const startChat = props.startChat;
   const setUserBanRequest = props.setUserBanRequest;
+  const unmatch = props.unmatch;
 
   const currentDistance = distance.inKms(
     location.latitude,
@@ -66,6 +71,7 @@ export default function SwipingCard(props) {
               style={{
                 border: "1px solid lightgray",
               }}
+              title="Dislike"
               variant="light"
               type="submit"
               onClick={() => swipe("left", currentUser.id)}
@@ -86,6 +92,7 @@ export default function SwipingCard(props) {
               style={{
                 border: "1px solid lightgray",
               }}
+              title="Like"
               variant="light"
               type="submit"
               onClick={() => swipe("right", currentUser.id)}
@@ -148,15 +155,63 @@ export default function SwipingCard(props) {
           </Fragment>
         )}
         {!!startChat && (
-          <Button
-            variant="light"
-            type="submit"
-            onClick={() => startChat(currentUser)}
-          >
-            <FontAwesomeIcon icon={faCommentAlt} />
-          </Button>
+          <>
+            <Button
+              className="m-3 rounded shadow"
+              style={{
+                border: "1px solid lightgray",
+              }}
+              title="Unmatch"
+              variant="light"
+              type="submit"
+              onClick={() => setShowUnmatchConfirmModal(true)}
+            >
+              <FontAwesomeIcon
+                icon={faUserXmark}
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  display: "flex",
+                  margin: "7px 1px",
+                  color: "#650202",
+                }}
+              />
+            </Button>
+            <Button
+              className="m-3 rounded shadow"
+              style={{
+                border: "1px solid lightgray",
+              }}
+              title="Start chatting"
+              variant="light"
+              type="submit"
+              onClick={() => startChat(currentUser)}
+            >
+              <FontAwesomeIcon
+                icon={faCommentAlt}
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  display: "flex",
+                  margin: "7px 1px",
+                  color: "#333",
+                }}
+              />
+            </Button>
+          </>
         )}
       </div>
+      <ConfirmationModal
+        show={showUnmatchConfirmModal}
+        handleClose={() => setShowUnmatchConfirmModal(false)}
+        handleConfirm={() => {
+          setShowUnmatchConfirmModal(false);
+          unmatch(currentUser.id);
+        }}
+        contentText={`Are you sure you want to unmatch ${currentUser.userName}?`}
+        cancelButtonText="Cancel"
+        confirmButtonText="Confirm"
+      />
     </div>
   );
 

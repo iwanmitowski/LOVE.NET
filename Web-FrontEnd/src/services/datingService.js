@@ -35,3 +35,13 @@ export async function likeUser(userId) {
     throw new Error(error.message);
   }
 }
+
+export async function unmatchUser(userId) {
+  try {
+    const response = await instance.post(`${baseUrl}/unlike/${userId}`);
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
