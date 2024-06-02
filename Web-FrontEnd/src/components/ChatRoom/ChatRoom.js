@@ -1,11 +1,4 @@
-import {
-  Col,
-  Container,
-  Form,
-  Image,
-  ListGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, Container, Form, Image, ListGroup, Row } from "react-bootstrap";
 import AwayMessage from "../Modals/Chat/Messages/AwayMessage";
 import HomeMessage from "../Modals/Chat/Messages/HomeMessage";
 import { useIdentityContext } from "../../hooks/useIdentityContext";
@@ -16,10 +9,12 @@ import {
   faChevronLeft,
   faPaperPlane,
   faTimes,
+  faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import styles from "../Modals/Chat/ChatModal.module.css";
+import { chatConstants } from "../../utils/constants";
 
 export default function ChatRoom(props) {
   const { user } = useIdentityContext();
@@ -31,6 +26,8 @@ export default function ChatRoom(props) {
   };
   const [pastedImageUrl, setPastedImageUrl] = useState("");
   const [currentMessage, setCurrentMessage] = useState(defaultMessage);
+  const [showSensitiveDataWarning, setShowSensitiveDataWarning] =
+    useState(false);
 
   const sendMessage = props.sendMessage;
   const chat = props.chat;
@@ -38,14 +35,18 @@ export default function ChatRoom(props) {
   const roomId = props.roomId;
   const usersInRoom = props.usersInRoom;
   const stopConnection = props.onHide;
-  
+
   useEffect(() => {
-    window.addEventListener('beforeunload', () => {
+    isSendingSensitiveData();
+  }, [currentMessage.text, pastedImageUrl]);
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", () => {
       stopConnection();
     });
     return () => {
       stopConnection();
-      window.removeEventListener('beforeunload', stopConnection);
+      window.removeEventListener("beforeunload", stopConnection);
     };
   }, []);
 
@@ -74,6 +75,13 @@ export default function ChatRoom(props) {
 
     setCurrentMessage(defaultMessage);
     setPastedImageUrl("");
+  };
+
+  const isSendingSensitiveData = () => {
+    const matches = currentMessage?.text?.match(chatConstants.PHONE_REGEX);
+    const hasTypedPhoneNumber = !!matches?.length;
+    const isSendingImage = !!pastedImageUrl;
+    setShowSensitiveDataWarning(isSendingImage || hasTypedPhoneNumber);
   };
 
   const onInputChange = (e) => {
@@ -129,7 +137,11 @@ export default function ChatRoom(props) {
     <Container className="py-3">
       <Row>
         <Col>
-          <div className="d-flex align-items-center" style={{cursor: 'pointer'}} onClick={stopConnection}>
+          <div
+            className="d-flex align-items-center"
+            style={{ cursor: "pointer" }}
+            onClick={stopConnection}
+          >
             <FontAwesomeIcon
               icon={faChevronLeft}
               style={{ marginRight: "4px" }}
@@ -161,15 +173,15 @@ export default function ChatRoom(props) {
                       style={{
                         height: "200px",
                         padding: "0",
-                        objectFit: "contain"
+                        objectFit: "contain",
                       }}
                       className="form-control my-4 rounded-0 border-0 bg-light"
                     />
                   )}
                   {message.text &&
-                    (
-                      message.isSystemMessage ? <p>{message.text}</p> :
-                      message.userId === user.id ? (
+                    (message.isSystemMessage ? (
+                      <p>{message.text}</p>
+                    ) : message.userId === user.id ? (
                       <HomeMessage key={index + 1} message={message} />
                     ) : (
                       <AwayMessage
@@ -183,6 +195,17 @@ export default function ChatRoom(props) {
             </InfiniteScroll>
           </div>
           <Form className="d-flex flex-column" onSubmit={onSendingMessage}>
+            {showSensitiveDataWarning && (
+              <div
+                className="py-2 bg-white d-flex justify-content-center align-items-center"
+                style={{ color: "#ffa500" }}
+              >
+                <FontAwesomeIcon icon={faWarning} />
+                <p className="my-0 mx-1">
+                  You are probably going to send sensitive data!
+                </p>
+              </div>
+            )}
             <div className="input-group">
               {pastedImageUrl && (
                 <>
@@ -194,7 +217,7 @@ export default function ChatRoom(props) {
                     style={{
                       height: "200px",
                       padding: "0",
-                      objectFit: "contain"
+                      objectFit: "contain",
                     }}
                   />
                   <div className="input-group-append">

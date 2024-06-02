@@ -10,7 +10,7 @@ const ConfirmationModal = ({
   confirmButtonText,
 }) => {
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal show={show} onHide={handleClose} backdrop="static" centered>
       <Modal.Header closeButton>
         <Modal.Title>
           <h4 className="m-0">Confirmation</h4>

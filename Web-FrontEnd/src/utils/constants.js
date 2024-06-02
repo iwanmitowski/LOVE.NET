@@ -18,7 +18,7 @@ export const identityConstants = {
   TOO_LONG_BIO: "Shorten your bio",
   USERNAME_MAX_LENGTH: 100,
   TOO_LONG_USERNAME: "Shorten your username",
-  UNDERAGED_USER: "You must to be 18 years old to register",
+  UNDERAGED_USER: "You must be 18 years old to register",
   CITIES_MAX_COUNT: 42905,
   INVALID_CITY: "Invalid city",
   COUNTRIES_MAX_COUNT: 239,
@@ -26,4 +26,8 @@ export const identityConstants = {
   UNSUPPORTED_FILE_TYPE: "Unsupported file type",
   GENDERS_MAX_COUNT: 3,
   INVALID_GENDER: "Invalid gender",
+};
+
+export const chatConstants = {
+  PHONE_REGEX: /\+?\d{1,4}[\s.-]?\(?\d{1,4}\)?[\s.-]?\d{1,4}[\s.-]?\d{1,4}[\s.-]?\d{1,9}/
 };

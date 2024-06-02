@@ -1,7 +1,11 @@
 import { Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import {
+  faPaperPlane,
+  faTimes,
+  faWarning,
+} from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
 import HomeMessage from "./Messages/HomeMessage";
 import AwayMessage from "./Messages/AwayMessage";
@@ -10,6 +14,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import styles from "./ChatModal.module.css";
 import { Fragment } from "react";
+import { chatConstants } from "../../../utils/constants";
 
 export default function ChatModal(props) {
   const { user } = useIdentityContext();
@@ -21,6 +26,12 @@ export default function ChatModal(props) {
 
   const [pastedImageUrl, setPastedImageUrl] = useState("");
   const [currentMessage, setCurrentMessage] = useState(defaultMessage);
+  const [showSensitiveDataWarning, setShowSensitiveDataWarning] =
+    useState(false);
+
+  useEffect(() => {
+    isSendingSensitiveData();
+  }, [currentMessage.text, pastedImageUrl]);
 
   const currentUser = props.user;
   const sendMessage = props.sendMessage;
@@ -56,8 +67,16 @@ export default function ChatModal(props) {
     setPastedImageUrl("");
   };
 
+  const isSendingSensitiveData = () => {
+    const matches = currentMessage?.text?.match(chatConstants.PHONE_REGEX);
+    const hasTypedPhoneNumber = !!matches?.length;
+    const isSendingImage = !!pastedImageUrl;
+    setShowSensitiveDataWarning(isSendingImage || hasTypedPhoneNumber);
+  };
+
   const onInputChange = (e) => {
     let currentValue = e.target.value;
+
     setCurrentMessage((prevStae) => {
       return {
         ...prevStae,
@@ -96,12 +115,17 @@ export default function ChatModal(props) {
       let skipCharactersCount = text.indexOf(",") + 1;
       text = text.slice(skipCharactersCount);
 
-      setCurrentMessage((prevStae) => {
-        return {
-          ...prevStae,
-          image: text,
-        };
-      });
+      setCurrentMessage(
+        (prevStae) => {
+          return {
+            ...prevStae,
+            image: text,
+          };
+        },
+        () => {
+          isSendingSensitiveData();
+        }
+      );
     });
   };
 
@@ -145,7 +169,7 @@ export default function ChatModal(props) {
                               style={{
                                 height: "200px",
                                 padding: "0",
-                                objectFit: "contain"
+                                objectFit: "contain",
                               }}
                               className="form-control my-4 rounded-0 border-0 bg-light"
                             />
@@ -165,6 +189,17 @@ export default function ChatModal(props) {
                   </InfiniteScroll>
                 </div>
                 <form className="bg-light" onSubmit={onSendingMessage}>
+                  {showSensitiveDataWarning && (
+                    <div
+                      className="py-2 d-flex justify-content-center align-items-center"
+                      style={{ color: "#ffa500" }}
+                    >
+                      <FontAwesomeIcon icon={faWarning} />
+                      <p className="my-0 mx-1">
+                        You are probably going to send sensitive data!
+                      </p>
+                    </div>
+                  )}
                   <div className="input-group">
                     {pastedImageUrl && (
                       <Fragment>
@@ -176,7 +211,7 @@ export default function ChatModal(props) {
                           style={{
                             height: "200px",
                             padding: "0",
-                            objectFit: "contain"
+                            objectFit: "contain",
                           }}
                         />
                         <div className="input-group-append">
