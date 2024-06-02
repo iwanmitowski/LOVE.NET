@@ -1,4 +1,12 @@
-import { Col, Container, Form, Image, ListGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Image,
+  ListGroup,
+  Row,
+} from "react-bootstrap";
 import AwayMessage from "../Modals/Chat/Messages/AwayMessage";
 import HomeMessage from "../Modals/Chat/Messages/HomeMessage";
 import { useIdentityContext } from "../../hooks/useIdentityContext";
@@ -7,6 +15,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
+  faHeart,
   faPaperPlane,
   faTimes,
   faWarning,
@@ -35,6 +44,7 @@ export default function ChatRoom(props) {
   const roomId = props.roomId;
   const usersInRoom = props.usersInRoom;
   const stopConnection = props.onHide;
+  const likeUser = props.likeUser;
 
   useEffect(() => {
     isSendingSensitiveData();
@@ -149,7 +159,7 @@ export default function ChatRoom(props) {
             <span>Rooms</span>
           </div>
         </Col>
-        <Col xs={9} className="d-flex flex-column border-end">
+        <Col xs={8} className="d-flex flex-column border-end">
           <div
             id="scrollableDiv"
             className={`px-4 ${styles["chat-box"]} bg-white`}
@@ -251,20 +261,46 @@ export default function ChatRoom(props) {
             </div>
           </Form>
         </Col>
-        <Col xs={2}>
+        <Col xs={3}>
           <ListGroup variant="flush">
-            {usersInRoom.map((user) => (
+            {usersInRoom.map((userInRoom) => (
               <ListGroup.Item
-                key={user.id}
-                className="d-flex align-items-center"
+                key={userInRoom.id}
+                className="d-flex align-items-center justify-content-between"
               >
-                <Image
-                  src={user.profilePictureUrl}
-                  roundedCircle
-                  width="24"
-                  height="24"
-                />
-                <span className="ms-2">{user.userName}</span>
+                <div>
+                  <Image
+                    src={userInRoom.profilePictureUrl}
+                    roundedCircle
+                    width="24"
+                    height="24"
+                  />
+                  <span className="ms-2">{userInRoom.userName}</span>
+                </div>
+
+                {user.id !== userInRoom.id && (
+                  <Button
+                    className="m-0 p-0 rounded shadow"
+                    style={{
+                      border: "1px solid lightgray",
+                    }}
+                    title="Like"
+                    variant="light"
+                    type="submit"
+                    onClick={() => likeUser(userInRoom.id)}
+                  >
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        display: "flex",
+                        margin: "3px",
+                        color: "#74B72E",
+                      }}
+                    />
+                  </Button>
+                )}
               </ListGroup.Item>
             ))}
           </ListGroup>

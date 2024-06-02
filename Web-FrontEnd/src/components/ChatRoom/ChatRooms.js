@@ -5,12 +5,18 @@ import * as chatService from "../../services/chatService";
 import { useChat } from "../../hooks/useChat";
 import { useIdentityContext } from "../../hooks/useIdentityContext";
 import ChatRoom from "./ChatRoom";
+import MatchModal from "../Modals/Match/MatchModal";
+
+import * as datingService from "../../services/datingService";
 
 export default function ChatRooms() {
-  const { user } = useIdentityContext();
+  const { user, userLogout } = useIdentityContext();
   const [rooms, setRooms] = useState([]);
   const chatState = useChat();
   const [chat, setChat] = useState([]);
+  const [matchModel, setMatchModel] = useState({
+    isMatch: false,
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -25,6 +31,24 @@ export default function ChatRooms() {
     chatState.stopConnection().then(() => {
       chatState.setUserConnection(null);
     });
+  };
+
+  const likeUser = (likedUserId) => {
+    datingService
+      .likeUser(likedUserId)
+      .then((res) => {
+        setMatchModel(res);
+      })
+      .catch((error) => {
+        if (
+          error?.response?.status === 401 ||
+          error?.message?.includes("status code 401")
+        ) {
+          userLogout();
+        } else {
+          console.log(error);
+        }
+      });
   };
 
   const fetchMessages = (roomId) => {
@@ -53,10 +77,11 @@ export default function ChatRooms() {
         sendMessage={chatState.sendMessage}
         fetchMessages={fetchMessages}
         onHide={() => onCloseChat()}
+        likeUser={likeUser}
       />
     );
   }
-  
+
   return (
     <div className="d-flex flex-wrap justify-content-center">
       {rooms.map((r) => (
@@ -65,10 +90,20 @@ export default function ChatRooms() {
           title={r.title}
           imgSrc={r.url}
           join={() => {
-            chatState.setUserConnection({ userId: user.id, roomId: r.id, profilePictureUrl: user.profilePicture, userName: user.userName });
+            chatState.setUserConnection({
+              userId: user.id,
+              roomId: r.id,
+              profilePictureUrl: user.profilePicture,
+              userName: user.userName,
+            });
           }}
         />
       ))}
+      <MatchModal
+        show={matchModel.isMatch}
+        user={matchModel.user}
+        onHide={() => setMatchModel({ isMatch: false })}
+      />
     </div>
   );
 }
