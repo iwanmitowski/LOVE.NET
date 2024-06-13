@@ -46,7 +46,7 @@ instance.interceptors.response.use(
           const response = await instance.post("/identity/refreshToken");
 
           const { token } = response.data;
-          localStorage.setItem("auth", JSON.stringify(token));
+          localStorage.setItem("auth", JSON.stringify(response.data));
 
           originalConfig.headers["Authorization"] = `Bearer ${token}`;
 
