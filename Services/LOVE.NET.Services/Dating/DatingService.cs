@@ -82,8 +82,6 @@
                .Take(DefaultTake)
                .ToList();
 
-            var totalMatches = matchesResult.Count();
-
             foreach (var match in matchesResult)
             {
                 var roomId = string.Join(string.Empty, new[] { match.Id, request.UserId }.OrderBy(id => id));
@@ -91,6 +89,7 @@
                 match.Images = match.Images.OrderByDescending(i => i.IsProfilePicture).ToList();
             }
 
+            var totalMatches = matchesIds.Count();
             var result = new MatchesViewModel()
             {
                 Matches = matchesResult,
