@@ -63,8 +63,7 @@ export const useChat = () => {
                   ...prevState,
                 ];
               });
-            }, 0)
-            
+            }, 0);
           });
         })
         .catch((error) => console.error("Connection failed: ", error));
