@@ -8,6 +8,7 @@ import ChatRoom from "./ChatRoom";
 import MatchModal from "../Modals/Match/MatchModal";
 
 import * as datingService from "../../services/datingService";
+import Loader from "../Shared/Loader/Loader";
 
 export default function ChatRooms() {
   const { user, userLogout } = useIdentityContext();
@@ -17,10 +18,17 @@ export default function ChatRooms() {
   const [matchModel, setMatchModel] = useState({
     isMatch: false,
   });
+
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    chatService.getChatrooms().then((res) => setRooms(res));
+    setIsLoading(true);
+    chatService
+      .getChatrooms()
+      .then((res) => {
+        setRooms(res);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {
@@ -68,17 +76,28 @@ export default function ChatRooms() {
     }
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
   if (chatState.userConnection) {
     return (
-      <ChatRoom
-        roomId={chatState.userConnection.roomId}
-        chat={chat}
-        usersInRoom={chatState.usersInRoom || []}
-        sendMessage={chatState.sendMessage}
-        fetchMessages={fetchMessages}
-        onHide={() => onCloseChat()}
-        likeUser={likeUser}
-      />
+      <>
+        <ChatRoom
+          roomId={chatState.userConnection.roomId}
+          chat={chat}
+          usersInRoom={chatState.usersInRoom || []}
+          sendMessage={chatState.sendMessage}
+          fetchMessages={fetchMessages}
+          onHide={() => onCloseChat()}
+          likeUser={likeUser}
+        />
+        <MatchModal
+          show={matchModel.isMatch}
+          user={matchModel.user}
+          onHide={() => setMatchModel({ isMatch: false })}
+        />
+      </>
     );
   }
 
@@ -99,11 +118,6 @@ export default function ChatRooms() {
           }}
         />
       ))}
-      <MatchModal
-        show={matchModel.isMatch}
-        user={matchModel.user}
-        onHide={() => setMatchModel({ isMatch: false })}
-      />
     </div>
   );
 }
