@@ -17,7 +17,12 @@ export const useChat = () => {
   useEffect(() => {
     if (userConnection) {
       const newConnection = new HubConnectionBuilder()
-        .withUrl(`${globalConstants.BASE_URL}/chat`)
+        .withUrl(`${globalConstants.BASE_URL}/chat`, {
+          // The hub is [Authorize]d now; sender identity comes from this
+          // token's claims, not from the payload.
+          accessTokenFactory: () =>
+            JSON.parse(localStorage.getItem("auth") || "{}")?.token,
+        })
         .configureLogging(LogLevel.Information)
         .withAutomaticReconnect()
         .build();

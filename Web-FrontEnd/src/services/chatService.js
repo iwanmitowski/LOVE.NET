@@ -23,3 +23,18 @@ export async function getChatrooms() {
     console.log(error);
   }
 }
+
+// Chat images are uploaded over REST first; the websocket message then
+// carries only the returned URL (no more base64 over the socket).
+export async function uploadChatImage(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await instance.post(`${baseUrl}/images`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data.url;
+}

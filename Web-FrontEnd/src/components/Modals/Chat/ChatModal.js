@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
 import HomeMessage from "./Messages/HomeMessage";
 import AwayMessage from "./Messages/AwayMessage";
-import { useChat } from "../../../hooks/useChat";
+import * as chatService from "../../../services/chatService";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import styles from "./ChatModal.module.css";
@@ -13,7 +13,7 @@ import { Fragment } from "react";
 
 export default function ChatModal(props) {
   const { user } = useIdentityContext();
-  const { hasMoreMessagesToLoad } = useChat();
+  const hasMoreMessagesToLoad = props.hasMoreMessagesToLoad;
   const defaultMessage = {
     text: "",
     image: null,
@@ -31,24 +31,28 @@ export default function ChatModal(props) {
     (i) => i.isProfilePicture
   )?.url;
 
-  const onSendingMessage = (e) => {
+  const onSendingMessage = async (e) => {
     e.preventDefault();
 
     if (!currentMessage.text && !currentMessage.image) {
       return;
     }
 
-    sendMessage({
-      roomId: currentUser.roomId,
-      userId: user.id,
-      text: currentMessage.text,
-    });
-
-    if (currentMessage.image) {
+    if (currentMessage.text) {
       sendMessage({
         roomId: currentUser.roomId,
-        userId: user.id,
-        image: currentMessage.image,
+        text: currentMessage.text,
+        profilePicture: user.profilePicture,
+      });
+    }
+
+    if (currentMessage.image) {
+      // Upload over REST first; only the URL travels over the websocket.
+      const imageUrl = await chatService.uploadChatImage(currentMessage.image);
+      sendMessage({
+        roomId: currentUser.roomId,
+        imageUrl,
+        profilePicture: user.profilePicture,
       });
     }
 
@@ -69,7 +73,6 @@ export default function ChatModal(props) {
   const onImagePaste = (e) => {
     const clipboardItems = e.clipboardData.items;
     const items = [].slice.call(clipboardItems).filter(function (item) {
-      // Filter the image items only
       return /^image\//.test(item.type);
     });
 
@@ -91,17 +94,11 @@ export default function ChatModal(props) {
       "utf-8"
     );
 
-    getBase64(file).then((res) => {
-      let text = res;
-      let skipCharactersCount = text.indexOf(",") + 1;
-      text = text.slice(skipCharactersCount);
-
-      setCurrentMessage((prevStae) => {
-        return {
-          ...prevStae,
-          image: text,
-        };
-      });
+    setCurrentMessage((prevState) => {
+      return {
+        ...prevState,
+        image: file,
+      };
     });
   };
 
@@ -216,13 +213,4 @@ export default function ChatModal(props) {
       )}
     </Modal>
   );
-}
-
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
 }
