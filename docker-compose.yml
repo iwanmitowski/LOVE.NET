@@ -122,6 +122,7 @@ services:
         create matching.match-created 3
         create chat.message-sent 8
         create chat.room-provisioned 3
+        create chat.room-read 3
         create notifications.email-requested 3
         create dead-letter 1
         create healthchecks-topic 1

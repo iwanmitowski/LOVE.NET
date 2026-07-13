@@ -38,6 +38,14 @@ public class ChatController : ControllerBase
     [HttpGet("chatrooms")]
     public async Task<IActionResult> GetChatRooms() => Ok(await chatService.GetChatroomsAsync());
 
+    /// <summary>Conversation-list data; inaccessible rooms are silently omitted.</summary>
+    [Authorize]
+    [HttpPost("summaries")]
+    public async Task<IActionResult> GetSummaries([FromBody] SummariesRequestModel request)
+    {
+        return Ok(await chatService.GetSummariesAsync(request.RoomIds, User.GetUserId()));
+    }
+
     /// <summary>
     /// Chat-image upload. Replaces the monolith's base64-over-WebSocket flow:
     /// the client uploads first, then sends the message with the returned URL.

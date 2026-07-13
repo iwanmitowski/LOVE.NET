@@ -14,6 +14,9 @@ public class ChatRequestModel
 /// <summary>History item — same field names the SPA renders (monolith MessageDto).</summary>
 public class MessageModel
 {
+    /// <summary>Server-assigned message id (assigned by the Realtime hub).</summary>
+    public string Id { get; set; } = null!;
+
     public string RoomId { get; set; } = null!;
 
     public string UserId { get; set; } = null!;
@@ -43,4 +46,28 @@ public class ChatroomModel
     public string Title { get; set; } = null!;
 
     public string Url { get; set; } = null!;
+}
+
+public class SummariesRequestModel
+{
+    public List<string> RoomIds { get; set; } = new();
+}
+
+/// <summary>Conversation-list data for one room: last message + unread state.</summary>
+public class RoomSummaryModel
+{
+    public string RoomId { get; set; } = null!;
+
+    public string? LastMessageText { get; set; }
+
+    public string? LastMessageImageUrl { get; set; }
+
+    public string? LastMessageSenderId { get; set; }
+
+    public DateTime? LastMessageAt { get; set; }
+
+    public int UnreadCount { get; set; }
+
+    /// <summary>When the other 1:1 participant last read the room (null for public rooms).</summary>
+    public DateTime? PeerLastReadAt { get; set; }
 }

@@ -21,6 +21,7 @@ builder.Services.AddOutboxPublisher<ChatDbContext>();
 builder.Services.AddHostedService<MessageSentConsumer>();
 builder.Services.AddHostedService<MatchCreatedConsumer>();
 builder.Services.AddHostedService<UserUpdatedConsumer>();
+builder.Services.AddHostedService<RoomReadConsumer>();
 builder.Services.AddCloudinaryMedia(builder.Configuration);
 
 builder.Services.AddScoped<IMessageStore, PostgresMessageStore>();

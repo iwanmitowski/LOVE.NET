@@ -149,6 +149,23 @@ namespace LoveNet.Chat.Api.Data.Migrations
                     b.ToTable("rooms", (string)null);
                 });
 
+            modelBuilder.Entity("LoveNet.Chat.Api.Data.RoomRead", b =>
+                {
+                    b.Property<string>("RoomId")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastReadAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("RoomId", "UserId");
+
+                    b.ToTable("room_reads", (string)null);
+                });
+
             modelBuilder.Entity("LoveNet.Chat.Api.Data.UserProfileLite", b =>
                 {
                     b.Property<string>("UserId")

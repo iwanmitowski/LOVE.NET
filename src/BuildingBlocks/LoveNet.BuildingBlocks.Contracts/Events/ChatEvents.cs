@@ -24,3 +24,12 @@ public record RoomProvisionedEvent(
     bool IsPublic,
     IReadOnlyList<string> MemberIds,
     string? Name);
+
+/// <summary>
+/// Published by Realtime when a user marks a room read; consumed by Chat to
+/// persist last-read state for unread counts and read receipts. Key: roomId.
+/// </summary>
+public record RoomReadEvent(
+    string RoomId,
+    string UserId,
+    DateTime ReadAt);
