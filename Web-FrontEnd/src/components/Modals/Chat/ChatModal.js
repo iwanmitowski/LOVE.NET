@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useIdentityContext } from "../../../hooks/useIdentityContext";
 import HomeMessage from "./Messages/HomeMessage";
 import AwayMessage from "./Messages/AwayMessage";
-import { useChat } from "../../../hooks/useChat";
 import * as chatService from "../../../services/chatService";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -14,7 +13,7 @@ import { Fragment } from "react";
 
 export default function ChatModal(props) {
   const { user } = useIdentityContext();
-  const { hasMoreMessagesToLoad } = useChat();
+  const hasMoreMessagesToLoad = props.hasMoreMessagesToLoad;
   const defaultMessage = {
     text: "",
     image: null,
@@ -74,7 +73,6 @@ export default function ChatModal(props) {
   const onImagePaste = (e) => {
     const clipboardItems = e.clipboardData.items;
     const items = [].slice.call(clipboardItems).filter(function (item) {
-      // Filter the image items only
       return /^image\//.test(item.type);
     });
 

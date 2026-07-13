@@ -5,8 +5,6 @@ using LoveNet.Notifications.Api.Data;
 using LoveNet.Notifications.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddLoveNetDefaults("notifications-api");

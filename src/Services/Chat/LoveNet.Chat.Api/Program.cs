@@ -8,8 +8,6 @@ using LoveNet.Chat.Api.Data.Seeding;
 using LoveNet.Chat.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddLoveNetDefaults("chat-api");

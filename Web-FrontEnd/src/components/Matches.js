@@ -132,6 +132,7 @@ export default function Matches() {
         chat={chat}
         sendMessage={chatState.sendMessage}
         fetchMessages={fetchMessages}
+        hasMoreMessagesToLoad={chatState.hasMoreMessagesToLoad}
       />
       <Search
         search={() => fetchUsers(1)}

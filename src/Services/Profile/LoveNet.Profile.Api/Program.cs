@@ -8,8 +8,6 @@ using LoveNet.Profile.Api.Data.Seeding;
 using LoveNet.Profile.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddLoveNetDefaults("profile-api");

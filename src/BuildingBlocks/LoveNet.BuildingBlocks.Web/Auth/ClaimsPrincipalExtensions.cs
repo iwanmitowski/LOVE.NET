@@ -12,7 +12,4 @@ public static class ClaimsPrincipalExtensions
     public static string GetUserName(this ClaimsPrincipal user) =>
         user.FindFirstValue(ClaimTypes.Name)
             ?? throw new InvalidOperationException("Authenticated principal has no Name claim");
-
-    public static string? GetEmail(this ClaimsPrincipal user) =>
-        user.FindFirstValue(ClaimTypes.Email);
 }

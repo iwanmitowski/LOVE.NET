@@ -6,8 +6,6 @@ using LoveNet.Matching.Api.Data;
 using LoveNet.Matching.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddLoveNetDefaults("matching-api");

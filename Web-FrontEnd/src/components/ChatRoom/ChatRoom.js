@@ -92,7 +92,6 @@ export default function ChatRoom(props) {
   const onImagePaste = (e) => {
     const clipboardItems = e.clipboardData.items;
     const items = [].slice.call(clipboardItems).filter(function (item) {
-      // Filter the image items only
       return /^image\//.test(item.type);
     });
 

@@ -147,7 +147,6 @@ public class ProfileService : IProfileService
                     Id = i.Id,
                     Url = i.Url,
                     IsProfilePicture = i.IsProfilePicture,
-                    IsDeleted = i.IsDeleted,
                 })
                 .ToList(),
         });

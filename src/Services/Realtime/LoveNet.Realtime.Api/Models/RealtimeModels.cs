@@ -1,19 +1,15 @@
 namespace LoveNet.Realtime.Api.Models;
 
 /// <summary>
-/// Join/leave payload (legacy UserConnection shape). UserId and UserName are
-/// ignored server-side — identity comes from JWT claims; only
-/// ProfilePictureUrl is trusted, as cosmetic data.
+/// Join/leave payload. The SPA still sends the legacy UserConnection shape
+/// with userId/userName; those extra JSON fields are ignored on binding —
+/// identity comes from JWT claims. ProfilePictureUrl is cosmetic only.
 /// </summary>
 public class UserConnectionModel
 {
-    public string? UserId { get; set; }
-
     public string RoomId { get; set; } = string.Empty;
 
     public string? ProfilePictureUrl { get; set; }
-
-    public string? UserName { get; set; }
 }
 
 public class SendMessageModel

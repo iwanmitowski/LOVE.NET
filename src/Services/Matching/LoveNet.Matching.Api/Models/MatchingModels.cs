@@ -45,8 +45,6 @@ public class ImageModel
     public string Url { get; set; } = null!;
 
     public bool IsProfilePicture { get; set; }
-
-    public bool IsDeleted { get; set; }
 }
 
 public class MatchesRequestModel

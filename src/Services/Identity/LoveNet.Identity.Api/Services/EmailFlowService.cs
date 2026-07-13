@@ -36,7 +36,7 @@ public class EmailFlowService : IEmailFlowService
         db.AddOutboxMessage(
             KafkaTopics.EmailRequested,
             user.Id,
-            new EmailRequestedEvent(EmailType.ConfirmEmail, user.Email!, user.UserName!, link),
+            new EmailRequestedEvent(EmailType.ConfirmEmail, user.Email!, link),
             correlationId);
         await db.SaveChangesAsync();
     }
@@ -58,7 +58,7 @@ public class EmailFlowService : IEmailFlowService
         db.AddOutboxMessage(
             KafkaTopics.EmailRequested,
             user.Id,
-            new EmailRequestedEvent(EmailType.ResetPassword, user.Email!, user.UserName!, link),
+            new EmailRequestedEvent(EmailType.ResetPassword, user.Email!, link),
             correlationId);
         await db.SaveChangesAsync();
 

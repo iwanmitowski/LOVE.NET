@@ -12,21 +12,24 @@ namespace LoveNet.Notifications.Api.Services;
 public class EmailDispatchService : IEmailDispatchService
 {
     private const string ConsumerName = "notifications-service";
-    private const string FromEmail = "parentassistantapi@abv.bg";
-    private const string FromName = "ParentAssistantApi";
 
     private readonly NotificationsDbContext db;
     private readonly IEmailSender emailSender;
     private readonly IEmailTemplateProvider templateProvider;
+    private readonly string fromEmail;
+    private readonly string fromName;
 
     public EmailDispatchService(
         NotificationsDbContext db,
         IEmailSender emailSender,
-        IEmailTemplateProvider templateProvider)
+        IEmailTemplateProvider templateProvider,
+        IConfiguration configuration)
     {
         this.db = db;
         this.emailSender = emailSender;
         this.templateProvider = templateProvider;
+        fromEmail = configuration["Email:FromAddress"] ?? "no-reply@lovenet.local";
+        fromName = configuration["Email:FromName"] ?? "LOVE.NET";
     }
 
     public async Task HandleEmailRequestedAsync(Guid messageId, EmailRequestedEvent evt, CancellationToken ct)
@@ -46,7 +49,7 @@ public class EmailDispatchService : IEmailDispatchService
         var template = await templateProvider.GetTemplateAsync(templateFile, ct);
         var content = string.Format(template, evt.Link);
 
-        await emailSender.SendEmailAsync(FromEmail, FromName, evt.ToEmail, subject, content);
+        await emailSender.SendEmailAsync(fromEmail, fromName, evt.ToEmail, subject, content);
 
         db.EmailLogs.Add(new EmailLog
         {
@@ -106,7 +109,7 @@ public class EmailDispatchService : IEmailDispatchService
     {
         var content = $"<h1>It's a match!</h1><p>You matched with {other.UserName}. Open LOVE.NET to say hi!</p>";
 
-        await emailSender.SendEmailAsync(FromEmail, FromName, recipient.Email, subject, content);
+        await emailSender.SendEmailAsync(fromEmail, fromName, recipient.Email, subject, content);
 
         db.EmailLogs.Add(new EmailLog
         {

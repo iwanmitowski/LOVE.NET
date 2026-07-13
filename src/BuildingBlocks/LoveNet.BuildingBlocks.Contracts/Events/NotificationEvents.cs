@@ -13,5 +13,4 @@ public enum EmailType
 public record EmailRequestedEvent(
     EmailType EmailType,
     string ToEmail,
-    string ToUserName,
     string Link);

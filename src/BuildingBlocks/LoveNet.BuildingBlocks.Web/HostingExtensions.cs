@@ -21,6 +21,11 @@ public static class HostingExtensions
     /// </summary>
     public static WebApplicationBuilder AddLoveNetDefaults(this WebApplicationBuilder builder, string serviceName)
     {
+        // Entities ported from the monolith mix DateTime kinds (seed data,
+        // birthdates); legacy behavior maps them to "timestamp without time
+        // zone" like the monolith did. Harmless for services without Npgsql.
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
         builder.Host.UseSerilog((context, loggerConfiguration) =>
         {
             loggerConfiguration

@@ -2,6 +2,7 @@ using LoveNet.BuildingBlocks.Contracts.Events;
 using LoveNet.Notifications.Api.Data;
 using LoveNet.Notifications.Api.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
 
 namespace LoveNet.Notifications.Tests;
@@ -28,7 +29,8 @@ public class EmailDispatchServiceTests
             .Setup(p => p.GetTemplateAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("link: {0}");
 
-        service = new EmailDispatchService(db, emailSender.Object, templateProvider.Object);
+        var configuration = new ConfigurationBuilder().Build();
+        service = new EmailDispatchService(db, emailSender.Object, templateProvider.Object, configuration);
     }
 
     [TearDown]
@@ -40,7 +42,6 @@ public class EmailDispatchServiceTests
         var evt = new EmailRequestedEvent(
             EmailType.ConfirmEmail,
             "user@example.com",
-            "TestUser",
             "https://love.net/confirm?token=abc");
 
         await service.HandleEmailRequestedAsync(Guid.NewGuid(), evt, CancellationToken.None);
@@ -71,7 +72,6 @@ public class EmailDispatchServiceTests
         var evt = new EmailRequestedEvent(
             EmailType.ResetPassword,
             "user@example.com",
-            "TestUser",
             "https://love.net/reset?token=xyz");
 
         await service.HandleEmailRequestedAsync(messageId, evt, CancellationToken.None);

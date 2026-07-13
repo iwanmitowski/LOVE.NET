@@ -1,4 +1,4 @@
-﻿using LoveNet.BuildingBlocks.EventBus;
+using LoveNet.BuildingBlocks.EventBus;
 using LoveNet.BuildingBlocks.Media;
 using LoveNet.BuildingBlocks.Web;
 using LoveNet.BuildingBlocks.Web.Auth;
@@ -8,10 +8,6 @@ using LoveNet.Identity.Api.Data.Seeding;
 using LoveNet.Identity.Api.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
-// The ported entities mix DateTime kinds (seed data, birthdates); legacy
-// behavior maps them to "timestamp without time zone" like the monolith did.
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
