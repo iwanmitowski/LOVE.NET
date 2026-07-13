@@ -1,5 +1,5 @@
 <h1 align="center">LOVE.NET</h1>
-<p align="center"> ReactJS SPA dating application — now running on event-driven .NET 8 microservices
+<p align="center"> React SPA dating application — now running on event-driven .NET 8 microservices
     <br>
 </p>
 
@@ -49,7 +49,7 @@ docker compose up -d --build
 SPA: http://localhost:3000 · Gateway: http://localhost:8080 · Swagger: http://localhost:8081..8086/swagger
 ```
 ```
-./scripts/smoke-test.ps1  (20-step end-to-end proof of the whole stack)
+./scripts/smoke-test.ps1  (25-step end-to-end proof of the whole stack)
 ```
 
 ![Containers](docs/images/containers.png)
@@ -132,12 +132,14 @@ Every service owns its schema; the shared tables you see (`outbox_messages`, `in
 ![Database placement](docs/images/database-placement.png)
 
 ## 🧪 Tests <a name = "tests"></a>
-* 37 NUnit tests across the five services (ported and adapted from the monolith suite)
-* Plus a 20-step end-to-end smoke test against the live compose stack (`scripts/smoke-test.ps1`)
+* 41 NUnit tests across the five services (ported and adapted from the monolith suite)
+* Plus a 25-step end-to-end smoke test against the live compose stack (`scripts/smoke-test.ps1`)
 * ![Tests](docs/images/tests.png)
 
 ## ⛏️ Built Using <a name = "built_using"></a>
-* ReactJS
+* React 19 + TypeScript (Vite)
+* Tailwind CSS v4 + shadcn/ui
+* TanStack Query + motion + sonner
 * .NET 8 APIs (7 services)
 * EF Core 8 with PostgreSQL (database-per-service)
 * Apache Kafka (KRaft)
@@ -152,7 +154,5 @@ Every service owns its schema; the shared tables you see (`outbox_messages`, `in
 * NUnit
 * Moq
 * Axios
-* React Bootstrap
-* MomentJS
-* React Tinder Card
+* Day.js
 * Docker Compose

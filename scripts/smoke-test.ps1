@@ -82,8 +82,12 @@ Step ($null -ne $room) "rooms row exists for $roomId"
 
 Write-Host "8. Realtime hub end-to-end (join, typing, send, echo, read receipt) via websocket" -ForegroundColor Cyan
 $messageText = "smoke $suffix"
-docker cp "$PSScriptRoot\hub-smoke.js" lovenet-frontend:/app/hub-smoke.js | Out-Null
-$hubOut = docker exec -e GATEWAY_URL=http://gateway:8080 -e "TOKEN=$($a.token)" -e "TOKEN_B=$($b.token)" -e "ROOM_ID=$roomId" -e "MESSAGE_TEXT=$messageText" lovenet-frontend node hub-smoke.js 2>&1
+# The frontend container is nginx-only now, so the probe runs in a disposable
+# node container on the compose network. cmd /c keeps docker's stderr chatter
+# (pull progress) from tripping PowerShell 5.1's Stop preference.
+$hubOutFile = Join-Path $env:TEMP "hub-smoke-out.txt"
+cmd /c "docker run --rm --network lovenet_net -v `"${PSScriptRoot}:/scripts`" -e GATEWAY_URL=http://gateway:8080 -e TOKEN=$($a.token) -e TOKEN_B=$($b.token) -e ROOM_ID=$roomId -e `"MESSAGE_TEXT=$messageText`" node:24-alpine sh -c `"cd /tmp && npm install --silent @microsoft/signalr ws >/dev/null 2>&1 && NODE_PATH=/tmp/node_modules node /scripts/hub-smoke.js`" > `"$hubOutFile`" 2>&1"
+$hubOut = Get-Content $hubOutFile -Raw
 Step ("$hubOut" -match 'HUB_OK') "hub echoed ReceiveMessage with server id"
 Step ("$hubOut" -match 'PEER_OK') "peer saw typing + message and its MarkRead produced a live ReadReceipt ($(("$hubOut" | Select-String 'PEER_OK.*').Matches.Value))"
 

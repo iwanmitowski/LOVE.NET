@@ -1,9 +1,0 @@
-.main {
-    min-height: 100vh;
-    display: flex;
-    flex-wrap: nowrap;
-    height: 100vh;
-    height: -webkit-fill-available;
-    overflow-x: hidden;
-    overflow-y: auto;
-}

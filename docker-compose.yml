@@ -325,13 +325,11 @@ services:
 
   frontend:
     build:
-      context: ./Web-FrontEnd
+      context: ./web
       dockerfile: Dockerfile
     container_name: lovenet-frontend
     ports:
-      - "3000:3000"
-    stdin_open: true
-    tty: true
+      - "3000:80"
     depends_on:
       - gateway
     networks:
