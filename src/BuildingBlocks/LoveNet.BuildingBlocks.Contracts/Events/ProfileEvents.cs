@@ -21,4 +21,5 @@ public record UserUpdatedEvent(
     string? CountryName,
     string? AvatarUrl,
     IReadOnlyList<string> ImageUrls,
-    bool IsBanned);
+    bool IsBanned,
+    bool IsAdmin = false);

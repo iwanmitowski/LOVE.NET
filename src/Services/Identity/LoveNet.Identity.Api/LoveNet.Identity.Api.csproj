@@ -20,4 +20,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Update="Data\Files\Users.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

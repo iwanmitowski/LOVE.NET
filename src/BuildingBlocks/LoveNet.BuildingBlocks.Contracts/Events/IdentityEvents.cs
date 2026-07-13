@@ -10,7 +10,8 @@ public record UserRegisteredEvent(
     int GenderId,
     int CityId,
     int CountryId,
-    IReadOnlyList<string> ImageUrls);
+    IReadOnlyList<string> ImageUrls,
+    bool IsAdmin = false);
 
 /// <summary>Published by Identity on moderation. BannedUntil null = unbanned. Key: userId.</summary>
 public record UserBannedEvent(

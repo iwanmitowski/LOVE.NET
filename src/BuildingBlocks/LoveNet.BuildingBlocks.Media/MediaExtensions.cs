@@ -6,18 +6,26 @@ namespace LoveNet.BuildingBlocks.Media;
 
 public static class MediaExtensions
 {
-    /// <summary>Registers the Cloudinary client + <see cref="IImagesService"/> (config section "Cloudinary").</summary>
+    /// <summary>
+    /// Registers the Cloudinary client + <see cref="IImagesService"/> (config
+    /// section "Cloudinary"). Construction is deferred so hosts start (and
+    /// design-time tools run) without credentials; uploads then fail loudly.
+    /// </summary>
     public static IServiceCollection AddCloudinaryMedia(this IServiceCollection services, IConfiguration configuration)
     {
-        var account = new Account(
-            configuration["Cloudinary:CloudName"],
-            configuration["Cloudinary:Key"],
-            configuration["Cloudinary:Secret"]);
+        services.AddSingleton(_ =>
+        {
+            var account = new Account(
+                configuration["Cloudinary:CloudName"],
+                configuration["Cloudinary:Key"],
+                configuration["Cloudinary:Secret"]);
 
-        var cloudinary = new Cloudinary(account);
-        cloudinary.Api.Secure = true;
+            var cloudinary = new Cloudinary(account);
+            cloudinary.Api.Secure = true;
 
-        services.AddSingleton(cloudinary);
+            return cloudinary;
+        });
+
         services.AddSingleton<IImagesService, ImagesService>();
 
         return services;
