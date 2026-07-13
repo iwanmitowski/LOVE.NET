@@ -1,0 +1,6 @@
+@LoveNet.Matching.Api_HostAddress = http://localhost:5165
+
+GET {{LoveNet.Matching.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

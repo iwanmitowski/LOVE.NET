@@ -1,42 +1,164 @@
-version: '3.4'
+name: lovenet
+
+# Infrastructure tier: one Postgres per stateful service (bulkhead isolation),
+# single-node Kafka in KRaft mode, Redis for the SignalR backplane + presence.
+# Application services are added on top of this file (see README).
+
+x-postgres-common: &postgres-common
+  image: postgres:16-alpine
+  environment: &postgres-env
+    POSTGRES_USER: lovenet
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lovenet}
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U lovenet"]
+    interval: 5s
+    timeout: 3s
+    retries: 12
+  networks:
+    - net
 
 services:
-  mssql:
-    container_name: mssql
-    image: mcr.microsoft.com/mssql/server:2017-latest
+  identity-db:
+    <<: *postgres-common
+    container_name: lovenet-identity-db
     environment:
-      ACCEPT_EULA: 'Y'
-      MSSQL_SA_PASSWORD: 'Admin@123'
-    ports: 
-      - 1433:1433
-    networks:
-      - net
-
-  love.net.web:
-    image: ${DOCKER_REGISTRY-}lovenetweb
-    build:
-      context: .
-      dockerfile: Web/LOVE.NET.Web/Dockerfile
-    ports: 
-      - 8080:8080
-    depends_on:
-      - mssql
-    networks:
-      - net
-
-  love.net.web-fe:
-    build:
-      context: ./Web-FrontEnd
-      dockerfile: Dockerfile
-    container_name: LOVE.NET.Web-Fe
+      <<: *postgres-env
+      POSTGRES_DB: lovenet_identity
     ports:
-      - 3000:3000
-    stdin_open: true
-    tty: true
-    depends_on:
-      - love.net.web
+      - "5433:5432"
+    volumes:
+      - identity-db-data:/var/lib/postgresql/data
+
+  profile-db:
+    <<: *postgres-common
+    container_name: lovenet-profile-db
+    environment:
+      <<: *postgres-env
+      POSTGRES_DB: lovenet_profile
+    ports:
+      - "5434:5432"
+    volumes:
+      - profile-db-data:/var/lib/postgresql/data
+
+  matching-db:
+    <<: *postgres-common
+    container_name: lovenet-matching-db
+    environment:
+      <<: *postgres-env
+      POSTGRES_DB: lovenet_matching
+    ports:
+      - "5435:5432"
+    volumes:
+      - matching-db-data:/var/lib/postgresql/data
+
+  chat-db:
+    <<: *postgres-common
+    container_name: lovenet-chat-db
+    environment:
+      <<: *postgres-env
+      POSTGRES_DB: lovenet_chat
+    ports:
+      - "5436:5432"
+    volumes:
+      - chat-db-data:/var/lib/postgresql/data
+
+  notifications-db:
+    <<: *postgres-common
+    container_name: lovenet-notifications-db
+    environment:
+      <<: *postgres-env
+      POSTGRES_DB: lovenet_notifications
+    ports:
+      - "5437:5432"
+    volumes:
+      - notifications-db-data:/var/lib/postgresql/data
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: lovenet-kafka
+    ports:
+      - "29092:29092"
+    environment:
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
     networks:
       - net
+
+  # One-shot topic creation. Auto-creation is disabled on the broker so every
+  # topic gets its intended partition count (ordering is per partition).
+  kafka-init:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: lovenet-kafka-init
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        set -e
+        create() { kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic "$$1" --partitions "$$2" --replication-factor 1; }
+        create identity.user-registered 3
+        create identity.user-banned 3
+        create profile.user-updated 3
+        create matching.match-created 3
+        create chat.message-sent 8
+        create chat.room-provisioned 3
+        create notifications.email-requested 3
+        create dead-letter 1
+        echo "Topics ready:"
+        kafka-topics --bootstrap-server kafka:9092 --list
+    networks:
+      - net
+
+  redis:
+    image: redis:7-alpine
+    container_name: lovenet-redis
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    networks:
+      - net
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    container_name: lovenet-jaeger
+    profiles: ["observability"]
+    ports:
+      - "16686:16686" # UI
+      - "4317:4317"   # OTLP gRPC
+    networks:
+      - net
+
+volumes:
+  identity-db-data:
+  profile-db-data:
+  matching-db-data:
+  chat-db-data:
+  notifications-db-data:
+  kafka-data:
 
 networks:
   net:
