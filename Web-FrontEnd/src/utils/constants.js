@@ -1,8 +1,7 @@
+// The API gateway keeps the monolith's old port, so these stay unchanged.
 export const globalConstants = {
   BASE_URL: "http://localhost:8080",
   API_URL: "http://localhost:8080/api/",
-  // BASE_URL: "https://lovenet.azurewebsites.net",
-  // API_URL: "https://lovenet.azurewebsites.net/api/",
 };
 
 export const identityConstants = {

@@ -19,4 +19,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Update="Data\Files\Chatrooms.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

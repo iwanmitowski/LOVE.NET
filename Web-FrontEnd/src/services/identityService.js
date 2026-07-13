@@ -4,6 +4,8 @@ import { getErrorMessage } from "../utils/errors"
 import * as date from "../utils/date";
 
 const baseUrl = globalConstants.API_URL + "identity";
+// Account/profile data is owned by the Profile service now.
+const profileBaseUrl = globalConstants.API_URL + "profile";
 
 export async function login(user) {
   try {
@@ -120,7 +122,7 @@ export async function logout() {
 
 export async function getAccount(id) {
   try {
-    const response = await instance.get(`${baseUrl}/account/${id}`);
+    const response = await instance.get(`${profileBaseUrl}/account/${id}`);
 
     return response.data;
   } catch (error) {
@@ -192,7 +194,7 @@ export async function editAccount(user) {
     }
 
     const response = await instance.put(
-      `${baseUrl}/account/${user.id}`,
+      `${profileBaseUrl}/account/${user.id}`,
       formData,
       {
         headers: {
