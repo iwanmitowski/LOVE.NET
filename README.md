@@ -1,130 +1,110 @@
-
-
 <h1 align="center">LOVE.NET</h1>
-<p align="center"> ReactJS SPA dating application
-    <br> 
+<p align="center">A dating app — swipe, match, chat in real time — built as event-driven microservices on .NET 8, Kafka, Redis, and PostgreSQL.
+    <br>
 </p>
 
-## 📝 Table of Contents
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Database Diagram](#database_diagram)
-- [Tests](#tests)
-- [Built Using](#built_using)
+## About
 
-## 🧐 About <a name = "about"></a>
-`LOVE.NET `gives you opportunity to match with people around the world and chat easily in real time.
-Some accounts, countries, cities, genders are loaded after the first start of the application.
+LOVE.NET lets you match with people around the world and chat in real time.
+Demo accounts, countries, cities, and genders are seeded on first start —
+through the same Kafka event pipeline production traffic uses.
 
-## 🏁 Getting Started <a name = "getting_started"></a>
-
-### Run the project
-
-```
-npm install
-```
-```
-npm start
-```
-```
-start the LOVE.NET.Web project
-```
-
-### Authentication and Authorization
+This repository was refactored from a layered ASP.NET Core monolith into
+seven services designed to scale the realtime chat workload horizontally.
+The original monolith is preserved on the
+[`monolith-snapshot`](../../tree/monolith-snapshot) branch, and the full
+design — service boundaries, Kafka topics, delivery semantics, resiliency
+patterns, and the scaling story — is documented in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ```
-JWT Bearer token is being used for authentication and authorization
-```
-```
-User is filling his mandatory data and uploading images. 
-```
-```
-Resend email verification if no email is received
-```
-```
-Verification - required step in order to use the app
-```
-```
-Reset password if forgotten
+React SPA ──► Gateway (YARP) ──► Identity │ Profile │ Matching │ Chat │ Realtime (SignalR) │ Notifications
+                                     │         │         │        │        │                    │
+                                  Postgres  Postgres  Postgres Postgres  Redis               Postgres
+                                     └─────────┴────── Kafka (outbox → topics → inbox) ────────┘
 ```
 
+Highlights:
 
-### User profile
+- **Realtime chat** over an authorized SignalR hub with a Redis backplane and
+  Redis presence — horizontally scalable, no in-process state.
+- **Durable-before-display** messaging: the hub gets a Kafka ack (acks=all,
+  keyed by room for ordering) before any client renders the message; the Chat
+  service persists it idempotently into a **monthly-partitioned** Postgres
+  table behind a storage seam ready for Cassandra/ScyllaDB.
+- **Transactional outbox + inbox dedupe** on every service boundary:
+  at-least-once delivery, effectively-once processing, dead-letter queue for
+  poison messages.
+- **Database-per-service** with event-carried read models — no cross-service
+  joins, no shared tables.
+- **Gateway** with rate limiting (per-IP, tighter on credentials), a single
+  CORS policy, websocket proxying, and a resilient fan-out aggregation for the
+  admin dashboard.
+- **Observability**: structured logs, OpenTelemetry traces/metrics with an
+  optional Jaeger container, correlation ids across HTTP and Kafka hops.
 
-```
-Fast and easy edit of your profile information
-```
+## Getting started
 
-```
-Add and remove photos
-```
+Prerequisites: Docker Desktop. Optionally Cloudinary/SendGrid keys for image
+uploads and real emails (everything else works without them).
 
-
-### Home Tab
-
-```
-All not swiped users
-```
- 
-```
-Easy filtration by age, gender, distance in km calculated Latitude and Longitude of both users.
-```
-```
-Easy swipe for mobile users, and buttons for PC master race fans
-```
-```
-Upon successful match - notification is received
-```
-
-### Matches Tab
-
-```
-All matches you have got
-```
- 
-```
-Easy chat with option to send images
-```
-```
-Infinite scrolling
-```
-```
-Search your beloved ones
+```bash
+cp .env.example .env          # fill in secrets if you have them
+docker compose up -d --build  # ~15 containers: services, dbs, kafka, redis, SPA
 ```
 
-### Dashboard Tab
-```
-Up-to-date statistics
-```
- 
-```
-Infinite scrolling of users, with possibility to ban them
-```
-```
-Search for intruders of the site
+- SPA: http://localhost:3000
+- Gateway (API + websocket): http://localhost:8080
+- Swagger per service: http://localhost:8081..8086/swagger
+- Tracing UI (optional): `docker compose --profile observability up -d jaeger` → http://localhost:16686
+
+Verify the whole stack end to end:
+
+```powershell
+./scripts/smoke-test.ps1
 ```
 
-## 📈 Database diagram<a name = "database_diagram"></a>
-![Imgur](https://i.imgur.com/Om9cTld.png)
-## 🧪 Tests <a name = "tests"></a>
-* Over 70 tests
-* Covering 90% of the services.
-* ![Imgur](https://i.imgur.com/XElPNID.png)
+The smoke test registers users through the gateway, drives the
+identity → profile → matching event pipeline, creates a match, joins the
+SignalR hub over a websocket, sends a message, proves it was persisted via
+Kafka, and checks the admin aggregation — 20 assertions.
 
-## ⛏️ Built Using <a name = "built_using"></a>
-* ReactJS
-* .NET 6 API
-* EF Core 6 with SQL Server
-* AutoMapper
-*  Swashbuckle Swagger
-* JWT Bearer
-* SignalR
-* Cloudinary
-* SendGrid
-* NUnit
-* Moq
-* Axios
-* React Bootstrap
-* MomentJS
-* React Tinder Card
+## Features
 
+- Register with photos, e-mail verification, password reset (links arrive via
+  the Notifications service)
+- Swipe deck with age/distance/gender preferences, mutual-like matching with
+  instant `MatchReceived` push
+- 1:1 match chats and public themed chatrooms, with image messages and live
+  presence
+- Profile editing with photo management
+- Admin dashboard: statistics, user search, ban/unban (lockout)
+
+## Solution layout
+
+```
+src/
+  BuildingBlocks/   Contracts (events), EventBus (Kafka + outbox/inbox),
+                    Web (JWT, logging, telemetry, health), Media (Cloudinary)
+  Gateway/          LoveNet.Gateway (YARP)
+  Services/         Identity | Profile | Matching | Chat | Realtime | Notifications
+                    (each: LoveNet.<X>.Api + LoveNet.<X>.Tests)
+Web-FrontEnd/       React 18 SPA
+scripts/            smoke-test.ps1 + hub-smoke.js
+docs/               ARCHITECTURE.md
+```
+
+## Tests
+
+```bash
+dotnet test LoveNet.sln
+```
+
+37 NUnit tests across five services (ported and adapted from the monolith's
+suite), plus the end-to-end smoke script above.
+
+## Built using
+
+.NET 8 · ASP.NET Core · SignalR (+ Redis backplane) · EF Core 8 / Npgsql ·
+Apache Kafka (KRaft) · Redis · PostgreSQL 16 · YARP · Serilog ·
+OpenTelemetry · React 18 · Docker Compose · Cloudinary · SendGrid
