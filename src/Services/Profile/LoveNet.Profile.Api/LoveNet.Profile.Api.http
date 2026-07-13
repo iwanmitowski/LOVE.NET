@@ -1,6 +1,0 @@
-@LoveNet.Profile.Api_HostAddress = http://localhost:5183
-
-GET {{LoveNet.Profile.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

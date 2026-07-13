@@ -12,7 +12,5 @@ public static class LoveNetConstants
 
     public const int MaxFileSizeInBytes = 20 * 1024 * 1024;
 
-    public static readonly string[] AllowedImageExtensions = { ".jpg", ".png" };
-
     public const string DefaultProfilePictureUrl = "https://res.cloudinary.com/dojl8gfnd/image/upload/v1666714042/24-248253_user-profile-default-image-png-clipart-png-download_tuamuf.png";
 }

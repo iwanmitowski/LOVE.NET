@@ -124,6 +124,7 @@ services:
         create chat.room-provisioned 3
         create notifications.email-requested 3
         create dead-letter 1
+        create healthchecks-topic 1
         echo "Topics ready:"
         kafka-topics --bootstrap-server kafka:9092 --list
     networks:
@@ -149,6 +150,189 @@ services:
     ports:
       - "16686:16686" # UI
       - "4317:4317"   # OTLP gRPC
+    networks:
+      - net
+
+  # ---------------------------------------------------------------- services
+
+  identity-api:
+    build:
+      context: .
+      dockerfile: src/Services/Identity/LoveNet.Identity.Api/Dockerfile
+    container_name: lovenet-identity-api
+    environment: &service-env
+      ASPNETCORE_ENVIRONMENT: Development
+      Kafka__BootstrapServers: kafka:9092
+      Jwt__Key: ${JWT_KEY:-lovenet-local-development-signing-key-do-not-use-in-production-0123456789abcdef}
+      Jwt__Issuer: ${JWT_ISSUER:-https://localhost:3000/}
+      Jwt__Audience: ${JWT_AUDIENCE:-https://localhost:3000/}
+      ConnectionStrings__Default: Host=identity-db;Port=5432;Database=lovenet_identity;Username=lovenet;Password=${POSTGRES_PASSWORD:-lovenet}
+      Cloudinary__CloudName: ${CLOUDINARY_CLOUD_NAME:-}
+      Cloudinary__Key: ${CLOUDINARY_KEY:-}
+      Cloudinary__Secret: ${CLOUDINARY_SECRET:-}
+    ports:
+      - "8081:8080"
+    depends_on:
+      identity-db:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+    healthcheck: &service-health
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 20s
+    networks:
+      - net
+
+  profile-api:
+    build:
+      context: .
+      dockerfile: src/Services/Profile/LoveNet.Profile.Api/Dockerfile
+    container_name: lovenet-profile-api
+    environment:
+      <<: *service-env
+      ConnectionStrings__Default: Host=profile-db;Port=5432;Database=lovenet_profile;Username=lovenet;Password=${POSTGRES_PASSWORD:-lovenet}
+    ports:
+      - "8082:8080"
+    depends_on:
+      profile-db:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+    healthcheck: *service-health
+    networks:
+      - net
+
+  matching-api:
+    build:
+      context: .
+      dockerfile: src/Services/Matching/LoveNet.Matching.Api/Dockerfile
+    container_name: lovenet-matching-api
+    environment:
+      <<: *service-env
+      ConnectionStrings__Default: Host=matching-db;Port=5432;Database=lovenet_matching;Username=lovenet;Password=${POSTGRES_PASSWORD:-lovenet}
+    ports:
+      - "8083:8080"
+    depends_on:
+      matching-db:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+    healthcheck: *service-health
+    networks:
+      - net
+
+  chat-api:
+    build:
+      context: .
+      dockerfile: src/Services/Chat/LoveNet.Chat.Api/Dockerfile
+    container_name: lovenet-chat-api
+    environment:
+      <<: *service-env
+      ConnectionStrings__Default: Host=chat-db;Port=5432;Database=lovenet_chat;Username=lovenet;Password=${POSTGRES_PASSWORD:-lovenet}
+    ports:
+      - "8084:8080"
+    depends_on:
+      chat-db:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+    healthcheck: *service-health
+    networks:
+      - net
+
+  realtime-api:
+    build:
+      context: .
+      dockerfile: src/Services/Realtime/LoveNet.Realtime.Api/Dockerfile
+    container_name: lovenet-realtime-api
+    environment:
+      <<: *service-env
+      Redis__Connection: redis:6379
+    ports:
+      - "8085:8080"
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+    healthcheck: *service-health
+    networks:
+      - net
+
+  notifications-api:
+    build:
+      context: .
+      dockerfile: src/Services/Notifications/LoveNet.Notifications.Api/Dockerfile
+    container_name: lovenet-notifications-api
+    environment:
+      <<: *service-env
+      ConnectionStrings__Default: Host=notifications-db;Port=5432;Database=lovenet_notifications;Username=lovenet;Password=${POSTGRES_PASSWORD:-lovenet}
+      SendGrid__ApiKey: ${SENDGRID_API_KEY:-}
+    ports:
+      - "8086:8080"
+    depends_on:
+      notifications-db:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+    healthcheck: *service-health
+    networks:
+      - net
+
+  gateway:
+    build:
+      context: .
+      dockerfile: src/Gateway/LoveNet.Gateway/Dockerfile
+    container_name: lovenet-gateway
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Jwt__Key: ${JWT_KEY:-lovenet-local-development-signing-key-do-not-use-in-production-0123456789abcdef}
+      Jwt__Issuer: ${JWT_ISSUER:-https://localhost:3000/}
+      Jwt__Audience: ${JWT_AUDIENCE:-https://localhost:3000/}
+      Frontend__Origin: ${FRONTEND_ORIGIN:-http://localhost:3000}
+      Services__Identity: http://identity-api:8080
+      Services__Profile: http://profile-api:8080
+      Services__Matching: http://matching-api:8080
+      Services__Chat: http://chat-api:8080
+      Services__Realtime: http://realtime-api:8080
+      ReverseProxy__Clusters__identity__Destinations__destination1__Address: http://identity-api:8080
+      ReverseProxy__Clusters__profile__Destinations__destination1__Address: http://profile-api:8080
+      ReverseProxy__Clusters__matching__Destinations__destination1__Address: http://matching-api:8080
+      ReverseProxy__Clusters__chat__Destinations__destination1__Address: http://chat-api:8080
+      ReverseProxy__Clusters__realtime__Destinations__destination1__Address: http://realtime-api:8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      identity-api:
+        condition: service_healthy
+      profile-api:
+        condition: service_healthy
+      matching-api:
+        condition: service_healthy
+      chat-api:
+        condition: service_healthy
+      realtime-api:
+        condition: service_healthy
+      notifications-api:
+        condition: service_healthy
+    healthcheck: *service-health
+    networks:
+      - net
+
+  frontend:
+    build:
+      context: ./Web-FrontEnd
+      dockerfile: Dockerfile
+    container_name: lovenet-frontend
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - gateway
     networks:
       - net
 
