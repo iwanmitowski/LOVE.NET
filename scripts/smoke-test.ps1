@@ -80,11 +80,16 @@ $room = Poll "room row in chat-db" {
 }
 Step ($null -ne $room) "rooms row exists for $roomId"
 
-Write-Host "8. Realtime hub end-to-end (join, send, echo) via websocket through the gateway" -ForegroundColor Cyan
+Write-Host "8. Realtime hub end-to-end (join, typing, send, echo, read receipt) via websocket" -ForegroundColor Cyan
 $messageText = "smoke $suffix"
-docker cp "$PSScriptRoot\hub-smoke.js" lovenet-frontend:/app/hub-smoke.js | Out-Null
-$hubOut = docker exec -e GATEWAY_URL=http://gateway:8080 -e "TOKEN=$($a.token)" -e "ROOM_ID=$roomId" -e "MESSAGE_TEXT=$messageText" lovenet-frontend node hub-smoke.js 2>&1
-Step ("$hubOut" -match 'HUB_OK') "hub echoed ReceiveMessage ($hubOut)"
+# The frontend container is nginx-only now, so the probe runs in a disposable
+# node container on the compose network. cmd /c keeps docker's stderr chatter
+# (pull progress) from tripping PowerShell 5.1's Stop preference.
+$hubOutFile = Join-Path $env:TEMP "hub-smoke-out.txt"
+cmd /c "docker run --rm --network lovenet_net -v `"${PSScriptRoot}:/scripts`" -e GATEWAY_URL=http://gateway:8080 -e TOKEN=$($a.token) -e TOKEN_B=$($b.token) -e ROOM_ID=$roomId -e `"MESSAGE_TEXT=$messageText`" node:24-alpine sh -c `"cd /tmp && npm install --silent @microsoft/signalr ws >/dev/null 2>&1 && NODE_PATH=/tmp/node_modules node /scripts/hub-smoke.js`" > `"$hubOutFile`" 2>&1"
+$hubOut = Get-Content $hubOutFile -Raw
+Step ("$hubOut" -match 'HUB_OK') "hub echoed ReceiveMessage with server id"
+Step ("$hubOut" -match 'PEER_OK') "peer saw typing + message and its MarkRead produced a live ReadReceipt ($(("$hubOut" | Select-String 'PEER_OK.*').Matches.Value))"
 
 Write-Host "9. Message persisted by Chat via Kafka consumer" -ForegroundColor Cyan
 $history = Poll "message in history" {
@@ -93,6 +98,18 @@ $history = Poll "message in history" {
     if ($h.totalMessages -ge 1 -and ($h.messages | Where-Object { $_.text -eq $messageText })) { $h }
 }
 Step ($null -ne $history) "chat history contains the hub message (durable via chat.message-sent)"
+
+Write-Host "9b. Conversation summaries reflect the read state (Kafka-persisted watermark)" -ForegroundColor Cyan
+$summary = Poll "summaries for $roomId" {
+    $s = Invoke-RestMethod -Uri "$gateway/api/chat/summaries" -Method Post -Headers $headersB `
+        -ContentType 'application/json' -Body (@{ roomIds = @($roomId) } | ConvertTo-Json)
+    $row = $s | Where-Object { $_.roomId -eq $roomId }
+    if ($row -and $row.unreadCount -eq 0 -and $row.lastMessageText -eq $messageText) { $row }
+}
+Step ($null -ne $summary) "userB's summary: unreadCount=0 after MarkRead, last message present"
+$summaryA = Invoke-RestMethod -Uri "$gateway/api/chat/summaries" -Method Post -Headers $headersA `
+    -ContentType 'application/json' -Body (@{ roomIds = @($roomId) } | ConvertTo-Json)
+Step ($null -ne ($summaryA | Where-Object { $_.roomId -eq $roomId }).peerLastReadAt) "userA sees peerLastReadAt (read receipt persisted)"
 
 Write-Host "10. Public chatrooms" -ForegroundColor Cyan
 $chatrooms = Invoke-RestMethod -Uri "$gateway/api/chat/chatrooms" -Headers $headersA

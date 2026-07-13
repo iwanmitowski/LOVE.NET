@@ -41,6 +41,7 @@ public class PostgresMessageStore : IMessageStore
             .Take(LoveNetConstants.DefaultTake)
             .Select(m => new MessageModel
             {
+                Id = m.Id,
                 RoomId = m.RoomId,
                 UserId = m.SenderId,
                 Text = m.Text,

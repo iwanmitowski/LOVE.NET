@@ -93,15 +93,87 @@ public class ChatHub : Hub
         // can never be lost by a crash between broadcast and publish.
         await eventPublisher.PublishAsync(KafkaTopics.MessageSent, message.RoomId, evt);
 
-        await Clients.Group(message.RoomId).SendAsync("ReceiveMessage", new
+        var payload = new
         {
+            Id = evt.Id,
             RoomId = message.RoomId,
             UserId = userId,
             Text = message.Text,
             ProfilePicture = message.ProfilePicture,
             ImageUrl = message.ImageUrl,
             CreatedOn = evt.CreatedOn,
+        };
+
+        await Clients.Group(message.RoomId).SendAsync("ReceiveMessage", payload);
+
+        // In a 1:1 room the peer may not be joined to the group (thread not
+        // open); a direct user push keeps their unread badge/toast live.
+        var peerId = GetPeerIdFromRoomId(message.RoomId, userId);
+
+        if (peerId is not null && !await roomRegistry.IsPublicRoomAsync(message.RoomId))
+        {
+            await Clients.User(peerId).SendAsync("MessageNotification", new
+            {
+                payload.Id,
+                payload.RoomId,
+                payload.UserId,
+                SenderUserName = userName,
+                payload.Text,
+                payload.ImageUrl,
+                payload.CreatedOn,
+            });
+        }
+    }
+
+    /// <summary>Marks the room read for the caller: durable via Kafka, live via a group broadcast.</summary>
+    public async Task MarkRead(string roomId)
+    {
+        var userId = Context.User!.GetUserId();
+
+        await EnsureRoomMemberAsync(roomId, userId);
+
+        var evt = new RoomReadEvent(roomId, userId, DateTime.UtcNow);
+
+        await eventPublisher.PublishAsync(KafkaTopics.RoomRead, roomId, evt);
+
+        await Clients.OthersInGroup(roomId).SendAsync("ReadReceipt", new
+        {
+            RoomId = roomId,
+            UserId = userId,
+            ReadAt = evt.ReadAt,
         });
+    }
+
+    /// <summary>Transient typing signal — no persistence, consumers debounce client-side.</summary>
+    public async Task Typing(string roomId)
+    {
+        var userId = Context.User!.GetUserId();
+
+        await EnsureRoomMemberAsync(roomId, userId);
+
+        await Clients.OthersInGroup(roomId).SendAsync("PeerTyping", new
+        {
+            RoomId = roomId,
+            UserId = userId,
+            UserName = Context.User!.GetUserName(),
+        });
+    }
+
+    /// <summary>
+    /// The 1:1 room id is both user GUIDs sorted and concatenated, so the peer
+    /// id is the room id minus the caller's own id. Public room ids don't
+    /// contain the caller's id, yielding null.
+    /// </summary>
+    private static string? GetPeerIdFromRoomId(string roomId, string userId)
+    {
+        if (!roomId.Contains(userId))
+        {
+            return null;
+        }
+
+        var peerId = roomId.Replace(userId, string.Empty);
+
+        return Guid.TryParse(peerId, out _) ? peerId : null;
     }
 
     /// <summary>

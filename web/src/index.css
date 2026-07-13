@@ -1,0 +1,127 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* LOVE.NET theme — dark-first with a rose→amber "sunset" accent. */
+:root {
+  --background: oklch(0.985 0.002 90);
+  --foreground: oklch(0.2 0.02 20);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.02 20);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.02 20);
+  --primary: oklch(0.62 0.24 12);
+  --primary-foreground: oklch(0.99 0.01 20);
+  --secondary: oklch(0.95 0.01 60);
+  --secondary-foreground: oklch(0.3 0.03 20);
+  --muted: oklch(0.955 0.008 80);
+  --muted-foreground: oklch(0.5 0.02 40);
+  --accent: oklch(0.94 0.03 40);
+  --accent-foreground: oklch(0.3 0.04 20);
+  --destructive: oklch(0.55 0.22 27);
+  --destructive-foreground: oklch(0.99 0.01 20);
+  --border: oklch(0.91 0.008 60);
+  --input: oklch(0.91 0.008 60);
+  --ring: oklch(0.62 0.24 12);
+  --radius: 0.75rem;
+
+  --gradient-from: oklch(0.62 0.24 12);
+  --gradient-to: oklch(0.75 0.16 55);
+
+  --chart-1: oklch(0.62 0.24 12);
+  --chart-2: oklch(0.75 0.16 55);
+  --chart-3: oklch(0.6 0.15 250);
+  --chart-4: oklch(0.7 0.15 150);
+  --chart-5: oklch(0.65 0.2 300);
+}
+
+.dark {
+  --background: oklch(0.16 0.015 285);
+  --foreground: oklch(0.93 0.005 60);
+  --card: oklch(0.2 0.018 285);
+  --card-foreground: oklch(0.93 0.005 60);
+  --popover: oklch(0.19 0.018 285);
+  --popover-foreground: oklch(0.93 0.005 60);
+  --primary: oklch(0.66 0.23 12);
+  --primary-foreground: oklch(0.99 0.01 20);
+  --secondary: oklch(0.26 0.02 285);
+  --secondary-foreground: oklch(0.9 0.01 60);
+  --muted: oklch(0.24 0.018 285);
+  --muted-foreground: oklch(0.65 0.015 60);
+  --accent: oklch(0.28 0.03 20);
+  --accent-foreground: oklch(0.93 0.01 40);
+  --destructive: oklch(0.6 0.2 27);
+  --destructive-foreground: oklch(0.99 0.01 20);
+  --border: oklch(0.28 0.02 285);
+  --input: oklch(0.3 0.02 285);
+  --ring: oklch(0.66 0.23 12);
+
+  --gradient-from: oklch(0.66 0.23 12);
+  --gradient-to: oklch(0.78 0.15 55);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gradient-from: var(--gradient-from);
+  --color-gradient-to: var(--gradient-to);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: "Inter", "Inter Fallback", system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100dvh;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@utility gradient-brand {
+  background-image: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+}
+
+@utility text-gradient-brand {
+  background-image: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}

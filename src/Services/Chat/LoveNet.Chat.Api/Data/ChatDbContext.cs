@@ -18,6 +18,8 @@ public class ChatDbContext : DbContext
 
     public DbSet<UserProfileLite> UserProfiles => Set<UserProfileLite>();
 
+    public DbSet<RoomRead> RoomReads => Set<RoomRead>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Message>(entity =>
@@ -45,6 +47,13 @@ public class ChatDbContext : DbContext
         {
             entity.ToTable("user_profiles_lite");
             entity.HasKey(p => p.UserId);
+        });
+
+        modelBuilder.Entity<RoomRead>(entity =>
+        {
+            entity.ToTable("room_reads");
+            entity.HasKey(r => new { r.RoomId, r.UserId });
+            entity.Property(r => r.RoomId).HasMaxLength(128);
         });
 
         modelBuilder.AddOutbox();
