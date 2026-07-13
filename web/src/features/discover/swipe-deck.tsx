@@ -1,4 +1,4 @@
-import { useCallback, useImperativeHandle, useRef, type Ref } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Heart, X } from "lucide-react";
 import {
   AnimatePresence,
@@ -32,7 +32,19 @@ interface SwipeDeckProps {
 
 /** Stacked deck: top card is draggable, the next two peek from behind; action bar below. */
 export default function SwipeDeck({ cards, myLocation, likePending, onSwipe }: SwipeDeckProps) {
-  const topCardRef = useRef<DeckCardHandle>(null);
+  // Ownership-checked registration instead of a plain shared ref: the old top
+  // card unmounts AFTER its successor mounts (AnimatePresence exit), and a
+  // shared ref would be nulled by that late cleanup, killing the buttons.
+  const topCardRef = useRef<DeckCardHandle | null>(null);
+  const registerTopCard = useCallback((handle: DeckCardHandle) => {
+    topCardRef.current = handle;
+    return () => {
+      if (topCardRef.current === handle) {
+        topCardRef.current = null;
+      }
+    };
+  }, []);
+
   const visible = cards.slice(0, VISIBLE_CARDS);
   const actionsDisabled = likePending || visible.length === 0;
 
@@ -43,7 +55,7 @@ export default function SwipeDeck({ cards, myLocation, likePending, onSwipe }: S
           {visible.map((card, index) => (
             <DeckCard
               key={card.id}
-              ref={index === 0 ? topCardRef : undefined}
+              registerTopCard={index === 0 ? registerTopCard : undefined}
               card={card}
               index={index}
               stackSize={visible.length}
@@ -100,10 +112,19 @@ interface DeckCardProps {
   isTop: boolean;
   distanceKm: number | null;
   onCommit: (card: UserCard, direction: SwipeDirection) => void;
-  ref?: Ref<DeckCardHandle>;
+  /** Present only for the top card; returns an unregister cleanup. */
+  registerTopCard?: (handle: DeckCardHandle) => () => void;
 }
 
-function DeckCard({ card, index, stackSize, isTop, distanceKm, onCommit, ref }: DeckCardProps) {
+function DeckCard({
+  card,
+  index,
+  stackSize,
+  isTop,
+  distanceKm,
+  onCommit,
+  registerTopCard,
+}: DeckCardProps) {
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-18, 18]);
   const likeOpacity = useTransform(x, [40, 140], [0, 1]);
@@ -129,7 +150,10 @@ function DeckCard({ card, index, stackSize, isTop, distanceKm, onCommit, ref }: 
     [card, onCommit, x],
   );
 
-  useImperativeHandle(ref, () => ({ swipe: (dir) => fling(dir === "right" ? 1 : -1) }), [fling]);
+  useEffect(() => {
+    if (!registerTopCard) return;
+    return registerTopCard({ swipe: (dir) => fling(dir === "right" ? 1 : -1) });
+  }, [registerTopCard, fling]);
 
   function handleDragEnd(_: unknown, info: PanInfo) {
     // The click that follows a drag release would step the photo carousel; swallow it.
